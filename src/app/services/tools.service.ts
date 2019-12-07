@@ -123,7 +123,7 @@ export class ToolsService {
    * @param sum Is a switch to add o remove OffsetTimeZone in the date
    */
   satinizeDate(date: Date, sum: boolean = false) {
-    let d = new Date(date)
+    let d = date
     let offSet = d.getTimezoneOffset() * 60000;
     let time = d.getTime();
     d.setTime(sum ? time + offSet : time - offSet)

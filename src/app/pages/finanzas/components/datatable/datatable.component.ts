@@ -17,12 +17,10 @@ export class DatatableComponent implements OnInit, OnChanges {
   private path: string = ''
   private pagination: paginationModel = {
     start: 0,
-    limit: 25,
-    total: 0
+    limit: 20,
   }
 
   @Input() columns: any
-  public loading: boolean = false;
   public ColumnMode = ColumnMode;
   public SelectionType = SelectionType;
   public get getPagination(): paginationModel { return this.pagination }
@@ -37,6 +35,8 @@ export class DatatableComponent implements OnInit, OnChanges {
   }
 
   @Output() select: EventEmitter<any> = new EventEmitter()
+
+  onload: boolean = false;
 
 
 
@@ -67,33 +67,27 @@ export class DatatableComponent implements OnInit, OnChanges {
   async forceUpdate() {
     this.pagination = {
       start: 0,
-      limit: 25,
-      total: 0
+      limit: 20,
     }
     this.getInformation(true)
   }
 
   private async getInformation(clear = false) {
-    this.loading = true;
-    /* let loading = this.toolsService.showLoading() */
-    const { data, meta } = await this.getData(`pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
-    this.pagination = meta.pagination
-    this.setPagination = {
-      start: this.source.length,
-      limit: 25,
-      total: this.source.length + meta.total
-    }
+    this.onload = true;
+    const { data, meta } = await this.getData(`pagination[start]=${this.pagination.start}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
     if (clear) {
       this.pagination = {
         start: 0,
-        limit: 25,
-        total: 0
+        limit: 20,
       }
       this.source = data;
     }
     else this.source = [...this.source, ...data];
-    /* (await loading).dismiss() */
-    this.loading = false;
+    this.setPagination = {
+      start: this.source.length,
+      limit: 20,
+    }
+    this.onload = false;
   }
   private async getData(route: any) {
     let path = ''
@@ -106,17 +100,19 @@ export class DatatableComponent implements OnInit, OnChanges {
       .get<any>(path).toPromise()
   }
   public onScroll(offsetY: number) {
-    // total height of all rows in the viewport
+    if (this.source.length == 0) {
+      return;
+    }
+
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
-    // check if we scrolled to the end of the viewport
-    if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
-        this.loading = false
-        return
-      }
+
+    const relativeHeight = (this.source.length * this.rowHeight) - 100;
+
+    const height = offsetY + viewHeight;
+
+    if (height >= relativeHeight && !this.onload) {
       this.getInformation();
     }
-    return
   }
 
 
@@ -131,6 +127,5 @@ export class DatatableComponent implements OnInit, OnChanges {
 interface paginationModel {
   start: number
   limit: number
-  total: number
 }
 

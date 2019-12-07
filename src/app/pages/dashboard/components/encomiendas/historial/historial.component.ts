@@ -149,7 +149,6 @@ export class HistorialComponent implements OnInit {
     }
     const { data, meta } = await this.getData(this.path + this.query + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     this.pagination = meta.pagination
-    console.log(data);
 
     if (this.pagination.start == 0) {
       this.source = data
@@ -167,20 +166,21 @@ export class HistorialComponent implements OnInit {
       .toPromise()
   }
 
-  public onScroll({offsetY, offsetX}) {
-    if(offsetX >= 0) return;
+  public onScroll(offsetY: number) {
+    if (this.source.length == 0) {
+      return;
+    }
+    if (offsetY == undefined || !offsetY) return;
 
-    // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
-    // check if we scrolled to the end of the viewport
-    if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
-        this.loading = false
-        return
-      }
+
+    const relativeHeight = (this.source.length * this.rowHeight) - 100;
+
+    const height = offsetY + viewHeight;
+
+    if (height >= relativeHeight && !this.loading) {
       this.getInformation();
     }
-    return
   }
 
   public onSearchPackage(_id: number) {

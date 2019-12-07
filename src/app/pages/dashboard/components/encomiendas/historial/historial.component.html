@@ -30,7 +30,7 @@
 <ion-content>
   <ngx-datatable
     class="dark fullscreen"
-    (scroll)="this.onScroll($event)"
+    (scroll)="this.onScroll($event.offsetY)"
     [rows]="this.source"
     [columnMode]="this.ColumnMode.standard"
     [headerHeight]="this.headerHeight"

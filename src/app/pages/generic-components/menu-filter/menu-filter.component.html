@@ -34,7 +34,7 @@
           <ion-input #viewEnd [value]="inputEnd" (ionChange)="inputEnd= $event['detail'].value" type="date"></ion-input>
           <ion-icon slot="end" name="calendar"></ion-icon>
         </ion-item>
-        <ion-button [disabled]="inputStart == inputEnd"  (click)="onSearchDate()" class="ion-margin" color="orange" shape="round">
+        <ion-button [disabled]="inputStart > inputEnd"  (click)="onSearchDate()" class="ion-margin" color="orange" shape="round">
           <ion-label>Buscar</ion-label>
           <ion-icon slot="start" name="search"></ion-icon>
         </ion-button>
