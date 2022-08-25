@@ -1,0 +1,7 @@
+{
+  "name": "admin-fastworld",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
