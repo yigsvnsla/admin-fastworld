@@ -1,0 +1,34 @@
+<ion-split-pane style="--side-width: 100px" contentId="menu-panel" when="lg">
+  <ion-menu contentId="menu-panel" menuId="menu-panel" side="start" type="overlay">
+    <ion-header >
+      <ion-toolbar color="ligth" class="ion-text-center">
+        <ion-img class="ion-padding" [src]="'../../../assets/svg/banner.svg'"></ion-img>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-item-group class="ion-text-center"> 
+        <ion-menu-toggle auto-hide="false">
+          <ion-item [detail]="true" [lines]="'full'" [routerLink]="['/dashboard/home']" routerDirection="root" routerLinkActive='active-link' [routerLinkActiveOptions]="{exact: true}">
+            <ion-label>Inicio</ion-label>
+            <ion-icon slot="start" name="home"></ion-icon>
+          </ion-item>
+        </ion-menu-toggle>
+        <ng-container *ngFor="let item of this.sectionMenu">
+          <ion-item-divider>
+            <ion-label>{{item.title}}</ion-label>
+          </ion-item-divider>
+          <ion-menu-toggle  *ngFor="let _item of item.options; let i = index" auto-hide="false" >
+            <ion-item [lines]="i == item.options.length - 1 ?'full':''" detail="true" [routerLink]="[ '/dashboard/' + item.url + '/' + _item.url ]" routerDirection="root" routerLinkActive='active-link' [routerLinkActiveOptions]="{exact: true}">
+              <ion-label>{{ (_item.title | titlecase) }}</ion-label>
+              <ion-icon slot="start" [name]="_item.icon"></ion-icon>
+            </ion-item>
+          </ion-menu-toggle> 
+        </ng-container>
+        <ion-button class="ion-margin" color="danger" (click)="onLogOut()" fill="solid" shape="round">
+          <ion-label>Cerrar Sesion</ion-label>
+        </ion-button>
+      </ion-item-group>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="menu-panel"></ion-router-outlet>
+</ion-split-pane>

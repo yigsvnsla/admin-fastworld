@@ -1,0 +1,185 @@
+
+<ion-header>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <app-popover-menu slot="end" trigger="historial"></app-popover-menu>
+    <ion-title>Header</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<!-- <ion-header>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-item class="searchbar" slot="start">
+      <ion-icon color="orange" slot="start" name="search"></ion-icon>
+      <ion-input  (ionChange)="this.onSearchChange($event)" [debounce]="600" #searchInput placeholder="Buscar" ></ion-input>
+      <ion-button [ngStyle]="{'visibility':searchInput.value == '' ? 'hidden': 'visible'}" color="orange" (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-progress-bar #progressBar [hidden]="true" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header> -->
+
+<!-- <ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="6">
+            <ion-card-subtitle>Encomiendas</ion-card-subtitle>
+            <ion-card-title>Historial</ion-card-title>
+          </ion-col>
+          <ion-col class="ion-text-center" size="6">
+            <ion-button color="orange" [routerLink]="['../crear']" shape="round">
+              <ion-label class="ion-hide-sm-down">Agregar Encomienda</ion-label>
+              <ion-icon class="ion-hide-sm-down" slot="start" name="add"></ion-icon>
+              <ion-icon class="ion-hide-sm-up" slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+      <ion-grid>
+        <ion-row>
+          <ion-col sizeXs="6">
+            <ion-item >
+              <ion-label  position="stacked">Mostrar <ion-text class="ion-hide-sm-down">Registros</ion-text></ion-label>
+              <ion-select (ionChange)="limitSelectChange($event)"  #limitSelect [value]="10"  interface="popover">
+                <ion-select-option [value]="10">10</ion-select-option>
+                <ion-select-option [value]="20">20</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col sizeXs="6">
+            <ion-item >
+              <ion-label position="stacked">Rango <ion-text class="ion-hide-sm-down">de Busqueda</ion-text></ion-label>
+              <ion-select (ionChange)="rangeToDate($event)" #date_rangeSelect [value]="1"  interface="popover">
+                <ion-select-option [value]="0">Hoy</ion-select-option>
+                <ion-select-option [value]="1">Ultimos 7 dias</ion-select-option>
+                <ion-select-option [value]="2">Del mes</ion-select-option>
+                <ion-select-option [value]="3">Ultimos 3 meses</ion-select-option>
+                <ion-select-option [value]="4">Personalizado</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item id="user-list" button lines="full">
+              <ion-input #inputUserList type="text" placeholder="Seleccionar usuario"></ion-input>
+              <ion-icon slot="start" name="people"></ion-icon>
+              <ion-icon slot="end" name="chevron-down"></ion-icon>
+            </ion-item>
+            <ion-popover [dismissOnSelect]="true" mode="md" size="auto" reference="trigger" side="start" alignment="start" [trigger]="'user-list'" >
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-list-header>
+                      <ion-label>Formatos</ion-label>
+                    </ion-list-header>
+                    <ion-item *ngFor="let user of [0,1,2,3]" button (click)="inputUserList.value = user">
+                      <ion-icon name="person" slot="start"></ion-icon>
+                      <ion-label>{{ user }}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="date_rangeSelect.value == 4">
+          <ion-col sizeXs="6" sizeSm="4.5">
+            <ion-item>
+              <ion-label position="stacked">Fecha de Inicio</ion-label>
+              <ion-input (ionChange)="dateValueChange1($event)" type="date" [value]="dateValue1"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col sizeXs="6" sizeSm="4.5">
+            <ion-item>
+              <ion-label position="stacked">Fecha de Final</ion-label>
+              <ion-input (ionChange)="dateValueChange2($event)" [value]="dateValue2" type="date"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col class="ion-align-self-center ion-text-center" sizeSm="3">
+              <ion-button color="orange"  (click)="rangeToDateSearch()"   shape="round">
+                <ion-label>Buscar</ion-label>
+                <ion-icon class="ion-hide-sm-up" slot="icon-only" name="search"></ion-icon>
+                <ion-icon class="ion-hide-md-down" slot="start" name="search"></ion-icon>
+              </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+          <ion-col>
+            <ngx-datatable
+            *ngIf="this.row$ | async as rows; else loading"
+            #ngxTable
+            class="bootstrap container striped"
+            [reorderable]="false"
+            [scrollbarH]="true"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [rows]='rows.data'
+            [footerHeight]="50"
+            [rowHeight]="60"
+            [virtualization]="false"
+            [externalPaging]="true"
+            [externalSorting]="true"
+            [limit]="rows.meta.pagination.pageSize"
+            [count]="rows.meta.pagination.total"
+            [offset]="rows.meta.pagination.page - 1"
+            (page)="setPage($event)"
+            (sort)="onSort($event,rows)"
+            [messages]="{emptyMessage: 'No hay informacion'}">
+
+              <ngx-datatable-column name="AFILIACIÓN ID" prop="id"></ngx-datatable-column>
+
+              <ngx-datatable-column name="CREACION" prop="createdAt">
+                <ng-template  let-value="value"  ngx-datatable-cell-template>
+                  {{this.formatDate(value)}}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="ACCIONES" >
+                <ng-template let-rowIndex="rowIndex" let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                  <div class="options">
+
+                    <ion-chip [id]="'formatDocument'+rowIndex" class="tertiary" outline="false">
+                      <ion-icon name="document"></ion-icon>
+                    </ion-chip>
+                    <ion-popover mode="md" size="auto" reference="trigger" side="start" alignment="start" [trigger]="'formatDocument'+rowIndex" >
+                      <ng-template>
+                        <ion-content>
+                          <ion-list>
+                            <ion-list-header>
+                              <ion-label>Formatos</ion-label>
+                            </ion-list-header>
+                            <ion-item button>
+                              <ion-icon color="success" slot="start" name="document"></ion-icon>
+                              <ion-label>Excel</ion-label>
+                            </ion-item>
+                            <ion-item button>
+                              <ion-icon color="danger" slot="start" name="document"></ion-icon>
+                              <ion-label>PDF</ion-label>
+                            </ion-item>
+                          </ion-list>
+                        </ion-content>
+                      </ng-template>
+                    </ion-popover>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+            <ng-template #loading>
+              <ion-card-header class="ion-text-center">
+                <ion-card-subtitle>
+                  <ion-spinner name="circles"></ion-spinner>
+                </ion-card-subtitle>
+                <ion-card-title>Cargando</ion-card-title>
+              </ion-card-header>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content> -->

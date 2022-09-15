@@ -1,0 +1,46 @@
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col class="ion-hide-sm-down" size="6">
+        <ion-img src="../../../assets/svg/naranja.svg"></ion-img>
+      </ion-col>
+      <ion-col sizeXs="12" sizeSm="6">
+        <ion-card>
+          <ion-segment color="orange" #segmentTime [value]="'login'">
+            <ion-segment-button [value]="'login'">
+              <ion-icon name="person"></ion-icon>
+              <ion-label>Ingresar</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <ng-container [ngSwitch]="segmentTime.value">
+            <ion-card *ngSwitchCase="'login'">
+              <ion-card-header class="ion-text-center">
+                <ion-card-subtitle>Ingresar</ion-card-subtitle>
+                <ion-card-title>Panel Administrativo</ion-card-title>
+              </ion-card-header>
+              <form [formGroup]="this.formLogin" (ngSubmit)="this.submit()">
+              <ion-card-content class="ion-text-center">
+                <ion-item >
+                  <ion-label position="stacked">Usuario</ion-label>
+                  <ion-icon slot="start" name="people"></ion-icon>
+                  <ion-input class="input-autocomplete" required formControlName="email" type="text"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Contraseña</ion-label>
+                  <ion-icon  slot="start" name="lock-closed"></ion-icon>
+                  <ion-input class="input-autocomplete" required formControlName="pass" type="password"></ion-input>
+                </ion-item>
+                <ion-button color="orange" shape="round" class="ion-margin" block type="submit" [disabled]="false">
+                  <ion-label>Ingresar</ion-label>
+                  <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+                </ion-button>
+              </ion-card-content>
+            </form>
+            </ion-card>
+          </ng-container>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,19 @@
+<ion-buttons style="margin-left: 4px;">
+    <ion-button [id]="this.trigger">
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-button>
+</ion-buttons>
+
+<ion-popover side="top" alignment="end" class="menu" [trigger]="this.trigger" triggerAction="click">
+    <ng-template>
+
+        <div class="popover-content ">
+            <ion-item>
+                <ion-icon name="pizza" slot="start"></ion-icon>
+                <ion-label>Pizza</ion-label>
+                <ion-icon name="pizza" slot="end"></ion-icon>
+
+            </ion-item>
+        </div>
+    </ng-template>
+</ion-popover>
