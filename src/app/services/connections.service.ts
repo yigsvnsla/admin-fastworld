@@ -44,7 +44,7 @@ export class ConectionsService {
   httpHeaders() {
     return {
       headers: new HttpHeaders({
-        'Authorization': `Bearer ${(this.cookiesService.get(environment['cookie_tag']))}`,
+        'Authorization': `Bearer ${(this.cookiesService.get(environment['admin_cookie_tag']))}`,
       }),
     };
   }
@@ -113,9 +113,9 @@ export class ConectionsService {
     Authentications methods
   */
 
-  public signUp(formBody:SingUpI){
+  public signUp(formBody:SingUpI,scope:string){
     return this.httpClient
-      .post<SingUpResponseI>(`${this.api}/auth/admin/signup`, formBody)
+      .post<SingUpResponseI>(`${this.api}/auth/${scope}/signup`, formBody)
       .pipe(
         debounceTime(500),
         retry(2),

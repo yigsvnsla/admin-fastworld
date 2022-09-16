@@ -87,12 +87,16 @@ export class DashboardPage implements OnInit {
       title:'Usuarios',
       url:'usuarios',
       options:[{
+        title:'crear',
+        url:'crear',
+        icon:'cube'
+      },{
         title:'clientes',
         url:'client',
         icon:'cube'
       },{
         title:'motorizados',
-        url:'drivers',
+        url:'conductores',
         icon:'list'
       },{
         title:'encargados',
@@ -112,7 +116,7 @@ export class DashboardPage implements OnInit {
   }
 
   onLogOut(){
-
+    this.conectionsService.logOut()
   }
 
 }

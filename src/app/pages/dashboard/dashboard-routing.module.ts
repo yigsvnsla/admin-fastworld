@@ -1,3 +1,5 @@
+import { ConductoresComponents } from './components/usuarios/conductores/conductores.component';
+import { ClientesComponents } from './components/usuarios/clientes/clientes.component';
 import { ActivasComponent } from './components/encomiendas/activas/activas.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgModule } from '@angular/core';
@@ -5,10 +7,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardPage } from './dashboard.page';
 import { HistorialComponent } from './components/encomiendas/historial/historial.component';
-import { CrearComponent } from './components/encomiendas/crear/crear.component';
+import { CrearComponent } from './components/encomiendas/crear-encomiendas/crear.component';
+import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
 
 const routes: Routes = [
-
   {
     path: '',
     component: DashboardPage,
@@ -21,7 +23,8 @@ const routes: Routes = [
       {
         path:'home',
         component:HomeComponent
-      },{
+      },
+      {
         path:'encomiendas',
         children:[
           {
@@ -31,10 +34,32 @@ const routes: Routes = [
           {
             path:'activas',
             component:ActivasComponent
-          },{
+          },
+          {
             path:'historial',
             component:HistorialComponent
           }
+        ]
+      },
+      {
+        path:'usuarios',
+        children:[
+          {
+            path:'crear',
+            component:CrearUsuarioComponent
+          },
+          {
+            path:'crear/:type',
+            component:CrearUsuarioComponent
+          },
+          {
+            path:'clientes',
+            component:ClientesComponents
+          },
+          {
+            path:'conductores',
+            component:ConductoresComponents
+          },
         ]
       }
     ]

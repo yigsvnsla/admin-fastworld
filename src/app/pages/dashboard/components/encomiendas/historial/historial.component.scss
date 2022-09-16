@@ -1,5 +1,14 @@
-ion-item{
-    &.searchbar{
-        --highlight-color-focused:var(--ion-color-orange)
+ion-item {
+    &.searchbar {
+        --highlight-color-focused: var(--ion-color-orange)
     }
 }
+
+ngx-datatable {
+    height: calc(100vh - 110px);
+}
+
+// ::ng-deep .progress-linear {
+//     position: fixed !important;
+//     bottom: 0px;
+// }
