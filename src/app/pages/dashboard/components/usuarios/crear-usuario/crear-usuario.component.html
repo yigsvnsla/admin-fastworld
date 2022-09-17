@@ -16,8 +16,8 @@
           <ion-item-group #formRegisterRef [formGroup]="this.formRegister">
             <ion-item>
                 <ion-label>Tipo de Usuario</ion-label>
-                <ion-select interface="popover" [value]="this.scope" placeholder="Seleccionar">
-                    <ion-select-option *ngFor="let rol of this.listTypeUser" [value]="rol.url">{{rol.title | titlecase}}</ion-select-option>
+                <ion-select #rolSelect interface="popover" [value]="this.scope" placeholder="Seleccionar">
+                  <ion-select-option *ngFor="let rol of this.listTypeUser" [value]="rol.url">{{rol.title | titlecase}}</ion-select-option>
                 </ion-select>
             </ion-item>
             <ng-container formGroupName="documents">
@@ -54,7 +54,7 @@
               </ion-button>
               <ion-input  (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="password" [type]="eyeIconRef.name == 'eye-off' ?'password': eyeIconRef.name == 'eye'? 'text':'password'" placeholder="Contraseña"></ion-input>
             </ion-item>
-            <!-- ------------ -->
+            <!-- ------------   -->
             <ion-button [disabled]="this.formRegister.invalid" class="ion-text-center ion-margin" type="submit" color="orange" (click)="onRegister()" expand="block" fill="solid" shape="round">
               <ng-container *ngIf="!this.loading; else _loading">
                 <ion-label>Registrar</ion-label>

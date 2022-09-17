@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConectionsService } from 'src/app/services/connections.service';
-import { IonItemGroup } from '@ionic/angular';
+import { IonItemGroup, IonSelect } from '@ionic/angular';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -13,6 +13,7 @@ import { format, isValidPhoneNumber } from 'libphonenumber-js';
 })
 
 export class CrearUsuarioComponent implements OnInit {
+    @ViewChild('rolSelect') public rolSelect: IonSelect
 
     @ViewChild('formRegisterRef') public formRegisterRef: IonItemGroup
     public formRegister: FormGroup
@@ -35,19 +36,18 @@ export class CrearUsuarioComponent implements OnInit {
 
     }
 
-    ngOnChanges(){
+    ngOnChanges() {
         this.scope = ''
         if (new RegExp(/([a-zA-Z])/g).test(this.rutaActiva.snapshot.params['type'])) {
-            if (this.rutaActiva.snapshot.params['type'] !== undefined){
+            if (this.rutaActiva.snapshot.params['type'] !== undefined) {
                 let index = this.listTypeUser.findIndex((rol => rol.title === this.rutaActiva.snapshot.params['type']))
-                if ( index < 0 ) { this.router.navigateByUrl('/dashboard/usuarios/crear') }
+                if (index < 0) { this.router.navigateByUrl('/dashboard/usuarios/crear') }
                 if (index >= 0) { this.scope = this.listTypeUser[index].url }
             }
         }
     }
 
     public ngOnInit() {
-
         this.loading = false
         this.formRegister = this.formBuilder.nonNullable.group({
             documents: this.formBuilder.nonNullable.group({
@@ -118,10 +118,14 @@ export class CrearUsuarioComponent implements OnInit {
     public onRegister() {
         this.loading = true
         this.conectionsService
-            .signUp(this.formRegister.value,this.scope)
+            .signUp(this.formRegister.value, this.rolSelect.value)
             .subscribe((response) => {
+                this.toolsService.showAlert({
+                    header:'Usuario Registrado',
+                    buttons:['ok']
+                })
                 console.log(response);
-              
+
                 this.loading = false
             }, (error) => {
                 console.error(error);
