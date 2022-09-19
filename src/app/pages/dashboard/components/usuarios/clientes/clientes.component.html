@@ -1,0 +1,22 @@
+<ion-header>
+    <ion-toolbar>
+        <app-btn-menu slot="start"></app-btn-menu>
+        <ion-buttons slot="end">
+            <ion-menu-button menu="menu-historial"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Header</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ngx-datatable
+    class="material"
+    [rows]="this.source"
+    [columns]="this.columns"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="headerHeight"
+    [rowHeight]="rowHeight"
+    [loadingIndicator]="loading"
+    [scrollbarV]="true"
+    (scroll)="onScroll($event.offsetY)"
+  ></ngx-datatable>
+</ion-content>

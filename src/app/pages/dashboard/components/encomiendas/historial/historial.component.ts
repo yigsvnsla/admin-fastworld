@@ -20,15 +20,34 @@ export class HistorialComponent implements OnInit {
   readonly rowHeight = 50;
   readonly headerHeight = 50;
 
-  public source: any[] = Array.from<any>({ length: 0 });
+  public source: any[] = []
   private itemsChanges$: BehaviorSubject<any>
   private path: string
   private pagination: {
-    page: number
-    pageSize?: number
-    pageCount?: number
+    start: number
+    limit: number
     total?: number
   }
+
+  public columns = [ {
+    name: 'id',
+    prop: 'id',
+  },{
+    name: 'Categoria',
+    prop: 'attributes.category',
+  },{
+    name: 'id',
+    prop: 'attributes.shipping_status',
+  },{
+    name: 'id',
+    prop: 'attributes.sender.data.attributes.basic.attributes.name',
+  },{
+    name: 'id',
+    prop: 'attributes.',
+  },{
+    name: 'id',
+    prop: 'attributes.',
+  },]
 
   public loading: boolean
   public ColumnMode = ColumnMode;
@@ -38,24 +57,24 @@ export class HistorialComponent implements OnInit {
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
-    this.itemsChanges$ = new BehaviorSubject<(string | undefined)[]>(this.source);
     this.setPath = 'admin/packages?populate=*&sort=id:ASC&'
-    this.setPagination = { page: 1, }
+    this.setPagination = { 
+      start:0,
+      limit:25,
+      total:0
+    }
     this.loading = false
-    this.getInformation()
   }
 
   public get getPagination(): {
-    page: number
-    pageSize?: number
-    pageCount?: number
+    start: number
+    limit: number
     total?: number
   } { return this.pagination }
 
   public set setPagination(v: {
-    page: number
-    pageSize?: number
-    pageCount?: number
+    start: number
+    limit: number
     total?: number
   }) { this.pagination = v; }
 
@@ -64,23 +83,26 @@ export class HistorialComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.getInformation()
 
   }
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path)
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)    
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
-    this.source.splice(page * pageSize, pageSize, ...data);
-    this.itemsChanges$.next(this.source);
+    this.source = [...this.source, ...data]
     this.loading = false;
+    
     console.log(data);
+    
+    
   }
 
   private async getData(path: string) {
     return await this.conectionsService
-      .get<any>(path + `&pagination[page]=${this.getPagination.page}`)
+      .get<any>(path)
       .pipe(delay(1000))
       .toPromise()
   }
@@ -88,86 +110,21 @@ export class HistorialComponent implements OnInit {
   public onScroll(offsetY: number) {
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
-    
     // check if we scrolled to the end of the viewport
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      // total number of results to load
-      
-      const currentPage = Math.floor(offsetY / this.pagination.pageSize) + 1;
-      console.log(currentPage);
-      
-      // let limit = this.pageLimit;
-
-      // check if we haven't fetched any results yet
-      if (this.source.length === 0) {
-        // calculate the number of rows that fit within viewport
-        const pageSize = Math.ceil(viewHeight / this.rowHeight);
-        // console.log(pageSize);
-        
-        // change the limit to pageSize such that we fill the first page entirely
-        // (otherwise, we won't be able to scroll past it)
-        // limit = Math.max(pageSize, this.pageLimit);
+      if (!this.loading && this.source.length != 0 && this.source.length  >= this.pagination.total) {
+        this.loading = false
+        return
       }
-      // this.loadPage(limit);
+      this.getInformation();
     }
+    return
+
+    
   }
 
 
 
-
-
-  // readonly headerHeight = 50;
-  // readonly rowHeight = 50;
-  // readonly pageLimit = 10;
-
-  // rows = [];
-  // isLoading: boolean;
-
-  // ColumnMode = ColumnMode;
-
-  // constructor(
-  //   private conectionsService: ConectionsService,
-  //   private el: ElementRef
-  // ) {}
-
-  // ngOnInit() {
-  //   this.onScroll(0);
-  // }
-
-  // onScroll(offsetY: number) {    
-  //   // total height of all rows in the viewport
-  //   const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
-
-  //   // check if we scrolled to the end of the viewport
-  //   if (!this.isLoading && offsetY + viewHeight >= this.rows.length * this.rowHeight) {
-  //     // total number of results to load
-  //     let limit = this.pageLimit;
-
-  //     // check if we haven't fetched any results yet
-  //     if (this.rows.length === 0) {
-  //       // calculate the number of rows that fit within viewport
-  //       const pageSize = Math.ceil(viewHeight / this.rowHeight);
-
-  //       // change the limit to pageSize such that we fill the first page entirely
-  //       // (otherwise, we won't be able to scroll past it)
-  //       limit = Math.max(pageSize, this.pageLimit);
-  //     }
-  //     // this.loadPage(limit);
-  //   }
-  // }
-
-  // private loadPage(limit: number) {
-  //   // set the loading flag, which serves two purposes:
-  //   // 1) it prevents the same page from being loaded twice
-  //   // 2) it enables display of the loading indicator
-  //   this.isLoading = true;
-  //   this.conectionsService.get()
-  //   // this.serverResultsService.getResults(this.rows.length, limit).subscribe(results => {
-  //   //   const rows = [...this.rows, ...results.data];
-  //   //   this.rows = rows;
-  //   //   this.isLoading = false;
-  //   // });
-  // }
 
 
 
