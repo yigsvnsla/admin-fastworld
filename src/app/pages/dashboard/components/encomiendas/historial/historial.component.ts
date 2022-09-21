@@ -58,7 +58,7 @@ export class HistorialComponent implements OnInit {
     private el: ElementRef
   ) {
     this.setPath = 'admin/packages?populate=*&sort=id:ASC&'
-    this.setPagination = { 
+    this.setPagination = {
       start:0,
       limit:25,
       total:0
@@ -89,15 +89,15 @@ export class HistorialComponent implements OnInit {
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)    
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
     this.loading = false;
-    
+
     console.log(data);
-    
-    
+
+
   }
 
   private async getData(path: string) {
@@ -120,7 +120,7 @@ export class HistorialComponent implements OnInit {
     }
     return
 
-    
+
   }
 
 
@@ -157,7 +157,7 @@ export class HistorialComponent implements OnInit {
   //   this.dateValue2 = format(new Date(Date.now()), 'yyyy-MM-dd')
   // }
 
-  // public ionViewDidEnter() {    
+  // public ionViewDidEnter() {
   //   this.rangeToDate(3)
   // }
 
@@ -177,14 +177,14 @@ export class HistorialComponent implements OnInit {
   // //   this.request({pagination:{...this.qsQuery.pagination, pageSize:($event as CustomEvent).detail.value}})
   // }
 
-  // public onSort($event:any,rows){ 
-  // //   this.progressBar['el'].hidden = false;   
+  // public onSort($event:any,rows){
+  // //   this.progressBar['el'].hidden = false;
   // //   this.conectionsService
   // //     .get(`users?${qs.stringify({...this.qsQuery,...{sort:[`${( $event.column.prop as string ).includes('.')? ( $event.column.prop as string ).slice( ( $event.column.prop as string ).indexOf('.') + 1 ) : $event.column.prop }:${ $event.newValue }`]}},{  encode:false  })}&populate=*`)
   // //     .subscribe(res=>{
   // //       this.progressBar['el'].hidden = true;
   // //       rows.data = (res.data as any)
-  // //     })  
+  // //     })
   // }
 
   // public onSearchChange($event:any){
@@ -237,7 +237,7 @@ export class HistorialComponent implements OnInit {
 
   // public rangeToDateSearch(){
   // //   let x1 = parse(this.dateValue1,'yyyy-MM-dd',new Date(Date.now()));
-  // //   let x2 = parse(this.dateValue2,'yyyy-MM-dd',new Date(Date.now()));    
+  // //   let x2 = parse(this.dateValue2,'yyyy-MM-dd',new Date(Date.now()));
   // //   if (isAfter(x1,x2)  || isBefore(x2,x1)) {
   // //     this.toolsService
   // //       .showAlert({
@@ -264,7 +264,7 @@ export class HistorialComponent implements OnInit {
   // //     pagination:{  page:this.pageNumber + 1, pageSize:this.limitSelect.value },
   // //     ...this.qsQuery,
   // //     ..._qs,
-  // //   }    
+  // //   }
   // //   // console.log(this.qsQuery);
   // //   this.row$ = this.conectionsService
   // //   .get(`users?${qs.stringify({...this.qsQuery},{  encode:false  })}&populate=*`)

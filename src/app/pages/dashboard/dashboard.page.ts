@@ -92,7 +92,7 @@ export class DashboardPage implements OnInit {
         icon:'cube'
       },{
         title:'clientes',
-        url:'client',
+        url:'clientes',
         icon:'cube'
       },{
         title:'motorizados',

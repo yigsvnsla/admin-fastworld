@@ -1,18 +1,18 @@
-import { Component, ElementRef, OnInit,} from '@angular/core';
+import { Component, ElementRef, OnInit, } from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 
 @Component({
-    selector: 'app-clientes',
-    templateUrl: './clientes.component.html',
-    styleUrls: ['./clientes.components.scss'],
+  selector: 'app-clientes',
+  templateUrl: './clientes.component.html',
+  styleUrls: ['./clientes.components.scss'],
 })
 
-export class ClientesComponents implements OnInit{
+export class ClientesComponents implements OnInit {
 
-    
+
   readonly rowHeight = 50;
   readonly headerHeight = 50;
 
@@ -25,9 +25,13 @@ export class ClientesComponents implements OnInit{
     total?: number
   }
 
-  public columns = [ {
+  public columns = [{
     name: 'id',
     prop: 'id',
+  },
+  {
+    name: 'nombre',
+    prop: 'basic.name',
   }]
 
   public loading: boolean
@@ -38,12 +42,12 @@ export class ClientesComponents implements OnInit{
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
-      
-    this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&'
-    this.setPagination = { 
-      start:0,
-      limit:25,
-      total:0
+
+    this.setPath = 'users/clients?&populate=*&sort=id:ASC&'
+    this.setPagination = {
+      start: 0,
+      limit: 25,
+      total: 0
     }
     this.loading = false
   }
@@ -71,15 +75,15 @@ export class ClientesComponents implements OnInit{
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)    
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
     this.loading = false;
-    
+
     // console.log(data);
-    
-    
+
+
   }
 
   private async getData(path: string) {
@@ -94,7 +98,7 @@ export class ClientesComponents implements OnInit{
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length  >= this.pagination.total) {
+      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
         this.loading = false
         return
       }
@@ -102,7 +106,7 @@ export class ClientesComponents implements OnInit{
     }
     return
 
-    
+
   }
 
 }
