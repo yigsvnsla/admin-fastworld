@@ -18,12 +18,12 @@ export class ModalMembershipComponent implements OnInit {
     private get dateNow() : string {
         return new Date(Date.now()).toISOString()
     }
-    
+
     private get dateEndOfMonth() : string {
         return endOfMonth(new Date(Date.now())).toISOString()
     }
 
-    private get nextDateMonth() : string{        
+    private get nextDateMonth() : string{
         return addMonths(new Date(Date.now()),1).toISOString()
     }
 
@@ -95,7 +95,7 @@ export class ModalMembershipComponent implements OnInit {
                 role:'success',
                 handler:(value)=>{
                     console.log(value);
-                    
+
                 }
             }]
         })
