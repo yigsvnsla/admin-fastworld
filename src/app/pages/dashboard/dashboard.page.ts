@@ -89,23 +89,23 @@ export class DashboardPage implements OnInit {
       options:[{
         title:'crear',
         url:'crear',
-        icon:'cube'
+        icon:'person'
       },{
         title:'clientes',
         url:'clientes',
-        icon:'cube'
+        icon:'people'
       },{
         title:'motorizados',
         url:'conductores',
-        icon:'list'
+        icon:'bicycle'
       },{
         title:'encargados',
         url:'managers',
-        icon:'list'
+        icon:'person-circle'
       },{
         title:'empleados',
         url:'employed',
-        icon:'list'
+        icon:'people-circle'
       }]
     }]
 

@@ -1,5 +1,5 @@
-import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
-import { ToolsService } from '../../../../../services/tools.service';
+import { ToolsService } from 'src/app/services/tools.service';
+import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { ConectionsService } from '../../../../../services/connections.service';
 import { delay, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -9,6 +9,7 @@ import { IonProgressBar, IonSelect } from '@ionic/angular';
 // import { UsuariosFormComponent } from '../usuarios-form/usuarios-form.component';
 import { endOfMonth, format, isAfter, isBefore, parse, parseISO, startOfMonth, sub } from 'date-fns';
 import * as qs from 'qs';
+import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
 
 @Component({
   selector: 'app-historial',
@@ -19,9 +20,7 @@ export class HistorialComponent implements OnInit {
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
-
   public source: any[] = []
-  private itemsChanges$: BehaviorSubject<any>
   private path: string
   private pagination: {
     start: number
@@ -36,24 +35,16 @@ export class HistorialComponent implements OnInit {
     name: 'Categoria',
     prop: 'attributes.category',
   },{
-    name: 'id',
+    name: 'Remitente',
     prop: 'attributes.shipping_status',
-  },{
-    name: 'id',
-    prop: 'attributes.sender.data.attributes.basic.attributes.name',
-  },{
-    name: 'id',
-    prop: 'attributes.',
-  },{
-    name: 'id',
-    prop: 'attributes.',
   },]
 
   public loading: boolean
   public ColumnMode = ColumnMode;
-
+  public SelectionType = SelectionType
 
   constructor(
+    private toolsService:ToolsService,
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
@@ -119,10 +110,32 @@ export class HistorialComponent implements OnInit {
       this.getInformation();
     }
     return
+  }
 
+  public onSearchPackage(_id:number){    
+    this.toolsService.showModal({
+      component:DetailsPackageComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
+  }
+
+  public onTransferPackage(_id:number){
 
   }
 
+  public onDonwloadInfoPackage(_id:number){
+
+  }
+
+  public onDeletePackage(_id:number){
+    
+  }
 
 
 

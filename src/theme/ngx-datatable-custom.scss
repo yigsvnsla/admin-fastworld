@@ -1,0 +1,35 @@
+ngx-datatable{
+    .datatable-header{
+        .datatable-header-inner{
+            height: inherit;
+            .datatable-header-cell{
+                display: flex;
+                align-items: center;
+                color: aqua;    
+                &.center{
+                    justify-content: center;
+                }
+            }
+        }
+
+    }
+
+    .datatable-body-row{
+        &.active{
+            background-color: transparent !important;
+        }
+        .datatable-body-cell{
+            display: flex;
+            align-items: center;
+            color: aqua;    
+            & > .datatable-body-cell-label{
+                display: flex;
+            }
+            &.center{
+                justify-content: center;
+            }
+        }
+    }
+
+}
+

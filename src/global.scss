@@ -35,9 +35,5 @@
 
 /* Custom Styles */ 
 @import "./theme/custom.scss";
+@import "./theme/ngx-datatable-custom.scss"
 
-*{
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
-}

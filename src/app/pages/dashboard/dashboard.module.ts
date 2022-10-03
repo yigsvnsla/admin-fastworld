@@ -1,3 +1,4 @@
+import { DetailsPackageComponent } from './../generic-components/details-package/details-package.component';
 import { ConductoresComponents } from './components/usuarios/conductores/conductores.component';
 import { ClientesComponents } from './components/usuarios/clientes/clientes.component';
 import { HistorialComponent } from './components/encomiendas/historial/historial.component';
@@ -17,6 +18,9 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CrearComponent } from './components/encomiendas/crear-encomiendas/crear.component';
 import { PopOverMenuComponent } from '../generic-components/popover-menu/popover-menu.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
+import { MenuFilterComponent } from '../generic-components/menu-filter/menu-filter.component';
+import { DetailsuserComponent } from '../generic-components/details-user/details-user.component';
+import { ModalMembershipComponent } from '../generic-components/modal-membership/modal-membersip.component';
 
 @NgModule({
   imports: [
@@ -37,7 +41,12 @@ import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear
     PopOverMenuComponent,
     CrearUsuarioComponent,
     ClientesComponents,
-    ConductoresComponents
+    ConductoresComponents,
+    DetailsPackageComponent,
+    MenuFilterComponent,
+    DetailsuserComponent,
+    ModalMembershipComponent
+    
   ]
 })
 export class DashboardPageModule {}

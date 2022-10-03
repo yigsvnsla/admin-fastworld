@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, } from '@angular/core';
+import { ToolsService } from './../../../../../services/tools.service';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, } from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
+import { DetailsuserComponent } from 'src/app/pages/generic-components/details-user/details-user.component';
 
 @Component({
   selector: 'app-clientes',
@@ -12,6 +14,7 @@ import { ConectionsService } from 'src/app/services/connections.service';
 
 export class ClientesComponents implements OnInit {
 
+  @ViewChild('opcionesRef') opcionesRef:TemplateRef<any>
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
@@ -25,14 +28,7 @@ export class ClientesComponents implements OnInit {
     total?: number
   }
 
-  public columns = [{
-    name: 'id',
-    prop: 'id',
-  },
-  {
-    name: 'nombre',
-    prop: 'basic.name',
-  }]
+  public columns: any[]
 
   public loading: boolean
   public ColumnMode = ColumnMode;
@@ -40,10 +36,21 @@ export class ClientesComponents implements OnInit {
 
   constructor(
     private conectionsService: ConectionsService,
-    private el: ElementRef
+    private el: ElementRef,
+    private toolsService:ToolsService
   ) {
 
-    this.setPath = 'users/clients?&populate=*&sort=id:ASC&'
+    this.columns = [{
+      name: 'id',
+      prop: 'id',
+    },
+    {
+      name: 'nombre',
+      prop: 'attributes.name',
+    }]
+  
+
+    this.setPath = 'basic/client?populate=*'
     this.setPagination = {
       start: 0,
       limit: 25,
@@ -68,6 +75,11 @@ export class ClientesComponents implements OnInit {
     this.path = v;
   }
 
+  test(x){
+    console.log(x);
+    
+  }
+
   public ngOnInit(): void {
     this.getInformation()
 
@@ -75,13 +87,13 @@ export class ClientesComponents implements OnInit {
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
+    const { data, meta } = await this.getData(this.path + `&sort=id:ASC&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
     this.loading = false;
 
-    // console.log(data);
+    console.log(this.source);
 
 
   }
@@ -105,8 +117,20 @@ export class ClientesComponents implements OnInit {
       this.getInformation();
     }
     return
+  }
 
 
+  public showProfile(_id:number){
+    this.toolsService.showModal({
+      component:DetailsuserComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
   }
 
 }

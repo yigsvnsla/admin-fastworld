@@ -1,0 +1,50 @@
+<ion-card mode="ios">
+    <ion-card-header>
+        <ion-card-title>Membrecia</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+        <ion-item-group>
+            <ion-item button (click)="this.showAlertMembership()" [detail]="true">
+                <ion-label>
+                    <p>Tipo</p>
+                    <h2>Seleccionar</h2>
+                </ion-label>
+            </ion-item>
+            <ion-item button [detail]="false">
+                <ion-label>Inicio</ion-label>
+                <ion-icon name="calendar" slot="start"></ion-icon>
+                <ion-datetime-button datetime="datetime-start"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true" >
+                    <ng-template>
+                        <ion-datetime locale="es-ES" color="orange" #dateTimeStart [showDefaultButtons]="true" presentation="date" id="datetime-start"></ion-datetime>
+                    </ng-template>
+                </ion-modal>
+            </ion-item>
+            <ion-item button [detail]="false">
+                <ion-label>Final</ion-label>
+                <ion-icon name="calendar" slot="start"></ion-icon>
+                <ion-datetime-button datetime="datetime-end"></ion-datetime-button>
+                <ion-modal  [keepContentsMounted]="true">
+                    <ng-template>
+                        <ion-datetime locale="es-ES" color="orange" #dateTimeEnd [showDefaultButtons]="true" presentation="date" id="datetime-end"></ion-datetime>
+                    </ng-template>
+                </ion-modal>
+            </ion-item>
+        </ion-item-group>
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-button color="danger" size="small" (click)="this.onExit()" expand="block" fill="clear" shape="round">
+                        <ion-label>Cancelar</ion-label>
+                    </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-button color="success" size="small"  expand="block" fill="clear" shape="round">
+                        <ion-label>Aceptar</ion-label>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+            
+        </ion-grid>
+    </ion-card-content>
+</ion-card>

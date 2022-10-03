@@ -1,0 +1,366 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="orange" (click)="this.onExit()">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Información Detallada</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+ <ng-container *ngIf="(this.package | async) as item; else loadingPackage">
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
+        <ion-card class="data" *ngIf="item.attributes.receiver != null; else notReceiver">
+          <ion-card-header>
+            <ion-card-subtitle style="display: flex; align-items: center;">
+              <ion-icon name="person"></ion-icon>
+              <ion-text color="orange">Cliente</ion-text>
+            </ion-card-subtitle>
+            <ion-card-title>{{(item.attributes.receiver.name | titlecase) }}</ion-card-title>
+            <ion-card-subtitle>Medios de Comunicación</ion-card-subtitle>
+            <ion-card-subtitle style="display: flex; align-items: center; justify-content: center;">
+              <ion-fab-button href="tel:{{item.attributes.receiver.phone}}" size="small">
+                <ion-icon name="call"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + item.attributes.receiver.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
+                <ion-icon name="logo-whatsapp"></ion-icon>
+              </ion-fab-button>
+            </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+        <ng-template #notReceiver>
+          <ion-card class="not-data">
+            <ion-card-header>
+              <ion-card-subtitle>Tiempo de vida del ticket: 30 minutos</ion-card-subtitle>
+              <ion-card-title>Esperando confirmación</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-img [src]="'../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'"></ion-img>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+      
+      <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
+        <ion-card class="data" *ngIf="item.attributes.driver != null; else notConductor">
+          <ion-card-header>
+            <ion-card-subtitle style="display: flex; align-items: center;">
+              <ion-icon name="bicycle"></ion-icon>
+              <ion-text color="orange">Motorizado</ion-text>
+            </ion-card-subtitle>
+            <ion-card-title>Darwin Moreno</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col sizeXs="12" sizeMd="6">
+                  <ion-item>
+                    <ion-label>
+                      <p style="display: flex; align-items: center;">
+                        <ion-icon name="grid"></ion-icon>
+                        <ion-text color="orange">Categoria</ion-text>
+                      </p>
+                      <h2>(item.attributes.category |titlecase) </h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeMd="6">
+                  <ion-item>
+                    <ion-label>
+                      <p style="display: flex; align-items: center;">
+                        <ion-icon name="grid"></ion-icon>
+                        <ion-text color="orange">Categoria</ion-text>
+                      </p>
+                      <h2>(item.attributes.category |titlecase) </h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        <ng-template #notConductor>
+          <ion-card class="not-data">
+            <ion-card-header>
+              <ion-card-subtitle>Conductor</ion-card-subtitle>
+              <ion-card-title>Sin Asignar</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-img [src]="'../../../../assets/svg/undraw_Delivery_address_re_cjca.svg'"></ion-img>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-card-subtitle style="display: flex; align-items: center;">
+                <ion-icon name="map"></ion-icon>
+                <ion-text color="orange">Información</ion-text>
+              </ion-card-subtitle>
+            </ion-card-subtitle>
+            <ion-card-title>Ubicaciones e Indicaciones</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col sizeXs="12" sizeSm="6">
+                  <ion-card-subtitle style="display: flex; align-items: center;">
+                    <ion-icon name="golf"></ion-icon>
+                    <ion-text color="orange">Ubicacion de Retiro</ion-text>
+                  </ion-card-subtitle>
+                
+                  <ion-item button detail-icon="map">
+                    <ion-label class="ion-text-wrap">
+                      <p style="display: flex; align-items: center;">
+                        <ion-icon name="grid"></ion-icon>
+                        <ion-text color="orange">Ubicacion</ion-text>
+                      </p>
+                      <h2>{{item.attributes.location.address}}</h2>
+                    </ion-label>
+                  </ion-item>
+               
+                  <ion-item detail="true" detail-icon="footsteps">
+                    <ion-label class="ion-text-wrap">
+                      <p style="display: flex; align-items: center;">
+                        <ion-icon name="footsteps"></ion-icon>
+                        <ion-text color="orange">Indicaciones</ion-text>
+                      </p>
+                      <h2>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maxime dolorem reprehenderit tempora officia ipsa neque ea labore. </h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeSm="6">
+                  <ion-card-subtitle style="display: flex; align-items: center;">
+                    <ion-icon name="flag"></ion-icon>
+                    <ion-text color="orange">Ubicacion de Entrega</ion-text>
+                  </ion-card-subtitle>
+                  <ng-container *ngIf="item.attributes.receiver != null; else notDirection" >
+                    <ion-item button detail-icon="map" [href]="'https://maps.google.com/?q=' +  item.attributes.receiver.direction.position.lat + ',' +  item.attributes.receiver.direction.position.lng" target="_blank" rel="noreferrer external">
+                      <ion-label class="ion-text-wrap">
+                        <p style="display: flex; align-items: center;">
+                          <ion-icon name="grid"></ion-icon>
+                          <ion-text color="orange">Ubicacion</ion-text>
+                        </p>
+                        <h2>{{item.attributes.receiver.direction.address}}</h2>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item detail="true" detail-icon="footsteps">
+                      <ion-label class="ion-text-wrap">
+                        <p style="display: flex; align-items: center;">
+                          <ion-icon name="footsteps"></ion-icon>
+                          <ion-text color="orange">Indicaciones</ion-text>
+                        </p>
+                        <h2>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maxime dolorem reprehenderit tempora officia ipsa neque ea labore. </h2>
+                      </ion-label>
+                    </ion-item>
+                  </ng-container>
+
+                  <ng-template #notDirection>
+                    <section class="not-data">
+                      <ion-card-header>
+                        <ion-card-subtitle>Ubicación</ion-card-subtitle>
+                        <ion-card-title>Sin Asignar</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-img [src]="'../../../../assets/svg/undraw_Delivery_address_re_cjca.svg'"></ion-img>
+                      </ion-card-content>
+                    </section>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-card-subtitle style="display: flex; align-items: center;">
+                <ion-icon name="bicycle"></ion-icon>
+                <ion-text color="orange">Información</ion-text>
+              </ion-card-subtitle>
+            </ion-card-subtitle>
+            <ion-card-title>Costo y Valores</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col sizeXs="12" sizeSm="6" sizeLg="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Valor de ruta</p>
+                      <h2>{{ item.attributes.fee != null ? (item.attributes.fee | currency) : 'Esperando Confirmación' }}</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col  sizeXs="12" sizeSm="6" sizeLg="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Encomienda</p>
+                      <h2>{{ (item.attributes.value | currency) }}</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeSm="6" sizeLg="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Estado</p>
+                      <h2>En Deuda</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeSm="6" sizeLg="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Valor recibido</p>
+                      <h2>{{ (item.attributes.money_catch | currency) }}</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle style="display: flex; align-items: center;">
+              <ion-icon name="cube"></ion-icon>
+              <ion-text color="orange">Información</ion-text>
+            </ion-card-subtitle>
+            <ion-card-title>Encomienda</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-card-subtitle>Caracteristicas</ion-card-subtitle>
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col sizeXs="12" sizeSm="6">
+                  <ion-item>
+                    <ion-icon name="grid" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Tipo de encomienda</p>
+                      <h2>(item.attributes.category |titlecase)</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeSm="6">
+                  <ion-item>
+                    <ion-icon name="flag" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Estado</p>
+                      <h2 [ngSwitch]="item.attributes.shipping_status">
+                        <ion-text *ngSwitchCase="'aceptado'" color="tertiary">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchCase="'entregado'" color="success">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchCase="'invalido'" color="medium">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchCase="'pendiente'" color="dark">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchCase="'recibido'" color="primary">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchCase="'reportado'" color="danger">
+                          <p>{{ item.attributes.shipping_status | titlecase}}</p>
+                        </ion-text>
+                        <ion-text *ngSwitchDefault color="dark">
+                          <p>Sin Estado</p>
+                        </ion-text>
+                      </h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-card-subtitle>Historial de movimientos</ion-card-subtitle>
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col sizeXs="12" sizeSm="6" sizeMd="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Fecha de creación</p>
+                      <h2>00/00/00 00:00 pm</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" sizeSm="6" sizeMd="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Fecha de confirmación</p>
+                      <h2>00/00/00 00:00 pm</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col sizeXs="12" sizeSm="6" sizeMd="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Fecha de aceptación</p>
+                      <h2>00/00/00 00:00 pm</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" sizeSm="6" sizeMd="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Fecha de recepción</p>
+                      <h2>00/00/00 00:00 pm</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" sizeSm="6" sizeMd="3">
+                  <ion-item>
+                    <ion-icon name="pizza" slot="start"></ion-icon>
+                    <ion-label>
+                      <p>Fecha de Entrega / Rechazo</p>
+                      <h2>00/00/00 00:00 pm</h2>
+                    </ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+ </ng-container>
+ <ng-template #loadingPackage>
+  <section  class="emptyList ion-padding">
+    <ion-img id="img-list" [src]="'../../../../assets/svg/undraw_loading_re_5axr.svg'"></ion-img>
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>Buscando Información</ion-card-title>
+      <ion-card-subtitle>Espere unos instantes mientras preparamos su solicitud</ion-card-subtitle>
+      <ion-spinner name="crescent"></ion-spinner>
+    </ion-card-header>
+  </section>
+ </ng-template>
+</ion-content>

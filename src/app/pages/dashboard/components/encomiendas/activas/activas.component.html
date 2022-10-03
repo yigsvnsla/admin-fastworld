@@ -9,14 +9,44 @@
 </ion-header>
 <ion-content>
   <ngx-datatable
-  class="material"
+  class="dark fullscreen"
   [rows]="this.source"
-  [columns]="this.columns"
   [columnMode]="ColumnMode.force"
   [headerHeight]="headerHeight"
   [rowHeight]="rowHeight"
   [loadingIndicator]="loading"
   [scrollbarV]="true"
   (scroll)="onScroll($event.offsetY)"
-></ngx-datatable>
+  [reorderable]="false"
+  [swapColumns]="false"> 
+  <ngx-datatable-column 
+      *ngFor='let column of columns'
+      name="{{column.name}}" 
+      prop="{{column.prop}}">
+  </ngx-datatable-column>
+  <ngx-datatable-column
+      headerClass="center"
+      cellClass="center"
+      [resizeable]="false"
+      [draggable]="false" 
+      [sortable]="false" 
+      name="Opciones"  
+      prop="id">
+      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-fab-button color="orange"  size="small">
+              <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="success"  size="small">
+              <ion-icon name="cloud-download"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="primary"  size="small">
+              <ion-icon name="pencil"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="danger" size="small">
+              <ion-icon name="close"></ion-icon>
+          </ion-fab-button>
+      </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
 </ion-content>

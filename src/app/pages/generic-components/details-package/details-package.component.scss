@@ -1,0 +1,66 @@
+@media only screen and (max-width:425px) {
+    ion-img#img-list {
+        width: 80vw;
+        height: 50vh
+    }
+}
+
+@media only screen and (min-width:425px) {
+    ion-img#img-list {
+        width: 55vw;
+        height: 55vh
+    }
+}
+
+@media only screen and (min-width:540px) {
+    ion-img#img-list {
+        width: 60vw;
+        height: 60vh;
+    }
+}
+
+@media only screen and (min-width:960px) {
+    ion-img#img-list {
+        width: 45vw;
+        height: 45vh
+    }
+}
+
+section{
+    &.not-data{
+        &>ion-card-content{
+            display: flex;
+            justify-content: center;
+            &>ion-img{
+                width: 150px;
+            }
+        }
+    }
+}
+    
+
+ion-card{
+    &.not-data {
+        width: 100%;
+        &>ion-card-content{
+            display: flex;
+            justify-content: center;
+            &>ion-img{
+                width: 200px;
+    
+            }
+        }
+    }
+    &.data{
+        width: 100%;
+    }
+
+}
+.emptyList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+

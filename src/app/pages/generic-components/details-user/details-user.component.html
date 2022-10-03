@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-toolbar mode="md">
+        <ion-buttons slot="start">
+            <ion-button color="orange" (click)="this.onExit()">
+                <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Información Detallada</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid fixed>
+        <ion-row>
+            <ion-col sizeXs="12" sizeMd="6">
+                <ion-card style="height: 260px">
+                    <ion-card-header>
+                        <ion-toolbar>
+                            <ion-card-subtitle>Nombre del Negocio</ion-card-subtitle>
+                            <ion-card-title>Mi Pequeña Empresa s.a</ion-card-title>        
+                            <ion-fab-button (click)="this.showAlertInputNameBusisness()" color="orange" size="small" slot="end">
+                                <ion-icon name="pencil"></ion-icon>
+                            </ion-fab-button>
+                        </ion-toolbar>
+                    </ion-card-header>
+                    <ion-card-content style="display: flex; justify-content: center; align-content: center;">
+                       <ion-avatar style="width: 140px; height: 140px;">
+                           <img [src]="'https://www.tailorbrands.com/wp-content/uploads/2020/07/mcdonalds-logo.jpg'" />
+                       </ion-avatar>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col sizeXs="12" sizeMd="6">
+                <ion-card style="height: 260px">
+                    <ion-card-header>
+                        <ion-toolbar>
+                            <ion-card-subtitle>Membrecia</ion-card-subtitle>
+                            <ion-card-title>Sin Asignar</ion-card-title>
+                            <ion-fab-button (click)="this.showModalMembership()" id="modal-membership" color="orange" size="small" slot="end">
+                                <ion-icon name="pencil"></ion-icon>
+                            </ion-fab-button>
+                        </ion-toolbar>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid fixed>
+                            <ion-row>
+                                <ion-col sizeLg="6">
+                                    <ion-item>
+                                        <ion-icon name="calendar" slot="start"></ion-icon>
+                                        <ion-label>
+                                            <p>dasdas</p>
+                                            <h4>00/00/1111</h4>
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col sizeLg="6">
+                                    <ion-item>
+                                        <ion-icon name="calendar" slot="start"></ion-icon>
+                                        <ion-label>
+                                            <p>dasdas</p>
+                                            <h4>00/00/1111</h4>
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
