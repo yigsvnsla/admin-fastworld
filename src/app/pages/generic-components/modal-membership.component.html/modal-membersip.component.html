@@ -1,0 +1,86 @@
+<ion-card mode="ios">
+    <ion-card-header>
+        <ion-card-title>Membrecia</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+        <ion-item-group>
+            <ion-grid class="ion-no-padding" *ngIf="this.tempMembership">
+                <ion-row>
+                    <ion-col size="6">
+                        <ion-item>
+                            <ion-label>
+                                <p>Inicio</p>
+                                <h2>{{ ( this.tempMembership.start | date:'d/M/yyyy') }}</h2>
+                            </ion-label>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="6">
+                        <ion-item>
+                            <ion-label>
+                                <p>Final</p>
+                                <h2>{{ ( this.tempMembership.expire | date:'d/M/yyyy') }}</h2>
+                            </ion-label>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+            <ion-item button (click)="this.showAlertMembership()" [detail]="true">
+                <ion-label>
+                    <p>Tipo</p>
+                    <h2>{{ this.tempMembership ? ( this.tempMembership.type | titlecase) :'Ninguna'}}</h2>
+                </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>
+                    <p>Asignar/Extender Vigencia</p>
+                    <h2>{{ selectDate.value != undefined ? selectDate.value != 0 ? ('Meses: ' + selectDate.value ) : 'Personalizado' : 'Seleccionar'}}</h2>
+                </ion-label>
+                <ion-select #selectDate interface="alert" (ionChange)="selectDateChange($event)">
+                    <ion-select-option [value]="1">1 Mes</ion-select-option>
+                    <ion-select-option [value]="3">3 Meses</ion-select-option>
+                    <ion-select-option [value]="6">6 Meses</ion-select-option>
+                    <ion-select-option [value]="12">12 Meses</ion-select-option>
+                    <ion-select-option [value]="0">Personalizado</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <div #customInputsDateContainer [hidden]="selectDate.value != 0">
+                <ion-item button [detail]="false">
+                    <ion-label>Inicio</ion-label>
+                    <ion-icon name="calendar" slot="start"></ion-icon>
+                    <ion-datetime-button datetime="datetime-start"></ion-datetime-button>
+                    <ion-modal id="dateTimeModalStart" [keepContentsMounted]="true" >
+                        <ng-template>
+                            <ion-datetime [value]="this.tempMembership?.start" (ionChange)="this.dateTimeStartChange($event)" locale="es-ES" color="orange" #dateTimeStart [showDefaultButtons]="true" presentation="date" id="datetime-start"></ion-datetime>
+                        </ng-template>
+                    </ion-modal>
+                </ion-item>
+                <ion-item button [detail]="false">
+                    <ion-label>Final</ion-label>
+                    <ion-icon name="calendar" slot="start"></ion-icon>
+                    <ion-datetime-button datetime="datetime-end"></ion-datetime-button>
+                    <ion-modal id="dateTimeModalEnd" [keepContentsMounted]="true">
+                        <ng-template>
+                            <ion-datetime [value]="this.tempMembership?.expire" (ionChange)="this.dateTimeEndChange($event)" locale="es-ES" color="orange" #dateTimeEnd [showDefaultButtons]="true" presentation="date" id="datetime-end"></ion-datetime>
+                        </ng-template>
+                    </ion-modal>
+                </ion-item>
+            </div>
+        </ion-item-group>
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-button color="danger" size="small" (click)="this.onExit()" expand="block" fill="clear" shape="round">
+                        <ion-label>Cancelar</ion-label>
+                    </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-button color="success" size="small" (click)="this.updateMemberShip()"  expand="block" fill="clear" shape="round">
+                        <ion-label>Aceptar</ion-label>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
+    </ion-card-content>
+</ion-card>

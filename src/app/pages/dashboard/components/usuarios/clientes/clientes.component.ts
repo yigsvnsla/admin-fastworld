@@ -4,7 +4,7 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
-import { DetailsuserComponent } from 'src/app/pages/generic-components/details-user/details-user.component';
+import { DetailsUserComponent } from 'src/app/pages/generic-components/details-user/details-user.component';
 
 @Component({
   selector: 'app-clientes',
@@ -122,7 +122,7 @@ export class ClientesComponents implements OnInit {
 
   public showProfile(_id:number){
     this.toolsService.showModal({
-      component:DetailsuserComponent,
+      component:DetailsUserComponent,
       cssClass:['modal-fullscreen'],
       keyboardClose:true,
       mode:'ios',

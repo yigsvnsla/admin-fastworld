@@ -26,7 +26,7 @@ export class ActivasComponent implements OnInit {
   }
 
   public columns = [ {
-    name: 'id',
+    name: 'Paquete',
     prop: 'id',
   },{
     name: 'Categoria',
@@ -120,3 +120,6 @@ export class ActivasComponent implements OnInit {
   }
 
 }
+
+
+// vista de la tabla columnas : ticket/ remitente / estado del paquete / contra entrega / repartidor / tiempo de retiro

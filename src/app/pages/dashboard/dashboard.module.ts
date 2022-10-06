@@ -19,8 +19,7 @@ import { CrearComponent } from './components/encomiendas/crear-encomiendas/crear
 import { PopOverMenuComponent } from '../generic-components/popover-menu/popover-menu.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
 import { MenuFilterComponent } from '../generic-components/menu-filter/menu-filter.component';
-import { DetailsuserComponent } from '../generic-components/details-user/details-user.component';
-import { ModalMembershipComponent } from '../generic-components/modal-membership/modal-membersip.component';
+import { DetailsUserComponent } from '../generic-components/details-user/details-user.component';
 
 @NgModule({
   imports: [
@@ -44,8 +43,7 @@ import { ModalMembershipComponent } from '../generic-components/modal-membership
     ConductoresComponents,
     DetailsPackageComponent,
     MenuFilterComponent,
-    DetailsuserComponent,
-    ModalMembershipComponent
+    DetailsUserComponent,
     
   ]
 })
