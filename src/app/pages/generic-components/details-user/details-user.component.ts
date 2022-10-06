@@ -26,7 +26,7 @@ export class DetailsUserComponent implements OnInit {
   public user: any
   public formBasic: FormGroup
   public editingLogo: boolean = false
-  private updateFileLogo = null  
+  private updateFileLogo = null
 
   constructor(
     private modalController: ModalController,
@@ -43,29 +43,29 @@ export class DetailsUserComponent implements OnInit {
     this.user$ = new BehaviorSubject<(any | undefined)>(this.user);
     // console.log(this.user);
   }
-  
+
   ngOnInit(): void {
 
 
   }
 
-  private instanceForm(data:any){
+  private instanceForm(data: any) {
     console.log(data);
-    
+
     this.formBasic = this.formBuilder.nonNullable.group({
       documents: this.formBuilder.nonNullable.group({
-        type: [null,[]],
+        type: [null, []],
         identification: [data.identification, [
           Validators.required,
-          Validators.nullValidator, 
+          Validators.nullValidator,
           Validators.pattern(/(^\d{9}$|^\d{13}$)/),
-          (codeControl:AbstractControl<number>)=>{
-            if (codeControl.value != null){
-              let val:string = codeControl.value.toString()
+          (codeControl: AbstractControl<number>) => {
+            if (codeControl.value != null) {
+              let val: string = codeControl.value.toString()
               if (val != '') {
                 // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
                 // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
-                if ( !(RegExp(/(^\d{9}$|^\d{13}$)/).test(val)) ) this.formBasic.get('documents').get('type').reset();
+                if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
                 return null
               }
             }
@@ -87,7 +87,7 @@ export class DetailsUserComponent implements OnInit {
         }
       ]],
       user: this.formBuilder.nonNullable.group({
-        password: ['', [Validators.required, Validators.nullValidator]],
+        password: [null, [Validators.required, Validators.nullValidator]],
         mail: [data.user.email, [
           Validators.required,
           Validators.nullValidator,
@@ -95,8 +95,8 @@ export class DetailsUserComponent implements OnInit {
           Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
         ]],
       })
-      
-    },)
+
+    })
 
     this.formBasic.disable()
   }
@@ -126,12 +126,9 @@ export class DetailsUserComponent implements OnInit {
     const send = async () => {
       const loading = await this.toolsService.showLoading('Actualizando informacion...')
       try {
-        console.log(this.formBasic.value);
-        // const businessName = { name: name }
-        // const response = await this.conectionService.put(`businesses/${this.user.business.id}`, businessName).toPromise()
-        // if (response) {
-        //   this.user.business.name = name
-        // }
+        console.log(this.formBasic.value)
+        const response = await this.conectionService.put(`basics/${this.id}`, this.formBasic.value).toPromise()
+        console.log(response)
       } catch (error) {
         console.error(error);
       } finally {
@@ -145,7 +142,7 @@ export class DetailsUserComponent implements OnInit {
       header: 'Membrecia',
       buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
     })
-    
+
   }
 
   public async showAlertConfirmUpdateLogo() {
@@ -185,14 +182,14 @@ export class DetailsUserComponent implements OnInit {
       inputs: [{
         type: 'text',
         value: this.user.business.name,
-        name:'name'
+        name: 'name'
       }],
       buttons: [{
         text: 'Cancelar'
       }, {
         text: 'Confirmar',
         role: 'success',
-        handler: async ({name}) => {
+        handler: async ({ name }) => {
           const send = async () => {
             const loading = await this.toolsService.showLoading('Actualizando informacion...')
             try {
