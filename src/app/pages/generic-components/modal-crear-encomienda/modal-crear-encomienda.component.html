@@ -5,7 +5,7 @@
                 <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-segment [swipeGesture]="false" value="lista" >
+        <ion-segment #segmentSelectPage [swipeGesture]="false" value="lista" >
             <ion-segment-button (click)="this.getSwiper.slidePrev()" value="lista">
                 <ion-label>Lista</ion-label>
             </ion-segment-button>
@@ -175,7 +175,7 @@
                     <ion-item-group>
                         <ion-item>
                             <ion-label>Categoria</ion-label>
-                            <ion-select multiple="false" placeholder="Seleccionar">
+                            <ion-select formControlName="category" multiple="false" placeholder="Seleccionar">
                                 <ion-select-option *ngFor="let categori of this.categories" [value]="categori">{{categori}}</ion-select-option>
                             </ion-select>
                         </ion-item>

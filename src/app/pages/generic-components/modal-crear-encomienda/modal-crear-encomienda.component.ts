@@ -3,9 +3,8 @@ import { ToolsService } from './../../../services/tools.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { InputCustomEvent, IonDatetime, IonicSlides, ModalController, SegmentCustomEvent, TextareaCustomEvent } from '@ionic/angular'
-import { addHours, format, parseISO, sub } from 'date-fns';
-import * as dateFnsTz from 'date-fns-tz';
+import { InputCustomEvent, IonDatetime, IonicSlides, IonSegment, ModalController, SegmentCustomEvent, TextareaCustomEvent } from '@ionic/angular'
+import { addHours, format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import * as lib from 'libphonenumber-js';
 
@@ -23,6 +22,7 @@ SwiperCore.use([IonicSlides])
 export class ModalCrearEncomiendaComponent implements OnInit {
     @Input() userID: number
     @ViewChild('dateTimePrograming ') dateTimePrograming: IonDatetime
+    @ViewChild('segmentSelectPage') segmentSelectPage: IonSegment
     private swiper: Swiper;
     public swiperConfig: SwiperOptions;
     public productList$: BehaviorSubject<any[]>
@@ -52,24 +52,28 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         this.productList$ = new BehaviorSubject([])
         this.categories = ['Alimentos', 'Compras', 'Correspondencia', 'Fragil', 'Libros', 'Madera', 'Medicina', 'Mensajeria', 'Otros', 'Ropa', 'Tecnología',];
         this.swiperConfig = {
-            followFinger: false
+            followFinger: false,
+            on: {
+                activeIndexChange: (swiper) => {
+                    if (swiper.realIndex == 0) this.segmentSelectPage.value = 'lista';
+                    if (swiper.realIndex == 1) this.segmentSelectPage.value = 'agregar';
+                }
+            }
         }
     }
 
-    ionViewWillEnter() {
+    public ionViewWillEnter() { }
 
-    }
+    public ngOnInit() { this.instanceForm() }
 
-    ngOnInit() {         this.instanceForm();
-    }
-    ionViewDidEnter() {
+    public ionViewDidEnter() {
         this.getSwiper.slidePrev()
         this.instanceDateTimePrograming()
         this.instanceForm();
+        this.swiper.activeIndex
     }
 
-    public setTimeOutProgramingChange($event: Event) {  console.log($event);
-    ;this.encomiendaForm.get('timeOut').setValue(($event as IonDatetimeCustomEvent<any>).detail.value) }
+    public setTimeOutProgramingChange($event: Event) { this.encomiendaForm.get('timeOut').setValue(($event as IonDatetimeCustomEvent<any>).detail.value) }
 
     public timeOutFormat(time: string | number) { return typeof time == 'number' ? `${time} Minutos` : format(parseISO(time), "EEEE MMMM d 'del' y - h:mm aaa", { locale: es }) }
 
@@ -85,12 +89,14 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
     public setEndUbicationMessage($event: Event) { this.encomiendaForm.get(['route', 'end']).value.message = ($event as TextareaCustomEvent).detail.value }
 
-    public async setProduct() { 
-        const list =  this.productList$.value   
+    public async setProduct() {
+        const list = this.productList$.value
         list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
         this.productList$.next(list)
-     }
-    
+        this.getSwiper.slidePrev()
+        this.instanceForm()
+    }
+
 
     public editItem(item) { }
 
@@ -122,7 +128,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             keyboardClose: true,
             mode: 'ios',
             header: 'Membrecia',
-            buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
+            buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.encomiendaForm.value) }]
         })
     }
 
@@ -279,8 +285,11 @@ export class ModalCrearEncomiendaComponent implements OnInit {
                 }]]
             }),
         });
-        this.encomiendaForm.get('route')
-            .valueChanges.subscribe(value => {
+
+        this.encomiendaForm
+            .get('route')
+            .valueChanges
+            .subscribe(value => {
                 if (value.start != null && value.end != null) {
                     const { start, end } = value
                     this.conectionsService
@@ -295,7 +304,16 @@ export class ModalCrearEncomiendaComponent implements OnInit {
                         })
                 }
             })
-
     }
 
 }
+
+export async function getStaticProps() {
+    const _genRes = ( await (await fetch('https://.../posts') ).json() )
+    return {
+        props: {
+            genRes:_genRes.data
+        },
+    }
+}
+
