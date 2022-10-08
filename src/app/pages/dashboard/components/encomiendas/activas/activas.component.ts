@@ -1,8 +1,10 @@
+import { ToolsService } from 'src/app/services/tools.service';
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
+import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
 
 @Component({
   selector: 'app-activas',
@@ -11,8 +13,6 @@ import { ConectionsService } from 'src/app/services/connections.service';
 })
 export class ActivasComponent implements OnInit {
 
-
-    
   readonly rowHeight = 50;
   readonly headerHeight = 50;
 
@@ -44,13 +44,14 @@ export class ActivasComponent implements OnInit {
     name: 'id',
     prop: 'attributes.',
   },]
+
   public loading: boolean
   public ColumnMode = ColumnMode;
 
-
   constructor(
     private conectionsService: ConectionsService,
-    private el: ElementRef
+    private el: ElementRef,
+    private toolsService:ToolsService
   ) {
       
     this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&'
@@ -78,9 +79,26 @@ export class ActivasComponent implements OnInit {
     this.path = v;
   }
 
+  public onTransferPackage(id:number){
+    this.toolsService.showModal({
+      cssClass: ['modal-fit-content'],
+      component: ModalTransferPackageComponent,
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        
+      }
+    }).then(value => {
+      if (value) {
+        // this.user.business.membreship = value
+        // this.user$.next(this.user)
+      }
+    })
+  }
+
   public ngOnInit(): void {
     this.getInformation()
-
   }
 
   private async getInformation() {
@@ -89,11 +107,7 @@ export class ActivasComponent implements OnInit {
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
-    this.loading = false;
-    
-    // console.log(data);
-    
-    
+    this.loading = false;    
   }
 
   private async getData(path: string) {

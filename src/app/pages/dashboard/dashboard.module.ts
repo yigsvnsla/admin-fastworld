@@ -25,6 +25,7 @@ import { DetailsUserComponent } from '../generic-components/details-user/details
 import { ModalCrearEncomiendaComponent } from '../generic-components/modal-crear-encomienda/modal-crear-encomienda.component';
 import { ModalMapComponent } from '../generic-components/modal-map/modal-map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ModalTransferPackageComponent } from '../generic-components/modal-transfer-package/modal-transfer-package.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
     DetailsUserComponent,
     ModalMembershipComponent,
     ModalCrearEncomiendaComponent,
-    ModalMapComponent
+    ModalMapComponent,
+    ModalTransferPackageComponent
   ]
 })
 export class DashboardPageModule {}
