@@ -79,7 +79,7 @@ export class ActivasComponent implements OnInit {
     this.path = v;
   }
 
-  public onTransferPackage(id:number){
+  public onTransferPackage(row:any){
     this.toolsService.showModal({
       cssClass: ['modal-fit-content'],
       component: ModalTransferPackageComponent,
@@ -87,11 +87,11 @@ export class ActivasComponent implements OnInit {
       mode: 'ios',
       backdropDismiss: false,
       componentProps: {
-        
+        data:row
       }
     }).then(value => {
       if (value) {
-        // this.user.business.membreship = value
+
         // this.user$.next(this.user)
       }
     })

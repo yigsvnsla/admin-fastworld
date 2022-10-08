@@ -128,7 +128,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             keyboardClose: true,
             mode: 'ios',
             header: 'Membrecia',
-            buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.encomiendaForm.value) }]
+            buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.productList$.value) }]
         })
     }
 
@@ -307,13 +307,3 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     }
 
 }
-
-export async function getStaticProps() {
-    const _genRes = ( await (await fetch('https://.../posts') ).json() )
-    return {
-        props: {
-            genRes:_genRes.data
-        },
-    }
-}
-
