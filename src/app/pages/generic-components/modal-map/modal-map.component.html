@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="this.dismiss()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar (ionCancel)="searchAddresCancel(addressList)" (ionChange)="searchAddresChange($event)" [value]="this.myUbication.address" enterkeyhint="search" animated="true" placeholder="Buscar Ubicación" inputmode="search" type="search"  [debounce]="500" showCancelButton="focus"></ion-searchbar>
+</ion-header>
+<ion-item-group [ngStyle]="{'display': this.autocompletePredictions.length > 1 ? 'block': 'none'}" #addressList id="address-list">
+<ion-item button (click)="selectAddress(prediction)" *ngFor="let prediction of this.autocompletePredictions">
+  <ion-icon slot="start" name="pin"></ion-icon>
+  <ion-label style="white-space: normal">
+    <p>{{ prediction.structured_formatting.main_text }}</p>
+    <h2>{{ prediction.structured_formatting.secondary_text }}</h2>
+  </ion-label>
+</ion-item>
+</ion-item-group>
+<div style="height: 100%; width: 100%;">
+<google-map (zoomChanged)="mapZoomChanged()" [zoom]="this.mapOptions.zoom" *ngIf="this.apiMap$ | async; else loadingMap" (mapDragend)="mapDragend()" (mapDrag)="mapDrag()" #googleMap [options]="this.mapOptions" width="100%" height="100%">
+  <map-marker [position]="markerOptions.position" [options]="markerOptions"></map-marker>
+</google-map>
+<ng-template #loadingMap>
+  <div style="height: 100%; width: 100%;">
+    cargando
+  </div>
+</ng-template>
+</div>
+<ion-footer>
+<ion-toolbar>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <ion-chip class="ion-text-center" (click)="selectUbication()">
+          <ion-icon name="location" color="dark"></ion-icon>
+          <ion-label>Seleccionar ubicación actual</ion-label>
+        </ion-chip>
+      </ion-col>
+      <ion-col size="3">
+        <ion-fab-button (click)="centerMyUbication()">
+          <ion-icon name="locate"></ion-icon>
+        </ion-fab-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-toolbar>
+</ion-footer>

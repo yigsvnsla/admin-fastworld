@@ -1,11 +1,10 @@
-import { ConectionsService } from './../../../services/connections.service';
+import { ConectionsService } from '../../../services/connections.service';
 import { ModalController, IonDatetime, SelectCustomEvent, IonSelect, AlertOptions } from '@ionic/angular';
-import { ToolsService } from './../../../services/tools.service';
-import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { ToolsService } from '../../../services/tools.service';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { addMonths, endOfMonth, parseISO, subDays } from 'date-fns';
 import { Input } from '@angular/core';
-import { OnChanges } from '@angular/core';
-import { DatetimeCustomEvent, IonSelectCustomEvent } from '@ionic/core';
+import { DatetimeCustomEvent,} from '@ionic/core';
 
 @Component({
     selector: 'app-modal-membership',

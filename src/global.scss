@@ -32,8 +32,10 @@
 @import '~@swimlane/ngx-datatable/themes/bootstrap.scss';
 @import '~@swimlane/ngx-datatable/assets/icons.css';
 
-
 /* Custom Styles */ 
 @import "./theme/custom.scss";
-@import "./theme/ngx-datatable-custom.scss"
+@import "./theme/ngx-datatable-custom.scss";
 
+/* Swiper */
+@import '~swiper/scss';
+@import '~@ionic/angular/css/ionic-swiper';

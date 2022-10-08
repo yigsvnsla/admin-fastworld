@@ -1,0 +1,26 @@
+ion-chip{
+    --background:var(--ion-color-orange)
+}
+
+ion-fab-button{
+    --background:var(--ion-color-orange)
+}
+
+ion-col{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#address-list{
+    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 91%;
+    margin-top: 57px;
+    z-index: 99999999999999;
+    background-color: var(--background);
+}

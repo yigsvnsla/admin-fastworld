@@ -1,3 +1,4 @@
+import { ModalCrearEncomiendaComponent } from './../../../../generic-components/modal-crear-encomienda/modal-crear-encomienda.component';
 import { ToolsService } from './../../../../../services/tools.service';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild, } from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
@@ -123,6 +124,19 @@ export class ClientesComponents implements OnInit {
   public showProfile(_id:number){
     this.toolsService.showModal({
       component:DetailsUserComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
+  }
+
+  public showCreateEncomienda(_id:number){
+    this.toolsService.showModal({
+      component:ModalCrearEncomiendaComponent,
       cssClass:['modal-fullscreen'],
       keyboardClose:true,
       mode:'ios',
