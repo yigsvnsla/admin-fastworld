@@ -103,6 +103,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     public deleteItem(item) { }
 
     public async post() {
+      console.log(this.userID)
         const send = async () => {
             const loading = await this.toolsService.showLoading('Actualizando informacion...')
             try {
@@ -128,7 +129,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             keyboardClose: true,
             mode: 'ios',
             header: 'Membrecia',
-            buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.productList$.value) }]
+            buttons: ['Cancelar', { text: 'Aceptar', handler: () => {send()} }]
         })
     }
 
