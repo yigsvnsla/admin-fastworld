@@ -108,6 +108,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     public deleteItem(item) { }
 
     public async post() {
+      console.log(this.userID)
         const send = async () => {
             const loading = await this.toolsService.showLoading('Actualizando informacion...')
             try {
