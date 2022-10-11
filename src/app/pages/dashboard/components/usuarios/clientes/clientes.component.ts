@@ -142,7 +142,7 @@ export class ClientesComponents implements OnInit {
       mode:'ios',
       backdropDismiss:false,
       componentProps:{
-        id:_id
+        userID:_id
       }
     })
   }

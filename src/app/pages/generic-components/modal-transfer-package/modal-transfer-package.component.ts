@@ -33,6 +33,9 @@ export class ModalTransferPackageComponent implements OnInit {
             const loading = await this.toolsService.showLoading('Transfiriendo...')
             try {
                 
+                console.log({ driver: this.idControl.value, package: this.idPackage });
+                
+
                 const response = await this.conectionsService.post('package/transfer', { driver: this.idControl.value, package: this.idPackage }).toPromise()
                 if (response) {
                     console.log(response);

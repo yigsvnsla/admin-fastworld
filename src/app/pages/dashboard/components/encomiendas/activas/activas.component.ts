@@ -87,7 +87,7 @@ export class ActivasComponent implements OnInit {
       mode: 'ios',
       backdropDismiss: false,
       componentProps: {
-        data:row
+        idPackage:row
       }
     }).then(value => {
       if (value) {

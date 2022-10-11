@@ -21,6 +21,7 @@ SwiperCore.use([IonicSlides])
 
 export class ModalCrearEncomiendaComponent implements OnInit {
     @Input() userID: number
+
     @ViewChild('dateTimePrograming ') dateTimePrograming: IonDatetime
     @ViewChild('segmentSelectPage') segmentSelectPage: IonSegment
     private swiper: Swiper;
@@ -64,7 +65,11 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
     public ionViewWillEnter() { }
 
-    public ngOnInit() { this.instanceForm() }
+    public ngOnInit() {
+        console.log(this.userID);
+        
+        this.instanceForm() 
+    }
 
     public ionViewDidEnter() {
         this.getSwiper.slidePrev()
@@ -128,7 +133,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             keyboardClose: true,
             mode: 'ios',
             header: 'Membrecia',
-            buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.productList$.value) }]
+            buttons: ['Cancelar', { text: 'Aceptar', handler: () => send()}]
         })
     }
 
