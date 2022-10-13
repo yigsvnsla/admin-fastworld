@@ -8,48 +8,74 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ngx-datatable
-  class="dark fullscreen"
-  [rows]="this.source"
-  [columnMode]="ColumnMode.force"
-  [headerHeight]="headerHeight"
-  [rowHeight]="rowHeight"
-  [loadingIndicator]="loading"
-  [scrollbarV]="true"
-  (scroll)="onScroll($event.offsetY)"
-  [reorderable]="false"
-  [swapColumns]="false"> 
-  <ngx-datatable-column 
-      *ngFor='let column of columns'
-      name="{{column.name}}" 
-      prop="{{column.prop}}">
-  </ngx-datatable-column>
-  <ngx-datatable-column
-      headerClass="center"
-      cellClass="center"
-      [resizeable]="false"
-      [draggable]="false" 
-      [sortable]="false" 
-      name="Opciones"  
-      prop="id">
-      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-fab-button color="orange"  size="small">
-              <ion-icon name="add"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
-            <ion-icon name="repeat"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="success"  size="small">
-              <ion-icon name="cloud-download"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="primary"  size="small">
-              <ion-icon name="pencil"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="danger" size="small">
-              <ion-icon name="close"></ion-icon>
-          </ion-fab-button>
-      </ng-template>
-  </ngx-datatable-column>
-</ngx-datatable>
+    <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen">   
+        <!-- colunm id -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Paquete" prop="id">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
+        </ngx-datatable-column>
+        <!-- column Sender  -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Remitente" prop="attributes.sender.data.attributes.basic.data.attributes">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value.name }}</ng-template>
+        </ngx-datatable-column>
+        <!-- column state package -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <ng-container [ngSwitch]="value">
+                    <h6 style="margin: 0; font-weight: bold;">
+                        <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'reportado'" color="danger">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
+                    </h6>
+                </ng-container>
+            </ng-template>
+        </ngx-datatable-column>
+        <!-- column Contra-Entrega  -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Contra-Entrega" prop="attributes.value">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value | currency }}</ng-template>
+        </ngx-datatable-column>
+        <!-- column Driver  -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Conductor" prop="attributes.driver.data.attributes">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <ng-container *ngIf="value">{{ ( value.name | titlecase ) }}  {{ ( value.lastname | titlecase ) }}</ng-container>
+                <ng-container *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ng-container>
+            </ng-template>
+        </ngx-datatable-column>
+        <!-- column timeOut  -->
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Tiempo de Retiro" prop="attributes.pickup">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <ng-container *ngIf="value"><ion-text color="dark">{{ ( value | date:'short') }}</ion-text></ng-container>
+                <ng-container *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ng-container>
+            </ng-template>
+        </ngx-datatable-column>
+        <!-- column options -->
+        <ngx-datatable-column [minWidth]="290" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Opciones" prop="id">
+            <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <ion-fab-button color="orange"  size="small">
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
+                    <ion-icon name="repeat"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="success"  size="small">
+                    <ion-icon name="cloud-download"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="primary"  size="small">
+                    <ion-icon name="pencil"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="danger" size="small">
+                    <ion-icon name="close"></ion-icon>
+                </ion-fab-button>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
 </ion-content>

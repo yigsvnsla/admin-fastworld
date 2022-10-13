@@ -1,0 +1,103 @@
+<ion-header>
+    <ion-toolbar mode="md">
+        <ion-buttons slot="start">
+            <ion-button color="orange" (click)="this.onExit()">
+                <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Información Detallada</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ng-container *ngIf=" ( this.user$ | async ) as user; else loadingUser">
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-card>
+                        <ion-card-header style="padding-bottom: 0;">
+                            <ion-toolbar>
+                                <ion-card-subtitle>Información Basica</ion-card-subtitle>
+                                <ion-card-title>Cliente  <ion-text color="orange">{{user.id}} </ion-text></ion-card-title>
+                                <ion-fab-button (click)="this.formBasic.enable()" color="orange" size="small" slot="end">
+                                    <ion-icon name="pencil"></ion-icon>
+                                </ion-fab-button>
+                            </ion-toolbar>
+                        </ion-card-header>
+                        <ion-card-content class="ion-no-padding">
+                            <ion-grid >
+                                <ion-row [formGroup]="this.formBasic">
+                                    <ion-col sizeXs="12" sizeSm="6" sizeMd="4">
+                                        <ion-item mode="md">
+                                            <ion-label position="stacked">Nombre</ion-label>
+                                            <ion-icon slot="start" name="add"></ion-icon>
+                                            <ion-input type="text" formControlName="name" placeholder="Ingresar Nombre"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col sizeXs="12" sizeSm="6" sizeMd="4">
+                                        <ion-item mode="md">
+                                            <ion-label position="stacked">Apellido</ion-label>
+                                            <ion-icon slot="start" name="add"></ion-icon>
+                                            <ion-input type="text" formControlName="lastname" placeholder="Ingresar Apellido"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col sizeXs="12"  sizeSm="6" sizeMd="4">
+                                        <ion-item mode="md">
+                                            <ion-label position="stacked">Telefono</ion-label>
+                                            <ion-icon slot="start" name="add"></ion-icon>
+                                            <ion-input type="text" formControlName="phone" placeholder="Ingresar telefono"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col sizeXs="12" sizeSm="6" sizeMd="4">
+                                        <ion-item mode="md">
+                                            <ion-icon slot="start" name="add"></ion-icon>
+                                            <ion-label position="stacked">Identification</ion-label>
+                                            <ion-input formControlName="identification" type="text" placeholder="Ingresar Dni"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ng-container formGroupName="user" >
+                                        <ion-col sizeXs="12" sizeSm="6" sizeMd="4">
+                                            <ion-item  mode="md">
+                                                <ion-label position="stacked">Email</ion-label>
+                                                <ion-icon slot="start" name="add"></ion-icon>
+                                                <ion-input type="text" formControlName="mail" placeholder="Awesome Input"></ion-input>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col sizeXs="12" sizeSm="6" sizeMd="4">
+                                            <ion-item  mode="md">
+                                                <ion-label position="stacked">Contraseña</ion-label>
+                                                <ion-icon slot="start" name="add"></ion-icon>
+                                                <ion-input type="text" formControlName="password" placeholder="Awesome Input"></ion-input>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ng-container>
+                                </ion-row>
+                                <ion-row *ngIf="this.formBasic.enabled">
+                                    <ion-col sizeXs="12" sizeSm="6">
+                                        <ion-button size="small" color="danger" (click)="this.formBasic.disable()" expand="block" fill="solid" shape="round">
+                                            <ion-label>cancelar</ion-label>
+                                        </ion-button>
+                                    </ion-col>
+                                    <ion-col sizeXs="12" sizeSm="6">
+                                        <ion-button size="small" color="success" (click)="this.showAlertConfirmUpdateBasic();this.formBasic.disable()" expand="block" fill="solid" shape="round">
+                                            <ion-label>Actualizar</ion-label>
+                                        </ion-button>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ng-container>
+    <ng-template #loadingUser>
+        <section  class="emptyList">
+          <ion-img style="max-width: 25%;" id="img-list" [src]="'../../../../assets/svg/undraw_loading_re_5axr.svg'"></ion-img>
+          <ion-card-header class="ion-text-center">
+            <ion-card-title>Buscando Información</ion-card-title>
+            <ion-card-subtitle>Espere unos instantes mientras preparamos su solicitud</ion-card-subtitle>
+            <ion-spinner name="crescent"></ion-spinner>
+          </ion-card-header>
+        </section>
+    </ng-template>
+</ion-content>

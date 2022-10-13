@@ -1,7 +1,7 @@
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { delay } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { ToolsService } from './../../../services/tools.service';
+import { ToolsService } from '../../../services/tools.service';
 import { IonDatetime, IonModal, ModalController } from '@ionic/angular';
 import { Input } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
@@ -14,11 +14,11 @@ import { ModalMembershipComponent } from '../modal-membership.component/modal-me
 
 @Component({
   selector: 'app-details-user',
-  templateUrl: './details-user.component.html',
-  styleUrls: ['./details-user.component.scss'],
+  templateUrl: './details-client.component.html',
+  styleUrls: ['./details-client.component.scss'],
 })
 
-export class DetailsUserComponent implements OnInit {
+export class DetailsClientComponent implements OnInit {
 
   @Input() public id: number
 

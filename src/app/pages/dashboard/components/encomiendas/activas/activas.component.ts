@@ -25,25 +25,6 @@ export class ActivasComponent implements OnInit {
     total?: number
   }
 
-  public columns = [ {
-    name: 'Paquete',
-    prop: 'id',
-  },{
-    name: 'Categoria',
-    prop: 'attributes.category',
-  },{
-    name: 'id',
-    prop: 'attributes.shipping_status',
-  },{
-    name: 'id',
-    prop: 'attributes.sender.data.attributes.basic.attributes.name',
-  },{
-    name: 'id',
-    prop: 'attributes.',
-  },{
-    name: 'id',
-    prop: 'attributes.',
-  },]
 
   public loading: boolean
   public ColumnMode = ColumnMode;
@@ -54,7 +35,7 @@ export class ActivasComponent implements OnInit {
     private toolsService:ToolsService
   ) {
       
-    this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:ASC&'
+    this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&'
     this.setPagination = { 
       start:0,
       limit:25,
@@ -108,6 +89,8 @@ export class ActivasComponent implements OnInit {
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
     this.loading = false;    
+    console.log(this.source);
+    
   }
 
   private async getData(path: string) {

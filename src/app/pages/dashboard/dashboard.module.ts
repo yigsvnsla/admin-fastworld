@@ -17,15 +17,16 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { CrearComponent } from './components/encomiendas/crear-encomiendas/crear.component';
 import { PopOverMenuComponent } from '../generic-components/popover-menu/popover-menu.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
 import { MenuFilterComponent } from '../generic-components/menu-filter/menu-filter.component';
-import { DetailsUserComponent } from '../generic-components/details-user/details-user.component';
+import { DetailsClientComponent } from '../generic-components/details-client/details-client.component';
 import { ModalCrearEncomiendaComponent } from '../generic-components/modal-crear-encomienda/modal-crear-encomienda.component';
 import { ModalMapComponent } from '../generic-components/modal-map/modal-map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ModalTransferPackageComponent } from '../generic-components/modal-transfer-package/modal-transfer-package.component';
+import { DetailsDriverComponent } from '../generic-components/details-driver/details-driver.component';
+import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
 
 @NgModule({
   imports: [
@@ -47,18 +48,19 @@ import { ModalTransferPackageComponent } from '../generic-components/modal-trans
     BtnMenuComponent,
     ActivasComponent,
     HistorialComponent,
-    CrearComponent,
     PopOverMenuComponent,
     CrearUsuarioComponent,
     ClientesComponents,
     ConductoresComponents,
     DetailsPackageComponent,
     MenuFilterComponent,
-    DetailsUserComponent,
+    DetailsClientComponent,
+    DetailsDriverComponent,
     ModalMembershipComponent,
     ModalCrearEncomiendaComponent,
     ModalMapComponent,
-    ModalTransferPackageComponent
+    ModalTransferPackageComponent,
+    SeguimientoComponent
   ]
 })
 export class DashboardPageModule {}

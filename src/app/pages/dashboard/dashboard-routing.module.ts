@@ -7,8 +7,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardPage } from './dashboard.page';
 import { HistorialComponent } from './components/encomiendas/historial/historial.component';
-import { CrearComponent } from './components/encomiendas/crear-encomiendas/crear.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
+import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
 
 const routes: Routes = [
   {
@@ -28,16 +28,16 @@ const routes: Routes = [
         path:'encomiendas',
         children:[
           {
-            path:'crear',
-            component:CrearComponent
-          },
-          {
             path:'activas',
             component:ActivasComponent
           },
           {
             path:'historial',
             component:HistorialComponent
+          },
+          {
+            path:'segumiento',
+            component:SeguimientoComponent
           }
         ]
       },

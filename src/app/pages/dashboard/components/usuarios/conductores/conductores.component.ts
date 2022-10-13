@@ -1,7 +1,9 @@
+import { ToolsService } from 'src/app/services/tools.service';
 import { Component, ElementRef, OnInit,} from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
+import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
 
 @Component({
     selector: 'app-conductores',
@@ -38,18 +40,34 @@ export class ConductoresComponents implements OnInit{
   
     constructor(
       private conectionsService: ConectionsService,
-      private el: ElementRef
-    ) {
-  
+      private el: ElementRef,
+      private toolsService:ToolsService
+    ) {  
+      this.loading = false
       this.setPath = 'basic/driver?populate=*'
       this.setPagination = {
         start: 0,
         limit: 25,
         total: 0
       }
-      this.loading = false
     }
   
+    //////
+
+    public showProfile(_id:number){
+      this.toolsService.showModal({
+        component:DetailsDriverComponent,
+        cssClass:['modal-fullscreen'],
+        keyboardClose:true,
+        mode:'ios',
+        backdropDismiss:false,
+        componentProps:{
+          id:_id
+        }
+      })
+    }
+
+    /////
     public get getPagination(): {
       start: number
       limit: number
@@ -78,10 +96,7 @@ export class ConductoresComponents implements OnInit{
       this.pagination = meta.pagination
       this.source = [...this.source, ...data]
       this.loading = false;
-  
       console.log(this.source);
-  
-  
     }
   
     private async getData(path: string) {
@@ -103,7 +118,5 @@ export class ConductoresComponents implements OnInit{
         this.getInformation();
       }
       return
-  
-  
     }
 }
