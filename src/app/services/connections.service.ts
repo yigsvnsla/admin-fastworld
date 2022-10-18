@@ -157,16 +157,15 @@ export class ConectionsService {
 
     // stream methods
 
-    public streamGet(path: string) {
+    public postStream(path: string, obj) {
         return this.httpClient
-            .get<any>(path, {
-                headers: new HttpHeaders({
-                    'responseType': 'arraybuffer',
-                    'Authorization': `Bearer ${(this.cookiesService.get(environment['admin_cookie_tag']))}`
-                })
+            .post(`${this.api}/${path}`,obj, {
+                headers: {
+                  'Authorization': `Bearer ${(this.cookiesService.get(environment['admin_cookie_tag']))}`
+                },
+                responseType: 'arraybuffer'
             })
             .pipe(
-                debounceTime(500),
                 retry(2),
                 catchError((err) => this.errorHandler(err))
             )

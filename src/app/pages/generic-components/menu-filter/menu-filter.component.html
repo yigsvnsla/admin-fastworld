@@ -21,8 +21,8 @@
             </ion-select>
           </ion-item>
         </ion-item-group>
-        
-        <ion-item-group class="ion-text-center"> 
+
+        <ion-item-group class="ion-text-center">
         <ion-item-divider>
           <ion-label>Seleccionar rango de busqueda </ion-label>
         </ion-item-divider>
@@ -53,7 +53,7 @@
             <ion-icon slot="start" name="search"></ion-icon>
           </ion-button>
         </section>
-        
+
       </ion-item-group>
     </ng-container>
       <ion-item-group class="ion-text-center">
@@ -68,7 +68,7 @@
           </ion-select>
           <ion-icon slot="start" name="document-text"></ion-icon>
         </ion-item>
-        <ion-button class="ion-margin" color="orange" shape="round">
+        <ion-button class="ion-margin" color="orange" shape="round" (click)="download()">
           <ion-label>Generar</ion-label>
           <ion-icon slot="start" name="download"></ion-icon>
         </ion-button>
