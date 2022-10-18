@@ -1,15 +1,11 @@
 import { ToolsService } from 'src/app/services/tools.service';
-import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { ConectionsService } from '../../../../../services/connections.service';
-import { delay, tap } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { IonProgressBar, IonSelect } from '@ionic/angular';
-// import { UsuariosFormComponent } from '../usuarios-form/usuarios-form.component';
-import { endOfMonth, format, isAfter, isBefore, parse, parseISO, startOfMonth, sub } from 'date-fns';
-import * as qs from 'qs';
 import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
+import { DetailsClientComponent } from 'src/app/pages/generic-components/details-client/details-client.component';
+import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
 
 @Component({
   selector: 'app-historial',
@@ -43,12 +39,21 @@ export class HistorialComponent implements OnInit {
   public ColumnMode = ColumnMode;
   public SelectionType = SelectionType
 
+  test($event){
+    console.log($event);
+    this.setPath = 'admin/packages?populate=*&sort=id:DESC&'+$event
+    this.getInformation()
+  }
+
   constructor(
     private toolsService:ToolsService,
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
-    this.setPath = 'admin/packages?populate=*&sort=id:ASC&'
+
+
+
+    
     this.setPagination = {
       start:0,
       limit:25,
@@ -74,14 +79,13 @@ export class HistorialComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getInformation()
+    
 
   }
 
   private async getInformation() {
     this.loading = true;
     const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
-    const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
     this.loading = false;
@@ -115,6 +119,32 @@ export class HistorialComponent implements OnInit {
   public onSearchPackage(_id:number){    
     this.toolsService.showModal({
       component:DetailsPackageComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
+  }
+
+  public showProfileClient(_id:number){
+    this.toolsService.showModal({
+      component:DetailsClientComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
+  }
+
+  public showProfileDriver(_id:number){
+    this.toolsService.showModal({
+      component:DetailsDriverComponent,
       cssClass:['modal-fullscreen'],
       keyboardClose:true,
       mode:'ios',

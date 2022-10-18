@@ -7,28 +7,28 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-  
-      <ion-item-group>
-        <ion-item-divider>
-          <ion-label>Filtrar Busqueda</ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-label position="stacked">Buscar por</ion-label>
-          <ion-icon slot="start" name="funnel"></ion-icon>
-          <ion-select interface="popover" [value]="0">
-            <ion-select-option [value]="0">Identificador</ion-select-option>
-            <ion-select-option [value]="1">Nombre y Apellido</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-item-group>
-  
-      <ion-item-group class="ion-text-center"> 
+      <ng-container [formGroup]="this.qsForm">
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>Filtrar Busqueda</ion-label>
+          </ion-item-divider>
+          <ion-item >
+            <ion-label position="stacked">Buscar por</ion-label>
+            <ion-icon slot="start" name="funnel"></ion-icon>
+            <ion-select formControlName="$containsi" interface="popover">
+              <ion-select-option value="id">Identificador</ion-select-option>
+              <ion-select-option value="name">Nombre Negocio</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-item-group>
+        
+        <ion-item-group class="ion-text-center"> 
         <ion-item-divider>
           <ion-label>Seleccionar rango de busqueda </ion-label>
         </ion-item-divider>
         <ion-item >
           <ion-label position="stacked">Rango <ion-text class="ion-hide-sm-down">de Busqueda</ion-text></ion-label>
-          <ion-select #dateRangeSelect [value]="0"  interface="popover">
+          <ion-select formControlName="$between" #dateRangeSelect   interface="popover">
             <ion-select-option [value]="0">Hoy</ion-select-option>
             <ion-select-option [value]="1">Ultimos 7 dias</ion-select-option>
             <ion-select-option [value]="2">Del mes</ion-select-option>
@@ -53,8 +53,9 @@
             <ion-icon slot="start" name="search"></ion-icon>
           </ion-button>
         </section>
-  
+        
       </ion-item-group>
+    </ng-container>
       <ion-item-group class="ion-text-center">
         <ion-item-divider>
           <ion-label>Exportar Datos</ion-label>

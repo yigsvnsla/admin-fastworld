@@ -10,7 +10,7 @@ import { ViewChild } from '@angular/core';
 
 import { ConectionsService } from 'src/app/services/connections.service';
 import { format, isValidPhoneNumber } from 'libphonenumber-js';
-import { ModalMembershipComponent } from '../modal-membership.component/modal-membersip.component';
+import { ModalMembershipComponent } from '../modal-membership/modal-membersip.component';
 
 @Component({
   selector: 'app-details-user',
@@ -86,7 +86,7 @@ export class DetailsClientComponent implements OnInit {
       ]],
       user: this.formBuilder.nonNullable.group({
         password: [null, [Validators.required, Validators.nullValidator]],
-        mail: [data.user.email, [
+        mail: [data.user?.email, [
           Validators.required,
           Validators.nullValidator,
           Validators.email,

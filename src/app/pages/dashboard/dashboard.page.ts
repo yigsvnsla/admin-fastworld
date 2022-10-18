@@ -80,6 +80,10 @@ export class DashboardPage implements OnInit {
         title:'Historial',
         url:'historial',
         icon:'list'
+      },{
+        title:'Seguimiento',
+        url:'seguimiento',
+        icon:'location'
       }]
     }]
 

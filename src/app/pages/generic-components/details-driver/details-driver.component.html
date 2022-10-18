@@ -11,6 +11,58 @@
 <ion-content>
     <ng-container *ngIf=" ( this.user$ | async ) as user; else loadingUser">
         <ion-grid fixed>
+
+            <ion-row>
+                <ion-col sizeXs="12" sizeSm="6">
+                    <ion-card>
+                        <ion-card-header style="padding-bottom: 0;">
+                            <ion-toolbar>
+                                <ion-card-subtitle>Información Basica</ion-card-subtitle>
+                                <ion-card-title>Vehiculo</ion-card-title>
+                                <ion-fab-button (click)="this.formDriver.enable()" color="orange" size="small" slot="end">
+                                    <ion-icon name="pencil"></ion-icon>
+                                </ion-fab-button>
+                            </ion-toolbar>
+                        </ion-card-header>
+                        <ion-card-content class="ion-no-padding">
+                            <ion-item-group [formGroup]="this.formDriver">
+                                <ion-item mode="md">
+                                    <ion-label position="stacked">Color</ion-label>
+                                    <ion-input formControlName="color" type="text" placeholder="Awesome Input"></ion-input>
+                                    <ion-icon slot="start" name="add"></ion-icon>
+                                </ion-item>
+                                <ion-item mode="md">
+                                    <ion-label position="stacked">Marca</ion-label>
+                                    <ion-input formControlName="maker" type="text" placeholder="Awesome Input"></ion-input>
+                                    <ion-icon slot="start" name="add"></ion-icon>
+                                </ion-item>
+                                <ion-item mode="md">
+                                    <ion-label position="stacked">Modelo</ion-label>
+                                    <ion-input formControlName="model" type="text" placeholder="Awesome Input"></ion-input>
+                                    <ion-icon slot="start" name="add"></ion-icon>
+                                </ion-item>
+                                <ion-item mode="md">
+                                    <ion-label position="stacked">Año</ion-label>
+                                    <ion-input formControlName="year" type="text" placeholder="Awesome Input"></ion-input>
+                                    <ion-icon slot="start" name="add"></ion-icon>
+                                </ion-item>                                
+                            </ion-item-group>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-card>
+                        <ion-card-header>
+                            <ion-card-subtitle>Awesome Subtitle</ion-card-subtitle>
+                            <ion-card-title>Awesome Title</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            Awesome content
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+
             <ion-row>
                 <ion-col size="12">
                     <ion-card>

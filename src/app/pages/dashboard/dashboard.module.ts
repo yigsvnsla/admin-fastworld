@@ -1,5 +1,5 @@
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
-import { ModalMembershipComponent } from './../generic-components/modal-membership.component/modal-membersip.component';
+import { ModalMembershipComponent } from '../generic-components/modal-membership/modal-membersip.component';
 import { DetailsPackageComponent } from './../generic-components/details-package/details-package.component';
 import { ConductoresComponents } from './components/usuarios/conductores/conductores.component';
 import { ClientesComponents } from './components/usuarios/clientes/clientes.component';

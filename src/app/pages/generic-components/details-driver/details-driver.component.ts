@@ -18,6 +18,7 @@ export class DetailsDriverComponent implements OnInit {
 
     public user$: BehaviorSubject<any>;
     public formBasic: FormGroup;
+    public formDriver : FormGroup
 
     constructor(
         private modalController: ModalController,
@@ -62,7 +63,18 @@ export class DetailsDriverComponent implements OnInit {
       }
 
     private instanceForm(data: any) {
+
+
         console.log(data);
+
+        this.formDriver = this.formBuilder.nonNullable.group({
+            color:[data.driver.color,[Validators.required]],
+            maker:[data.driver.maker,[Validators.required]],
+            model:[data.driver.model,[Validators.required]],
+            year:[data.driver.year,[Validators.required]]            
+        })
+
+        this.formDriver.disable()
 
         this.formBasic = this.formBuilder.nonNullable.group({
             type: [null, []],
@@ -98,7 +110,7 @@ export class DetailsDriverComponent implements OnInit {
             ]],
             user: this.formBuilder.nonNullable.group({
                 password: [null, [Validators.required, Validators.nullValidator]],
-                mail: [data.user.email, [
+                mail: [data.user?.email, [
                     Validators.required,
                     Validators.nullValidator,
                     Validators.email,

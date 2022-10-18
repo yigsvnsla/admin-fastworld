@@ -36,7 +36,7 @@ const routes: Routes = [
             component:HistorialComponent
           },
           {
-            path:'segumiento',
+            path:'seguimiento',
             component:SeguimientoComponent
           }
         ]
