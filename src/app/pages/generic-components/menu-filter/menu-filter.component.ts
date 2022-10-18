@@ -1,7 +1,9 @@
+import { ConectionsService } from './../../../services/connections.service';
+import { ToolsService } from './../../../services/tools.service';
 import { Input, Output } from "@angular/core";
 import { Component, OnInit, EventEmitter,} from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { InputChangeEventDetail, IonInput, IonSearchbar } from "@ionic/angular";
+import { InputChangeEventDetail, IonInput, IonSearchbar, SelectCustomEvent } from "@ionic/angular";
 import { endOfMonth, startOfMonth, sub } from "date-fns";
 import * as qs from "qs";
 
@@ -27,7 +29,9 @@ export class MenuFilterComponent implements OnInit {
 
 
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private toolsServices:ToolsService,
+        private connectionsService:ConectionsService
     ) {
 
     }
@@ -147,7 +151,7 @@ export class MenuFilterComponent implements OnInit {
                 this.setFilter(range, filter)
                 break;
 
-            default:
+            default: { console.error('rangeSearch --> el valor'); }
                 break;
         }
 
@@ -168,10 +172,35 @@ export class MenuFilterComponent implements OnInit {
     }
 
 
+    public async getExport(type:string){
+        const send = async () => {
+            const loading = await this.toolsServices.showLoading('Actualizando informacion...')
+            try {
+                // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+                // if (response) {
+                    await this.toolsServices.showAlert({
+                        cssClass: 'alert-success',
+                        keyboardClose: true,
+                        mode: 'ios',
+                        header: 'Exito',
+                        buttons: [{ text: 'Aceptar' }]
+                    })
+                // }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                loading.dismiss()
+            }
+        }
 
-
-
-
+        await this.toolsServices.showAlert({
+            cssClass: 'alert-success',
+            keyboardClose: true,
+            mode: 'ios',
+            header: 'Descargar ' + type,
+            buttons: ['Cancelar', { text: 'Aceptar', handler: () => send()}]
+        })
+    }
 
 }
 
