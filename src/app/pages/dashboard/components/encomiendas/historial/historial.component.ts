@@ -41,6 +41,10 @@ export class HistorialComponent implements OnInit {
 
   test($event){
     console.log($event);
+    this.setPagination = {
+      start: 0,
+      limit: 25
+    }
     this.setPath = 'admin/packages?populate=*&sort=id:DESC&'+$event
     this.getInformation()
   }
@@ -53,7 +57,7 @@ export class HistorialComponent implements OnInit {
 
 
 
-    
+
     this.setPagination = {
       start:0,
       limit:25,
@@ -79,20 +83,20 @@ export class HistorialComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    
+
 
   }
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.start}&pagination[limit]=${this.pagination.limit}`)
     this.pagination = meta.pagination
-    this.source = [...this.source, ...data]
+    if(this.pagination.start == 0){
+      this.source = data
+    }else{
+      this.source = [...this.source, ...data]
+    }
     this.loading = false;
-
-    console.log(data);
-
-
   }
 
   private async getData(path: string) {
@@ -116,7 +120,7 @@ export class HistorialComponent implements OnInit {
     return
   }
 
-  public onSearchPackage(_id:number){    
+  public onSearchPackage(_id:number){
     this.toolsService.showModal({
       component:DetailsPackageComponent,
       cssClass:['modal-fullscreen'],
@@ -164,7 +168,7 @@ export class HistorialComponent implements OnInit {
   }
 
   public onDeletePackage(_id:number){
-    
+
   }
 
 
