@@ -27,6 +27,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { ModalTransferPackageComponent } from '../generic-components/modal-transfer-package/modal-transfer-package.component';
 import { DetailsDriverComponent } from '../generic-components/details-driver/details-driver.component';
 import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
+import { SocketIoModule } from 'ngx-socket-io';
 
 @NgModule({
   imports: [
@@ -41,6 +42,8 @@ import { SeguimientoComponent } from './components/encomiendas/seguimiento/segui
     HttpClientModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
+    SocketIoModule
+
   ],
   declarations: [
     DashboardPage,

@@ -10,13 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { SocketIoModule } from 'ngx-socket-io';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     HttpClientModule,
-    BrowserModule, 
-    IonicModule.forRoot(), 
+    BrowserModule,
+    IonicModule.forRoot(),
     AppRoutingModule,
     NgxDatatableModule,
     FormsModule,
@@ -24,6 +25,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     HttpClientModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
+    SocketIoModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

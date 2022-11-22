@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ConectionsService } from 'src/app/services/connections.service';
+import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
 
 @Component({
@@ -32,11 +32,12 @@ export class ActivasComponent implements OnInit {
   constructor(
     private conectionsService: ConectionsService,
     private el: ElementRef,
-    private toolsService:ToolsService
+    private toolsService:ToolsService,
+    private socketService: SocketService
   ) {
-      
+
     this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&'
-    this.setPagination = { 
+    this.setPagination = {
       start:0,
       limit:25,
       total:0
@@ -79,18 +80,50 @@ export class ActivasComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.socketService.on('product-updated', (product: any | any[]) => {
+      const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
+      console.log(product);
+
+      if (condition) {
+        // this.source.addItemToSource(product.data)
+      }
+
+      if (!condition) {
+        // this.source.deleteItemToSource(product.data.attributes.id)
+      }
+    })
+    this.socketService.on('product-created', (product: any | any[]) => {
+      console.log(product);            // if (Array.isArray(product)) {
+      product['data'].forEach((value) => {
+        if (value.attributes.shipping_status == 'pendiente') {
+          // this.source.addItemToSource(value)
+        };
+        if (value.attributes.shipping_status != 'pendiente') {
+          // this.source.deleteItemToSource(value.id)
+        }
+      })
+
+    })
     this.getInformation()
+  }
+
+  ionViewWillLeave() {
+    /**
+     * Important, remove all listener of the events used.
+     */
+    this.socketService.removeAllListeners('product-updated')
+    this.socketService.removeAllListeners('product-created')
   }
 
   private async getInformation() {
     this.loading = true;
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)    
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data]
-    this.loading = false;    
+    this.loading = false;
     console.log(this.source);
-    
+
   }
 
   private async getData(path: string) {
@@ -113,7 +146,7 @@ export class ActivasComponent implements OnInit {
     }
     return
 
-    
+
   }
 
 }

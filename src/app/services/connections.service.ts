@@ -19,6 +19,7 @@ import {
 } from 'rxjs/operators';
 import { SigInResponseI, SingInRequestI, SingUpI, SingUpResponseI } from '../interfaces/auth.interface';
 import { MapDirectionsService, MapGeocoder } from '@angular/google-maps';
+import { Socket } from 'ngx-socket-io';
 
 
 @Injectable({
@@ -292,5 +293,30 @@ export class ConectionsService {
                 })
         }
     }
+
+}
+/**
+ * socket.io
+ */
+ @Injectable({
+  providedIn: 'root',
+})
+export class SocketService extends Socket {
+  constructor() {
+    super({
+      url: 'https://s1.fastworld.app',
+      options: {
+        autoConnect: false,
+        query:{
+          origin:'admin'
+        }
+      }
+    });
+  }
+
+
+  public set setAuth(token: string) {
+    this.ioSocket.auth={token: token }
+  }
 
 }

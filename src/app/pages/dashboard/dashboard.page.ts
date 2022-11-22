@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ConectionsService } from 'src/app/services/connections.service';
+import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { CookiesService } from 'src/app/services/cookies.service';
 import { ToolsService } from 'src/app/services/tools.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +13,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 
 
 export class DashboardPage implements OnInit {
+
 
   public sectionMenu: routerMenu[]
 
@@ -67,7 +69,8 @@ export class DashboardPage implements OnInit {
   constructor(
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
-    private cookiesService: CookiesService
+    private cookiesService: CookiesService,
+    private socketService: SocketService
   ) {
     this.encomiendaRoutes = [{
       title:'Encomiendas',
@@ -115,8 +118,17 @@ export class DashboardPage implements OnInit {
 
   }
 
+
   ngOnInit() {
     this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
+
+    this.socketService.setAuth = this.cookiesService.get(environment['admin_cookie_tag']).replace(/"/g,'')
+    this.socketService.connect()
+
+    this.socketService.on('connect',(arg, callback) =>{
+      console.log('Connect socket');
+
+    })
   }
 
   onLogOut(){
