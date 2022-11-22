@@ -134,7 +134,8 @@ export class CrearUsuarioComponent implements OnInit {
         console.log(response);
 
         this.loading = false
-        this.showAdminRole(response)
+        console.log(this.rolSelect.value)
+        if(this.rolSelect.value == 'admin') this.showAdminRole(response)
       }, (error) => {
         console.error(error);
         this.loading = false
