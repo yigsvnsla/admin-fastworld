@@ -28,7 +28,7 @@
                 </ion-label>
                 <ion-input (keydown.arrowup)="(false)" (keydown.arrowdown)="(false)" (keydown.enter)="this.enterOrGo()" class="input-autocomplete input-number" formControlName="code" type="number" placeholder="DNI / RUC"></ion-input>
               </ion-item>
-            </ng-container> 
+            </ng-container>
             <ion-item>
               <ion-icon slot="start" name="person"></ion-icon>
               <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="name" type="text" placeholder="Nombre"></ion-input>
@@ -45,7 +45,7 @@
               <ion-icon slot="start" name="mail"></ion-icon>
               <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="mail" type="email" placeholder="Correo Electronico"></ion-input>
             </ion-item>
-      
+
             <!-- crear componente independiente para reutilizarlo -->
             <ion-item>
               <ion-icon slot="start" name="key"></ion-icon>

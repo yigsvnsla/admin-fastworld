@@ -153,7 +153,6 @@ export class ConectionsService {
     public logOut(): void {
         this.cookiesService.remove(environment['cookie_tag']);
         this.router.navigateByUrl('auth');
-
     }
 
     // stream methods

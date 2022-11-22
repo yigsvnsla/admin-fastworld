@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Datos adicionales</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [formGroup]="formAdmin">
+  <ion-row>
+    <ion-item-divider>
+      <ion-label>Informacion detallada</ion-label>
+    </ion-item-divider>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Alias</ion-label>
+        <ion-input type="text" placeholder="Ingresa un alias" formControlName="name"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-item-divider>
+      <ion-label>Funciones administrativas</ion-label>
+    </ion-item-divider>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Rol o Cargo</ion-label>
+        <ion-select placeholder="Seleccionar" interface="popover" formControlName="role">
+          <ion-select-option value="administrador">Administrador</ion-select-option>
+          <ion-select-option value="encargado">Encargado</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-button [disabled]="this.formAdmin.invalid" class="ion-text-center ion-margin" type="submit" color="orange" (click)="submit()" expand="block" fill="solid" shape="round">
+        <ng-container *ngIf="!this.loading; else _loading">
+          <ion-label>Registrar</ion-label>
+          <ion-icon slot="end" name="send"></ion-icon>
+        </ng-container>
+        <ng-template #_loading>
+          <ion-spinner slot="end" name="crescent"></ion-spinner>
+        </ng-template>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

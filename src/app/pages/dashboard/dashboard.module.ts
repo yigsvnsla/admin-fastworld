@@ -28,6 +28,7 @@ import { ModalTransferPackageComponent } from '../generic-components/modal-trans
 import { DetailsDriverComponent } from '../generic-components/details-driver/details-driver.component';
 import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
 import { SocketIoModule } from 'ngx-socket-io';
+import { ModalAdminRoleComponent } from '../generic-components/modal-admin-role/modal-admin-role.component';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { SocketIoModule } from 'ngx-socket-io';
     ModalCrearEncomiendaComponent,
     ModalMapComponent,
     ModalTransferPackageComponent,
-    SeguimientoComponent
+    SeguimientoComponent,
+    ModalAdminRoleComponent
   ]
 })
 export class DashboardPageModule {}

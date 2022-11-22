@@ -25,7 +25,7 @@ export class ModalMapComponent implements OnInit {
   public apiMap$: Observable<boolean>;
   public myUbication: Ubication
 
-  constructor(    
+  constructor(
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
     private modalController:ModalController) {

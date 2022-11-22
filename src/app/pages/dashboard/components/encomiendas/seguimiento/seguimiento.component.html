@@ -1,9 +1,9 @@
 <ion-header>
-    <ion-toolbar>
-      <app-btn-menu slot="start"></app-btn-menu>
-      <ion-title>Inicio</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-      mapa
-  </ion-content>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-title>Motorizados tiempo real</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div style="height: 100%; width: 100%;">
+  <google-map *ngIf="this.apiMap$ | async" [options]="options" width="100%" height="100%" ></google-map>
+</div>

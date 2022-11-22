@@ -5,132 +5,149 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ToolsService } from 'src/app/services/tools.service';
 import { format, isValidPhoneNumber } from 'libphonenumber-js';
+import { ModalAdminRoleComponent } from 'src/app/pages/generic-components/modal-admin-role/modal-admin-role.component';
 
 @Component({
-    selector: 'app-historial',
-    templateUrl: './crear-usuario.component.html',
-    styleUrls: ['./crear-usuario.component.scss'],
+  selector: 'app-historial',
+  templateUrl: './crear-usuario.component.html',
+  styleUrls: ['./crear-usuario.component.scss'],
 })
 
 export class CrearUsuarioComponent implements OnInit {
-    @ViewChild('rolSelect') public rolSelect: IonSelect
+  @ViewChild('rolSelect') public rolSelect: IonSelect
+  @ViewChild('formRegisterRef') public formRegisterRef: IonItemGroup
 
-    @ViewChild('formRegisterRef') public formRegisterRef: IonItemGroup
-    public formRegister: FormGroup
-    public loading: boolean
-    public listTypeUser = [{
-        title: 'cliente',
-        url: 'client'
-    }, {
-        title: 'conductor',
-        url: 'driver'
-    }]
-    public scope: string
-    constructor(
-        private toolsService: ToolsService,
-        private conectionsService: ConectionsService,
-        private formBuilder: FormBuilder,
-        private rutaActiva: ActivatedRoute,
-        private router: Router
-    ) {
+  public formRegister: FormGroup
+  public loading: boolean
+  public listTypeUser = [{
+    title: 'cliente',
+    url: 'client'
+  }, {
+    title: 'conductor',
+    url: 'driver'
+  },
+  {
+    title: 'Administrador',
+    url: 'admin'
+  }]
 
+
+  public scope: string
+  constructor(
+    private toolsService: ToolsService,
+    private conectionsService: ConectionsService,
+    private formBuilder: FormBuilder,
+    private rutaActiva: ActivatedRoute,
+    private router: Router
+  ) {
+
+  }
+
+  ngOnChanges() {
+    this.scope = ''
+    if (new RegExp(/([a-zA-Z])/g).test(this.rutaActiva.snapshot.params['type'])) {
+      if (this.rutaActiva.snapshot.params['type'] !== undefined) {
+        let index = this.listTypeUser.findIndex((rol => rol.title === this.rutaActiva.snapshot.params['type']))
+        if (index < 0) { this.router.navigateByUrl('/dashboard/usuarios/crear') }
+        if (index >= 0) { this.scope = this.listTypeUser[index].url }
+      }
     }
+  }
 
-    ngOnChanges() {
-        this.scope = ''
-        if (new RegExp(/([a-zA-Z])/g).test(this.rutaActiva.snapshot.params['type'])) {
-            if (this.rutaActiva.snapshot.params['type'] !== undefined) {
-                let index = this.listTypeUser.findIndex((rol => rol.title === this.rutaActiva.snapshot.params['type']))
-                if (index < 0) { this.router.navigateByUrl('/dashboard/usuarios/crear') }
-                if (index >= 0) { this.scope = this.listTypeUser[index].url }
+  public ngOnInit() {
+    this.loading = false
+    this.formRegister = this.formBuilder.nonNullable.group({
+      documents: this.formBuilder.nonNullable.group({
+        code: ['', [
+          Validators.required,
+          Validators.nullValidator,
+          Validators.pattern(/(^\d{9}$|^\d{13}$)/),
+          (codeControl: AbstractControl<number>) => {
+            if (codeControl.value != null) {
+              let val: string = codeControl.value.toString()
+              if (val != '') {
+                if (val.length == 9) this.formRegister.get('documents').get('type').setValue('dni');
+                if (val.length == 13) this.formRegister.get('documents').get('type').setValue('ruc');
+                if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formRegister.get('documents').get('type').reset();
+                return null
+              }
             }
+          }
+        ]],
+        type: [null, []]
+      }),
+      name: ['', [Validators.required, Validators.nullValidator]],
+      lastname: ['', [Validators.required, Validators.nullValidator]],
+      phone: ['', [
+        Validators.required,
+        Validators.nullValidator,
+        (phoneControl: AbstractControl<string>) => {
+          if (phoneControl['value'] != '') {
+            if (RegExp(/ /).test(phoneControl['value'])) phoneControl.patchValue(phoneControl['value'].replace(/ /, ''));
+            if (RegExp(/^[0-9]{10}$/).test(phoneControl['value'])) phoneControl.setValue(format(phoneControl['value'], 'EC', 'INTERNATIONAL').replace(/ /, ''));
+            if (RegExp(/^[+]{1}[0-9]{12}$/).test(phoneControl['value']) && isValidPhoneNumber(phoneControl['value'])) return null;
+            return { notIsValidPhoneNumber: true };
+          }
         }
-    }
+      ]],
+      mail: ['', [
+        Validators.required,
+        Validators.nullValidator,
+        Validators.email,
+        Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+      ]],
+      password: ['', [Validators.required, Validators.nullValidator]],
+    })
+  }
 
-    public ngOnInit() {
-        this.loading = false
-        this.formRegister = this.formBuilder.nonNullable.group({
-            documents: this.formBuilder.nonNullable.group({
-                code: ['', [
-                    Validators.required,
-                    Validators.nullValidator,
-                    Validators.pattern(/(^\d{9}$|^\d{13}$)/),
-                    (codeControl: AbstractControl<number>) => {
-                        if (codeControl.value != null) {
-                            let val: string = codeControl.value.toString()
-                            if (val != '') {
-                                if (val.length == 9) this.formRegister.get('documents').get('type').setValue('dni');
-                                if (val.length == 13) this.formRegister.get('documents').get('type').setValue('ruc');
-                                if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formRegister.get('documents').get('type').reset();
-                                return null
-                            }
-                        }
-                    }
-                ]],
-                type: [null, []]
-            }),
-            name: ['', [Validators.required, Validators.nullValidator]],
-            lastname: ['', [Validators.required, Validators.nullValidator]],
-            phone: ['', [
-                Validators.required,
-                Validators.nullValidator,
-                (phoneControl: AbstractControl<string>) => {
-                    if (phoneControl['value'] != '') {
-                        if (RegExp(/ /).test(phoneControl['value'])) phoneControl.patchValue(phoneControl['value'].replace(/ /, ''));
-                        if (RegExp(/^[0-9]{10}$/).test(phoneControl['value'])) phoneControl.setValue(format(phoneControl['value'], 'EC', 'INTERNATIONAL').replace(/ /, ''));
-                        if (RegExp(/^[+]{1}[0-9]{12}$/).test(phoneControl['value']) && isValidPhoneNumber(phoneControl['value'])) return null;
-                        return { notIsValidPhoneNumber: true };
-                    }
+  public enterOrGo() {
+    if (!this.formRegister.valid) {
+      for (const keyC1 in this.formRegisterRef['el']['children']) {
+        if (Object.prototype.hasOwnProperty.call(this.formRegisterRef['el']['children'], keyC1)) {
+          if (this.formRegisterRef['el']['children'][keyC1]['localName'] == 'ion-item') {
+            for (const keyC2 in this.formRegisterRef['el']['children'][keyC1]['children']) {
+              if (Object.prototype.hasOwnProperty.call(this.formRegisterRef['el']['children'][keyC1]['children'], keyC2)) {
+                if (this.formRegisterRef['el']['children'][keyC1]['children'][keyC2]['localName'] == 'ion-input') {
+                  if ((this.formRegisterRef['el']['children'][keyC1]['children'][keyC2] as HTMLIonInputElement).value == '') {
+                    (this.formRegisterRef['el']['children'][keyC1]['children'][keyC2] as HTMLIonInputElement).setFocus()
+                    return
+                  }
                 }
-            ]],
-            mail: ['', [
-                Validators.required,
-                Validators.nullValidator,
-                Validators.email,
-                Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
-            ]],
-            password: ['', [Validators.required, Validators.nullValidator]],
+              }
+            }
+          }
+        }
+      }
+    }
+    else this.onRegister()
+  }
+
+  public onRegister() {
+    this.loading = true
+    this.conectionsService
+      .signUp(this.formRegister.value, this.rolSelect.value)
+      .subscribe((response) => {
+        this.toolsService.showAlert({
+          header: 'Usuario Registrado',
+          buttons: ['ok']
         })
-    }
+        console.log(response);
 
-    public enterOrGo() {
-        if (!this.formRegister.valid) {
-            for (const keyC1 in this.formRegisterRef['el']['children']) {
-                if (Object.prototype.hasOwnProperty.call(this.formRegisterRef['el']['children'], keyC1)) {
-                    if (this.formRegisterRef['el']['children'][keyC1]['localName'] == 'ion-item') {
-                        for (const keyC2 in this.formRegisterRef['el']['children'][keyC1]['children']) {
-                            if (Object.prototype.hasOwnProperty.call(this.formRegisterRef['el']['children'][keyC1]['children'], keyC2)) {
-                                if (this.formRegisterRef['el']['children'][keyC1]['children'][keyC2]['localName'] == 'ion-input') {
-                                    if ((this.formRegisterRef['el']['children'][keyC1]['children'][keyC2] as HTMLIonInputElement).value == '') {
-                                        (this.formRegisterRef['el']['children'][keyC1]['children'][keyC2] as HTMLIonInputElement).setFocus()
-                                        return
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else this.onRegister()
-    }
+        this.loading = false
+        this.showAdminRole(response)
+      }, (error) => {
+        console.error(error);
+        this.loading = false
+      })
+  }
 
-    public onRegister() {
-        this.loading = true
-        this.conectionsService
-            .signUp(this.formRegister.value, this.rolSelect.value)
-            .subscribe((response) => {
-                this.toolsService.showAlert({
-                    header:'Usuario Registrado',
-                    buttons:['ok']
-                })
-                console.log(response);
-
-                this.loading = false
-            }, (error) => {
-                console.error(error);
-                this.loading = false
-            })
-    }
+  showAdminRole(response: any){
+    this.toolsService.showModal({
+      component: ModalAdminRoleComponent,
+      componentProps:{
+        user: response.user.id
+      }
+    })
+  }
 
 }

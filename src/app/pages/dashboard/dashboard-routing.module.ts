@@ -59,7 +59,8 @@ const routes: Routes = [
           {
             path:'conductores',
             component:ConductoresComponents
-          },
+          }
+
         ]
       }
     ]

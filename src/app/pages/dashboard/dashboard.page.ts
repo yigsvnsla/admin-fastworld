@@ -107,13 +107,15 @@ export class DashboardPage implements OnInit {
         icon:'bicycle'
       },{
         title:'encargados',
-        url:'managers',
+        url:'encargados',
         icon:'person-circle'
-      },{
+      }
+      /* ,{
         title:'empleados',
         url:'employed',
         icon:'people-circle'
-      }]
+      } */
+    ]
     }]
 
   }
