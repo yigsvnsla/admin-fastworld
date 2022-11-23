@@ -16,7 +16,7 @@ export class ConductoresComponents implements OnInit{
 
     readonly rowHeight = 50;
     readonly headerHeight = 50;
-  
+
     public source: any[] = []
     private path: string
     private pagination: {
@@ -24,7 +24,7 @@ export class ConductoresComponents implements OnInit{
       limit: number
       total?: number
     }
-  
+
     public columns = [{
       name: 'id',
       prop: 'id',
@@ -33,16 +33,16 @@ export class ConductoresComponents implements OnInit{
       name: 'nombre',
       prop: 'attributes.name',
     }]
-  
+
     public loading: boolean
     public ColumnMode = ColumnMode;
-  
-  
+
+
     constructor(
       private conectionsService: ConectionsService,
       private el: ElementRef,
       private toolsService:ToolsService
-    ) {  
+    ) {
       this.loading = false
       this.setPath = 'basic/driver?populate=*'
       this.setPagination = {
@@ -51,7 +51,7 @@ export class ConductoresComponents implements OnInit{
         total: 0
       }
     }
-  
+
     //////
 
     public showProfile(_id:number){
@@ -73,39 +73,41 @@ export class ConductoresComponents implements OnInit{
       limit: number
       total?: number
     } { return this.pagination }
-  
+
     public set setPagination(v: {
       start: number
       limit: number
       total?: number
     }) { this.pagination = v; }
-  
+
     public set setPath(v: string) {
       this.path = v;
     }
-  
+
     public ngOnInit(): void {
       this.getInformation()
-  
+
     }
-  
+
     private async getInformation() {
       this.loading = true;
+      let loading = this.toolsService.showLoading()
       const { data, meta } = await this.getData(this.path + `&sort=id:ASC&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
       const { page, pageSize, pageCount, total } = meta.pagination
       this.pagination = meta.pagination
-      this.source = [...this.source, ...data]
+      this.source = [...this.source, ...data];
+      (await loading).dismiss
       this.loading = false;
       console.log(this.source);
     }
-  
+
     private async getData(path: string) {
       return await this.conectionsService
         .get<any>(path)
         .pipe(delay(1000))
         .toPromise()
     }
-  
+
     public onScroll(offsetY: number) {
       // total height of all rows in the viewport
       const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;

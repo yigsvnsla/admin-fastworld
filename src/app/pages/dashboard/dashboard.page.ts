@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../services/local-storage.service';
 import { Component, OnInit } from '@angular/core';
 import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { CookiesService } from 'src/app/services/cookies.service';
@@ -70,7 +71,8 @@ export class DashboardPage implements OnInit {
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
     private cookiesService: CookiesService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private localStorageService:LocalStorageService
   ) {
     this.encomiendaRoutes = [{
       title:'Encomiendas',
@@ -121,8 +123,13 @@ export class DashboardPage implements OnInit {
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
     this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
+
+    //console.log(this.cookiesService.get(environment['admin_cookie_tag']).replace(/"/g,''))
+    //console.log(await this.localStorageService.get(environment.admin_user_tag));
+
+    console.log(await this.conectionsService.get('admin/user/me').toPromise())
 
     this.socketService.setAuth = this.cookiesService.get(environment['admin_cookie_tag']).replace(/"/g,'')
     this.socketService.connect()

@@ -49,7 +49,7 @@ export class ClientesComponents implements OnInit {
       name: 'nombre',
       prop: 'attributes.name',
     }]
-  
+
 
     this.setPath = 'basic/client?populate=*'
     this.setPagination = {
@@ -78,7 +78,7 @@ export class ClientesComponents implements OnInit {
 
   test(x){
     console.log(x);
-    
+
   }
 
   public ngOnInit(): void {
@@ -88,10 +88,13 @@ export class ClientesComponents implements OnInit {
 
   private async getInformation() {
     this.loading = true;
+    let loading = this.toolsService.showLoading()
+
     const { data, meta } = await this.getData(this.path + `&sort=id:ASC&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
-    this.source = [...this.source, ...data]
+    this.source = [...this.source, ...data];
+    (await loading).dismiss()
     this.loading = false;
 
     console.log(this.source);

@@ -89,6 +89,8 @@ export class HistorialComponent implements OnInit {
 
   private async getInformation() {
     this.loading = true;
+    let loading = this.toolsService.showLoading()
+
     const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.start}&pagination[limit]=${this.pagination.limit}`)
     this.pagination = meta.pagination
     if(this.pagination.start == 0){
@@ -96,6 +98,7 @@ export class HistorialComponent implements OnInit {
     }else{
       this.source = [...this.source, ...data]
     }
+    (await loading).dismiss()
     this.loading = false;
   }
 

@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
+import { startOfDay } from 'date-fns';
 
 @Component({
   selector: 'app-activas',
@@ -35,8 +36,8 @@ export class ActivasComponent implements OnInit {
     private toolsService:ToolsService,
     private socketService: SocketService
   ) {
-
-    this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&'
+    this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[$and][0][createdAt][$gte]=${startOfDay(new Date()).toISOString()}&filters[$and][2][shipping_status][$notContains]=entregado`
+    // this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&'
     this.setPagination = {
       start:0,
       limit:25,
@@ -117,10 +118,12 @@ export class ActivasComponent implements OnInit {
 
   private async getInformation() {
     this.loading = true;
+    let loading = this.toolsService.showLoading()
     const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
-    this.source = [...this.source, ...data]
+    this.source = [...this.source, ...data];
+    (await loading).dismiss()
     this.loading = false;
     console.log(this.source);
 

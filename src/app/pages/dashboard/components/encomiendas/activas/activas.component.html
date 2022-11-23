@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen">   
+    <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen">
         <!-- colunm id -->
         <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Paquete" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
@@ -29,7 +29,7 @@
                         <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
-                        <ion-text *ngSwitchCase="'reportado'" color="danger">{{ value | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
                     </h6>
                 </ng-container>
