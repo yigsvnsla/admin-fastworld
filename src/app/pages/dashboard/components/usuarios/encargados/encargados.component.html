@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+      <app-btn-menu slot="start"></app-btn-menu>
+      <ion-buttons slot="end">
+          <ion-menu-button menu="menu-historial"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Encargados</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen" >
+      <!-- colunm id -->
+      <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="ID" prop="id">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
+      </ngx-datatable-column>
+      <!-- colunm name complete -->
+      <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Nombre" prop="attributes">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ ( value.name | uppercase ) }} {{ ( value.lastname | uppercase ) }}</ng-template>
+      </ngx-datatable-column>
+      <!-- colunm phone -->
+      <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Telefono" prop="attributes.phone">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
+      </ngx-datatable-column>
+      <!-- colunm dni -->
+      <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Identificacion" prop="attributes.identification">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
+      </ngx-datatable-column>
+      <!-- colunm status -->
+      <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.status">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
+      </ngx-datatable-column>
+      <!-- column Options -->
+      <ngx-datatable-column headerClass="center" cellClass="center" [resizeable]="false" [draggable]="false" [sortable]="false" [width]="300" name="Opciones" prop="id">
+          <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <ion-fab-button (click)="showProfile(row.id)" color="tertiary" size="small">
+                  <ion-icon name="person"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button (click)="showCreateEncomienda(row.id)" color="orange" size="small">
+                  <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button color="success" size="small">
+                  <ion-icon name="cloud-download"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button color="primary" size="small">
+                  <ion-icon name="pencil"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button color="danger" size="small">
+                  <ion-icon name="close"></ion-icon>
+              </ion-fab-button>
+          </ng-template>
+      </ngx-datatable-column>
+  </ngx-datatable>
+</ion-content>

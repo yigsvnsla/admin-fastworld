@@ -96,7 +96,7 @@ export class ConductoresComponents implements OnInit{
       const { page, pageSize, pageCount, total } = meta.pagination
       this.pagination = meta.pagination
       this.source = [...this.source, ...data];
-      (await loading).dismiss
+      (await loading).dismiss()
       this.loading = false;
       console.log(this.source);
     }

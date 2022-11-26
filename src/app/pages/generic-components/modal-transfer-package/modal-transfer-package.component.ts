@@ -32,14 +32,10 @@ export class ModalTransferPackageComponent implements OnInit {
         const send = async () => {
             const loading = await this.toolsService.showLoading('Transfiriendo...')
             try {
-                
                 console.log({ driver: this.idControl.value, package: this.idPackage });
-                
-
                 const response = await this.conectionsService.post('package/transfer', { driver: this.idControl.value, package: this.idPackage }).toPromise()
                 if (response) {
                     console.log(response);
-
                 }
 
             } catch (error) {
@@ -53,7 +49,7 @@ export class ModalTransferPackageComponent implements OnInit {
             cssClass: 'alert-success',
             keyboardClose: true,
             mode: 'ios',
-            header: 'Membrecia',
+            header: 'Confirmar',
             buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
         })
     }

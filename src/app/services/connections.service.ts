@@ -141,9 +141,6 @@ export class ConectionsService {
                 debounceTime(500),
                 retry(2),
                 tap(async res => {
-                  console.log(res);
-
-
                     this.cookiesService.set(environment['admin_cookie_tag'], res.jwt);
                     (await this.localStorageService.remove(environment['admin_user_tag']));
                     (await this.localStorageService.set(environment['admin_user_tag'], res.user));
@@ -154,7 +151,8 @@ export class ConectionsService {
     }
 
     public logOut(): void {
-        this.cookiesService.remove(environment['cookie_tag']);
+        this.cookiesService.remove(environment.admin_cookie_tag);
+        this.localStorageService.remove(environment.admin_user_tag)
         this.router.navigateByUrl('auth');
     }
 

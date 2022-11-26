@@ -1,3 +1,4 @@
+import { EncargadosComponent } from './components/usuarios/encargados/encargados.component';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ModalMembershipComponent } from '../generic-components/modal-membership/modal-membersip.component';
 import { DetailsPackageComponent } from './../generic-components/details-package/details-package.component';
@@ -65,7 +66,8 @@ import { ModalAdminRoleComponent } from '../generic-components/modal-admin-role/
     ModalMapComponent,
     ModalTransferPackageComponent,
     SeguimientoComponent,
-    ModalAdminRoleComponent
+    ModalAdminRoleComponent,
+    EncargadosComponent
   ]
 })
 export class DashboardPageModule {}

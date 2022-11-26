@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  
+
   public formLogin:FormGroup
 
   constructor(
@@ -18,7 +18,7 @@ export class SignInComponent implements OnInit {
 
   ngOnInit() {
     this.formLogin = this.formBuilder.group({
-      email:['',[Validators.required, ]], 
+      email:['',[Validators.required, ]],
       pass:['',[Validators.required, Validators.minLength(6)]],
     });
   }

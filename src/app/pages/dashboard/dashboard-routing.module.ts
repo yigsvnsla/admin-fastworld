@@ -1,3 +1,4 @@
+import { EncargadosComponent } from './components/usuarios/encargados/encargados.component';
 import { ConductoresComponents } from './components/usuarios/conductores/conductores.component';
 import { ClientesComponents } from './components/usuarios/clientes/clientes.component';
 import { ActivasComponent } from './components/encomiendas/activas/activas.component';
@@ -59,6 +60,10 @@ const routes: Routes = [
           {
             path:'conductores',
             component:ConductoresComponents
+          },
+          {
+            path:'encargados',
+            component:EncargadosComponent
           }
 
         ]

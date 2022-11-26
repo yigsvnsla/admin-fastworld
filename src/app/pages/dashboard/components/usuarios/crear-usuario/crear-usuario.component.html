@@ -1,70 +1,88 @@
 <ion-header>
-    <ion-toolbar>
-        <app-btn-menu slot="start"></app-btn-menu>
-        <ion-buttons slot="end">
-            <ion-menu-button menu="menu-historial"></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Crear Usuario</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-buttons slot="end">
+      <ion-menu-button menu="menu-historial"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Crear Usuario</ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-card class="ion-text-center">
-        <ion-card-header class="ion-text-start">
-          <ion-card-title><h1>Registro</h1></ion-card-title>
-        </ion-card-header>
-        <ion-card-content style="padding-bottom: 0;">
-          <ion-item-group #formRegisterRef [formGroup]="this.formRegister">
-            <ion-item>
-                <ion-label>Tipo de Usuario</ion-label>
-                <ion-select #rolSelect interface="popover" [value]="this.scope" placeholder="Seleccionar">
-                  <ion-select-option *ngFor="let rol of this.listTypeUser" [value]="rol.url">{{rol.title | titlecase}}</ion-select-option>
-                </ion-select>
-            </ion-item>
-            <ng-container formGroupName="documents">
-              <ion-item>
-                <ion-icon slot="start" name="id-card"></ion-icon>
-                <ion-label color="dark" position="stacked">
-                  Tipo de Documento : <ion-text [color]="this.formRegister.get('documents').get('type').value != null ? 'success' : 'danger'" >{{this.formRegister.get('documents').get('type').value != null ? (this.formRegister.get('documents').get('type').value | uppercase) : 'Sin Especificar'}} </ion-text>
-                </ion-label>
-                <ion-input (keydown.arrowup)="(false)" (keydown.arrowdown)="(false)" (keydown.enter)="this.enterOrGo()" class="input-autocomplete input-number" formControlName="code" type="number" placeholder="DNI / RUC"></ion-input>
-              </ion-item>
-            </ng-container>
-            <ion-item>
-              <ion-icon slot="start" name="person"></ion-icon>
-              <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="name" type="text" placeholder="Nombre"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon slot="start" name="person"></ion-icon>
-              <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="lastname" type="text" placeholder="Apellido"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon slot="start" name="call"></ion-icon>
-              <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="phone" type="tel" placeholder="Telefono"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-icon slot="start" name="mail"></ion-icon>
-              <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="mail" type="email" placeholder="Correo Electronico"></ion-input>
-            </ion-item>
+  <ion-card class="ion-text-center">
+    <ion-card-header class="ion-text-start">
+      <ion-card-title>
+        <h1>Registro</h1>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="padding-bottom: 0;">
+      <ion-item-group #formRegisterRef [formGroup]="this.formRegister">
+        <ion-item>
+          <ion-label>Tipo de Usuario</ion-label>
+          <ion-select #rolSelect interface="popover" [value]="this.scope" placeholder="Seleccionar">
+            <ion-select-option  *ngFor="let rol of this.listTypeUser" [value]="rol.url">{{rol.title | titlecase}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ng-container formGroupName="documents">
+          <ion-item>
+            <ion-icon slot="start" name="id-card"></ion-icon>
+            <ion-label color="dark" position="stacked">
+              Tipo de Documento : <ion-text
+                [color]="this.formRegister.get('documents').get('type').value != null ? 'success' : 'danger'">
+                {{this.formRegister.get('documents').get('type').value != null ?
+                (this.formRegister.get('documents').get('type').value | uppercase) : 'Sin Especificar'}} </ion-text>
+            </ion-label>
+            <ion-input (keydown.arrowup)="(false)" (keydown.arrowdown)="(false)" (keydown.enter)="this.enterOrGo()"
+              class="input-autocomplete input-number" formControlName="code" type="number" placeholder="DNI / RUC">
+            </ion-input>
+          </ion-item>
+        </ng-container>
+        <ion-item>
+          <ion-icon slot="start" name="person"></ion-icon>
+          <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="name" type="text"
+            placeholder="Nombre"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="person"></ion-icon>
+          <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="lastname"
+            type="text" placeholder="Apellido"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="call"></ion-icon>
+          <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="phone" type="tel"
+            placeholder="Telefono"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="mail"></ion-icon>
+          <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="mail" type="email"
+            placeholder="Correo Electronico"></ion-input>
+        </ion-item>
 
-            <!-- crear componente independiente para reutilizarlo -->
-            <ion-item>
-              <ion-icon slot="start" name="key"></ion-icon>
-              <ion-button class="eye-button" slot="end" (click)="eyeIconRef.name == 'eye-off' ? eyeIconRef.name = 'eye':eyeIconRef.name = 'eye-off'">
-                <ion-icon #eyeIconRef slot="icon-only" name="eye-off"></ion-icon>
-              </ion-button>
-              <ion-input  (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="password" [type]="eyeIconRef.name == 'eye-off' ?'password': eyeIconRef.name == 'eye'? 'text':'password'" placeholder="Contraseña"></ion-input>
-            </ion-item>
-            <!-- ------------   -->
-            <ion-button [disabled]="this.formRegister.invalid" class="ion-text-center ion-margin" type="submit" color="orange" (click)="onRegister()" expand="block" fill="solid" shape="round">
-              <ng-container *ngIf="!this.loading; else _loading">
-                <ion-label>Registrar</ion-label>
-                <ion-icon slot="end" name="send"></ion-icon>
-              </ng-container>
-              <ng-template #_loading>
-                <ion-spinner slot="end" name="crescent"></ion-spinner>
-              </ng-template>
-            </ion-button>
-          </ion-item-group>
-        </ion-card-content>
-      </ion-card>
+        <!-- crear componente independiente para reutilizarlo -->
+        <ion-item>
+          <ion-icon slot="start" name="key"></ion-icon>
+          <ion-button class="eye-button" slot="end"
+            (click)="eyeIconRef.name == 'eye-off' ? eyeIconRef.name = 'eye':eyeIconRef.name = 'eye-off'">
+            <ion-icon #eyeIconRef slot="icon-only" name="eye-off"></ion-icon>
+          </ion-button>
+          <ion-input (keydown.enter)="this.enterOrGo()" class="input-autocomplete" formControlName="password"
+            [type]="eyeIconRef.name == 'eye-off' ?'password': eyeIconRef.name == 'eye'? 'text':'password'"
+            placeholder="Contraseña"></ion-input>
+        </ion-item>
+
+        <!-- <h1>->{{rolSelect.value}}</h1> -->
+        <!-- ------------   -->
+        <ion-button [disabled]="this.formRegister.invalid && !rolSelect.value" class="ion-text-center ion-margin" type="submit"
+          color="orange" (click)="onRegister()" expand="block" fill="solid" shape="round">
+          <ng-container *ngIf="!this.loading; else _loading">
+            <ion-label>Registrar</ion-label>
+            <ion-icon slot="end" name="send"></ion-icon>
+          </ng-container>
+          <ng-template #_loading>
+            <ion-spinner slot="end" name="crescent"></ion-spinner>
+          </ng-template>
+        </ion-button>
+      </ion-item-group>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
