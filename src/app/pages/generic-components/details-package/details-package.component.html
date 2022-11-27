@@ -301,7 +301,7 @@
                     <ng-container [ngSwitch]="history.type">
 
                       <ion-item *ngSwitchCase="'creado'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -310,12 +310,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Creado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'confirmación'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -324,12 +328,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Confirmado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'aceptado'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -338,12 +346,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Aceptado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'rechazado'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -352,12 +364,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Rechazado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'entregado'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -366,12 +382,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Entregado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'recibido'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -380,12 +400,16 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Recibido</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
                       <ion-item *ngSwitchCase="'pagado'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
@@ -394,20 +418,29 @@
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Pagado</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
 
-                      <ion-item *ngSwitchCase="'transfer'">
-                        <ion-icon name="pizza" slot="start"></ion-icon>
+                      <ion-item *ngSwitchCase="'transferido'">
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>
                           <p>
-                            <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
+                            <ion-text color="dark">Fecha: </ion-text>
+                            {{history.time | date:'d/M/yy h:mm a'}}
                           <p>
                           <p>
                             <ion-text color="dark">Estado: </ion-text>
                             <ion-text color="success">Transferido</ion-text>
                           </p>
+                          <p>
+                            <ion-text color="dark">Realizado por: </ion-text>
+                            {{history.basic.name}} {{history.basic.lastname}}
+                          <p>
                           <h2>"{{history.comment}}"</h2>
                         </ion-label>
                       </ion-item>
