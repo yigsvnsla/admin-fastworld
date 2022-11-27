@@ -41,7 +41,9 @@ export class ModalTransferPackageComponent implements OnInit {
             } catch (error) {
                 console.error(error);
             } finally {
+
                 loading.dismiss()
+                await this.onExit()
             }
         }
 

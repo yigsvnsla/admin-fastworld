@@ -8,28 +8,39 @@
       <ion-button  [hidden]="searchInput.value == '' " (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
         <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
       </ion-button>
-    </ion-item> 
+    </ion-item>
     <ion-buttons slot="end">
       <ion-menu-button menu="menu-historial"></ion-menu-button>
     </ion-buttons>
     <ion-title>Historial Encomiendas</ion-title>
-    
+
   </ion-toolbar>
 </ion-header>
 
 <app-menu-filter (urlGen)="test($event)" [inputSearch]="searchInput"  path="das"></app-menu-filter>
 
 <ion-content>
-  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event.offsetY)" [rows]="this.source" [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false"> 
+  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event.offsetY)" [rows]="this.source" [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
     <!-- column id -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Paquete" prop="id">
+    <ngx-datatable-column [minWidth]="50" [width]="80"  [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Paquete" prop="id">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
       <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
     </ngx-datatable-column>
-    <!-- column category -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Categoria" prop="attributes.category">
-      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
+    <!-- column state -->
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">
+      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ng-container [ngSwitch]="value">
+              <h6 style="margin: 0; font-weight: bold;">
+                  <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
+              </h6>
+          </ng-container>
+      </ng-template>
     </ngx-datatable-column>
     <!-- column sender -->
     <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Remitente" prop="attributes.sender.data.attributes.business">
@@ -64,7 +75,7 @@
               </ion-card-header>
               </ion-card>
             </ion-content>
-          </ng-template> 
+          </ng-template>
         </ion-popover>
       </ng-template>
     </ngx-datatable-column>
@@ -153,9 +164,9 @@
         [width]="225"
         [canAutoResize]="true"
         [resizeable]="false"
-        [draggable]="false" 
-        [sortable]="false" 
-        name="Opciones"  
+        [draggable]="false"
+        [sortable]="false"
+        name="Opciones"
         prop="id">
         <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -170,7 +181,7 @@
           </ion-fab-button>
           <ion-fab-button (click)="this.onDeletePackage(value)" color="danger" size="small">
             <ion-icon name="close"></ion-icon>
-          </ion-fab-button> 
+          </ion-fab-button>
         </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>

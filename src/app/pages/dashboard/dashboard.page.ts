@@ -33,96 +33,8 @@ export class DashboardPage implements OnInit {
   }
 
 
-  async ngOnInit() {
-    const {admin} = await this.localStorageService.get(environment.admin_user_tag)
+  ngOnInit() {
 
-
-
-
-    if (admin.role == 'administrador'){
-      this.encomiendaRoutes = [{
-        title:'Encomiendas',
-        url:'encomiendas',
-        options:[{
-          title:'Activas',
-          url:'activas',
-          icon:'cube'
-        },{
-          title:'Historial',
-          url:'historial',
-          icon:'list'
-        },{
-          title:'Seguimiento',
-          url:'seguimiento',
-          icon:'location'
-        }]
-      }]
-
-      this.usersRouters = [{
-        title:'Usuarios',
-        url:'usuarios',
-        options:[{
-          title:'crear',
-          url:'crear',
-          icon:'person'
-        },{
-          title:'clientes',
-          url:'clientes',
-          icon:'people'
-        },{
-          title:'motorizados',
-          url:'conductores',
-          icon:'bicycle'
-        },{
-          title:'encargados',
-          url:'encargados',
-          icon:'person-circle'
-        }
-        /* ,{
-          title:'empleados',
-          url:'employed',
-          icon:'people-circle'
-        } */
-      ]
-      }]
-      this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
-    }
-    if (admin.role == 'encargado'){
-      this.encomiendaRoutes = [{
-        title:'Encomiendas',
-        url:'encomiendas',
-        options:[{
-          title:'Activas',
-          url:'activas',
-          icon:'cube'
-        },{
-          title:'Historial',
-          url:'historial',
-          icon:'list'
-        },{
-          title:'Seguimiento',
-          url:'seguimiento',
-          icon:'location'
-        }]
-      }]
-
-      this.usersRouters = [{
-        title:'Usuarios',
-        url:'usuarios',
-        options:[{
-          title:'clientes',
-          url:'clientes',
-          icon:'people'
-        },
-        /* ,{
-          title:'empleados',
-          url:'employed',
-          icon:'people-circle'
-        } */
-      ]
-      }]
-      this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
-    }
     this.socketService.setAuth = this.cookiesService.get(environment['admin_cookie_tag']).replace(/"/g,'')
     this.socketService.connect()
 
@@ -131,6 +43,102 @@ export class DashboardPage implements OnInit {
 
     })
   }
+
+ async ionViewDidEnter() {
+
+
+
+  const {admin} = await this.localStorageService.get(environment.admin_user_tag)
+
+
+
+
+  if (admin.role == 'administrador'){
+    this.encomiendaRoutes = [{
+      title:'Encomiendas',
+      url:'encomiendas',
+      options:[{
+        title:'Activas',
+        url:'activas',
+        icon:'cube'
+      },{
+        title:'Historial',
+        url:'historial',
+        icon:'list'
+      },{
+        title:'Seguimiento',
+        url:'seguimiento',
+        icon:'location'
+      }]
+    }]
+
+    this.usersRouters = [{
+      title:'Usuarios',
+      url:'usuarios',
+      options:[{
+        title:'crear',
+        url:'crear',
+        icon:'person'
+      },{
+        title:'clientes',
+        url:'clientes',
+        icon:'people'
+      },{
+        title:'motorizados',
+        url:'conductores',
+        icon:'bicycle'
+      },{
+        title:'encargados',
+        url:'encargados',
+        icon:'person-circle'
+      }
+      /* ,{
+        title:'empleados',
+        url:'employed',
+        icon:'people-circle'
+      } */
+    ]
+    }]
+    this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
+  }
+  if (admin.role == 'encargado'){
+    this.encomiendaRoutes = [{
+      title:'Encomiendas',
+      url:'encomiendas',
+      options:[{
+        title:'Activas',
+        url:'activas',
+        icon:'cube'
+      },{
+        title:'Historial',
+        url:'historial',
+        icon:'list'
+      },{
+        title:'Seguimiento',
+        url:'seguimiento',
+        icon:'location'
+      }]
+    }]
+
+    this.usersRouters = [{
+      title:'Usuarios',
+      url:'usuarios',
+      options:[{
+        title:'clientes',
+        url:'clientes',
+        icon:'people'
+      },
+      /* ,{
+        title:'empleados',
+        url:'employed',
+        icon:'people-circle'
+      } */
+    ]
+    }]
+    this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
+  }
+
+ }
 
   onLogOut(){
     this.conectionsService.logOut()
