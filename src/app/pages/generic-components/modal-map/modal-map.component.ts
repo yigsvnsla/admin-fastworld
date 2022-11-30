@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { MapGeocoder } from '@angular/google-maps';
+import { IonSearchbar, ModalController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Ubication } from 'src/app/interfaces/ubication.interface';
@@ -15,6 +16,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 export class ModalMapComponent implements OnInit {
 
   @ViewChild('googleMap') private googleMap: google.maps.Map;
+  @ViewChild('searchbar') private searchbar: IonSearchbar
 
   public autocompletePredictions: google.maps.places.AutocompletePrediction[]
   public googleAutocompleteService: google.maps.places.AutocompleteService
@@ -28,7 +30,10 @@ export class ModalMapComponent implements OnInit {
   constructor(
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
-    private modalController:ModalController) {
+    private modalController:ModalController,
+    private mapGeocoder: MapGeocoder,
+
+  ) {
     this.apiMap$ = of(false)
     this.autocompletePredictions = []
     this.myUbication = {
@@ -165,9 +170,56 @@ export class ModalMapComponent implements OnInit {
     })
   }
 
-  public dismiss(){
-    this.modalController.dismiss()
 
+  private debounceTimer
+  public autocompleteItems: google.maps.GeocoderResult[] = []
+  onSearchChange(e: any) {
+
+    let address = (e as CustomEvent).detail.value;
+    console.log(address);
+
+    if (this.debounceTimer) clearTimeout(this.debounceTimer)
+    this.debounceTimer = setTimeout(() => {
+      if (address != '') {
+        this.mapGeocoder
+          .geocode({ address })
+          .subscribe(({ results, status }) => {
+            switch (status) {
+              case google.maps.GeocoderStatus.OK:
+                if (results.length == 1) {
+                  this.myUbication.address = results[0].formatted_address
+                  this.myUbication.position = results[0].geometry.location.toJSON()
+                  this.markerOptions.position = results[0].geometry.location.toJSON()
+                  this.mapOptions.center = results[0].geometry.location.toJSON()
+                  this.mapOptions.zoom = this.mapOptions.maxZoom
+                  this.googleMap.panTo(this.myUbication.position);
+                  this.autocompletePredictions = []
+                  console.log(results);
+                  return
+                }
+                this.autocompleteItems = results
+                break;
+              case google.maps.GeocoderStatus.ERROR:
+                console.error('error map geocoder');
+                break;
+              case google.maps.GeocoderStatus.ZERO_RESULTS:
+                // this.searchBar.value = ""
+                this.autocompleteItems = []
+                this.toolsService.showAlert({
+                  header: 'Sin Resultados 🤷‍♂️',
+                  subHeader: 'Es posible que la direccion no exista o este mal escrita',
+                  cssClass: 'alert-warn',
+                  buttons: ['ok']
+                })
+                break;
+            }
+          })
+      }
+    }, 3000);
+  }
+
+  public onExit(){
+    this.modalController.dismiss()
   }
 
 }

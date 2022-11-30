@@ -23,16 +23,12 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     @Input() userID: number
 
     @ViewChild('dateTimePrograming ') dateTimePrograming: IonDatetime
-    @ViewChild('segmentSelectPage') segmentSelectPage: IonSegment
-    private swiper: Swiper;
-    public swiperConfig: SwiperOptions;
+
     public productList$: BehaviorSubject<any[]>
     public encomiendaForm: FormGroup
     public receiverForm: FormGroup
     public categories: string[]
 
-    public get getSwiper(): Swiper { return this.swiper }
-    public set setSwiper(v: Swiper) { this.swiper = v }
 
     private get dateMinTimeOutPrograming(): string {
         let offset = new Date().getTimezoneOffset() * 60
@@ -52,30 +48,19 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     ) {
         this.productList$ = new BehaviorSubject([])
         this.categories = ['Alimentos', 'Compras', 'Correspondencia', 'Fragil', 'Libros', 'Madera', 'Medicina', 'Mensajeria', 'Otros', 'Ropa', 'Tecnología',];
-        this.swiperConfig = {
-            followFinger: false,
-            on: {
-                activeIndexChange: (swiper) => {
-                    if (swiper.realIndex == 0) this.segmentSelectPage.value = 'lista';
-                    if (swiper.realIndex == 1) this.segmentSelectPage.value = 'agregar';
-                }
-            }
-        }
     }
 
     public ionViewWillEnter() { }
 
     public ngOnInit() {
         console.log(this.userID);
-        
-        this.instanceForm() 
+
+        this.instanceForm()
     }
 
     public ionViewDidEnter() {
-        this.getSwiper.slidePrev()
         this.instanceDateTimePrograming()
         this.instanceForm();
-        this.swiper.activeIndex
     }
 
     public setTimeOutProgramingChange($event: Event) { this.encomiendaForm.get('timeOut').setValue(($event as IonDatetimeCustomEvent<any>).detail.value) }
@@ -86,7 +71,6 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
     public async onExit() { (await this.modalController.getTop()).dismiss() }
 
-    public setSwiperInstance($swiper: Swiper) { this.setSwiper = $swiper }
 
     public timeOutSegmentChange($event: Event) { this.encomiendaForm.get('timeOut').setValue(null) }
 
@@ -98,7 +82,6 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         const list = this.productList$.value
         list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
         this.productList$.next(list)
-        this.getSwiper.slidePrev()
         this.instanceForm()
     }
 

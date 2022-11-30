@@ -1,18 +1,16 @@
-ion-segment {
-    --background: var(--ion-color-orange);
+ion-modal {
+  --height: 75%;
 }
 
-swiper {
-    width: 100%;
-    height: 100%;
+ion-content{
+  --offset-top: -20px !important
+
 }
 
 .emptyList {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
-
-

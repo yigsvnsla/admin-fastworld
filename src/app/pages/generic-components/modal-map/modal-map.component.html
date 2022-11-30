@@ -1,12 +1,5 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="this.dismiss()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-searchbar (ionCancel)="searchAddresCancel(addressList)" (ionChange)="searchAddresChange($event)" [value]="this.myUbication.address" enterkeyhint="search" animated="true" placeholder="Buscar Ubicación" inputmode="search" type="search"  [debounce]="500" showCancelButton="focus"></ion-searchbar>
+  <ion-searchbar #searchbar (ionCancel)="searchAddresCancel(addressList)" (ionChange)="onSearchChange($event)" [value]="this.myUbication.address" enterkeyhint="search" animated="true" placeholder="Buscar Ubicación" inputmode="search" type="search"  [debounce]="500" showCancelButton="focus"></ion-searchbar>
 </ion-header>
 <ion-item-group [ngStyle]="{'display': this.autocompletePredictions.length > 1 ? 'block': 'none'}" #addressList id="address-list">
 <ion-item button (click)="selectAddress(prediction)" *ngFor="let prediction of this.autocompletePredictions">
@@ -31,6 +24,11 @@
 <ion-toolbar>
   <ion-grid fixed>
     <ion-row>
+      <ion-col size="3">
+        <ion-fab-button color="danger" (click)="onExit()">
+          <ion-icon name="close"></ion-icon>
+        </ion-fab-button>
+      </ion-col>
       <ion-col>
         <ion-chip class="ion-text-center" (click)="selectUbication()">
           <ion-icon name="location" color="dark"></ion-icon>
