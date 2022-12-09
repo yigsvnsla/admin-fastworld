@@ -1,0 +1,16 @@
+.scroller{
+  height: 100%;
+}
+ion-card{
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+}
+ion-card-content{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+ngx-datatable{
+  flex-grow: 1;
+}

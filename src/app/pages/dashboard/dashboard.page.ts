@@ -20,6 +20,7 @@ export class DashboardPage implements OnInit {
 
   private encomiendaRoutes : routerMenu[]
   private usersRouters : routerMenu[]
+  private adminRoutes: routerMenu[]
 
 
   constructor(
@@ -54,7 +55,19 @@ export class DashboardPage implements OnInit {
 
 
   if (admin.role == 'administrador'){
-    this.encomiendaRoutes = [{
+    this.encomiendaRoutes = [
+      {
+        title: 'Checkout',
+        url: 'pagos',
+        options: [
+          {
+            title: 'Pagos',
+            url: '',
+            icon: 'person'
+          }
+        ]
+      },
+      {
       title:'Encomiendas',
       url:'encomiendas',
       options:[{
@@ -99,6 +112,7 @@ export class DashboardPage implements OnInit {
       } */
     ]
     }]
+
     this.sectionMenu = [...this.encomiendaRoutes,... this.usersRouters]
   }
   if (admin.role == 'encargado'){
@@ -117,9 +131,8 @@ export class DashboardPage implements OnInit {
         title:'Seguimiento',
         url:'seguimiento',
         icon:'location'
-      }]
+      },]
     }]
-
     this.usersRouters = [{
       title:'Usuarios',
       url:'usuarios',

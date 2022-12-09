@@ -1,0 +1,57 @@
+<ion-card *ngIf="validUser">
+  <!-- <ion-card-header>
+    <ion-card-title>{{user.business | titlecase}}</ion-card-title>
+    <ion-card-subtitle>Cliente: {{user.name | titlecase}}</ion-card-subtitle>
+  </ion-card-header> -->
+  <ion-card-header>
+    <ion-toolbar>
+      <ion-title>
+        <ion-label>
+          <h1>{{user.business | titlecase}}</h1>
+          <h3>Cliente: {{user.name | titlecase}}</h3>
+        </ion-label>
+      </ion-title>
+    </ion-toolbar>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-row>
+      <ion-col size="3">
+        <ion-item button>
+          <ion-icon name="logo-usd" slot="start"></ion-icon>
+          <ion-label position="stacked">Deuda</ion-label>
+          <ion-input value="{{user.pending | number}}" readonly=""></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item button>
+          <ion-icon name="cube-outline" slot="start"></ion-icon>
+          <ion-label position="stacked">Cantidad de encomiendas</ion-label>
+          <ion-input value="{{user.count | number}}" readonly=""></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" shape="round" color="success">
+          <ion-icon name="card-outline" slot="start"></ion-icon>
+          <ion-label>Pagar</ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-item-divider>
+      <ion-label>Ultimos pagos realizados</ion-label>
+    </ion-item-divider>
+    <ngx-datatable class="dark fullscreen">
+      <ngx-datatable-column   [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Referencia" prop="id">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Fecha" prop="createdAt">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Pagado" prop="value">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ion-card-content>
+</ion-card>
