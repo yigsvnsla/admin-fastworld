@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapGeocoder } from '@angular/google-maps';
-import { IonSearchbar, ModalController } from '@ionic/angular';
+import { IonInput, IonSearchbar, ModalController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Ubication } from 'src/app/interfaces/ubication.interface';
@@ -17,7 +17,7 @@ export class ModalMapComponent implements OnInit {
 
   @ViewChild('googleMap') private googleMap: google.maps.Map;
   @ViewChild('searchbar') private searchbar: IonSearchbar
-
+  @ViewChild('searchInput') public searchInput: IonInput
   public autocompletePredictions: google.maps.places.AutocompletePrediction[]
   public googleAutocompleteService: google.maps.places.AutocompleteService
   private sessionToken: google.maps.places.AutocompleteSessionToken;
@@ -27,10 +27,12 @@ export class ModalMapComponent implements OnInit {
   public apiMap$: Observable<boolean>;
   public myUbication: Ubication
 
+  public addressList: boolean = false
+
   constructor(
     private conectionsService: ConectionsService,
     private toolsService: ToolsService,
-    private modalController:ModalController,
+    private modalController: ModalController,
     private mapGeocoder: MapGeocoder,
 
   ) {
@@ -65,16 +67,35 @@ export class ModalMapComponent implements OnInit {
     this.showMap()
   }
 
-  public loadMap(){
-    this.apiMap$ = this.conectionsService
-    .getGoogleMapsApi()
-    .pipe(
-      tap(api => {
-        this.googleAutocompleteService = new google.maps.places.AutocompleteService();
-        this.sessionToken = new google.maps.places.AutocompleteSessionToken();
-        this.markerOptions.position = this.mapOptions.center;
-      })
-    )
+  searchInputFocus($event) {
+    this.addressList = true
+    this.searchInput.value = ''
+    console.log($event);
+
+  }
+
+  searchInputBlur($event) {
+    console.log($event);
+  }
+
+  public loadMap() {
+    if (window?.google) {
+      this.apiMap$ = of(true)
+      this.googleAutocompleteService = new google.maps.places.AutocompleteService();
+      this.sessionToken = new google.maps.places.AutocompleteSessionToken();
+      this.markerOptions.position = this.mapOptions.center;
+    } else {
+      this.apiMap$ = this.conectionsService
+        .getGoogleMapsApi()
+        .pipe(
+          tap(api => {
+            console.log(google);
+            this.googleAutocompleteService = new google.maps.places.AutocompleteService();
+            this.sessionToken = new google.maps.places.AutocompleteSessionToken();
+            this.markerOptions.position = this.mapOptions.center;
+          })
+        )
+    }
   }
 
   public showMap() {
@@ -92,41 +113,57 @@ export class ModalMapComponent implements OnInit {
             .subscribe(_geoCodeResults => {
               this.myUbication.address = _geoCodeResults[0].formatted_address
               this.myUbication.placeId = _geoCodeResults[0].place_id
+
+              this.searchInput.value = this.myUbication.address
+              console.log(this.myUbication );
+
             })
         }
       })
   }
 
-  public mapZoomChanged(){
+  public mapZoomChanged() {
     this.googleMap.panTo(this.myUbication.position);
   }
 
-  public async searchAddresChange($event: Event) {
-    this.myUbication.address = ($event as CustomEvent).detail.value;
-    if (($event as CustomEvent).detail.value != '') {
+  // public async searchAddresChange($event: Event) {
 
-      let { predictions } = (await this.googleAutocompleteService.getPlacePredictions({
-        input: ($event as CustomEvent).detail.value,
-        sessionToken: this.sessionToken,
-        language: 'es-419',
-        componentRestrictions: { country: 'EC' },
-      }))
 
-      this.autocompletePredictions = predictions
-    }
-  }
+  // this.myUbication.address = ($event as CustomEvent).detail.value;
 
-  public selectAddress(prediction: google.maps.places.AutocompletePrediction) {
-    this.conectionsService
-      .mapGeocode({ placeId: prediction.place_id, region: 'EC' })
-      .subscribe(result => {
-        this.myUbication.position = result[0].geometry.location.toJSON()
-        this.markerOptions.position = result[0].geometry.location.toJSON()
-        this.mapOptions.center = result[0].geometry.location.toJSON()
+  // if (($event as CustomEvent).detail.value != '') {
+
+  //   let { predictions } = (await this.googleAutocompleteService.getPlacePredictions({
+  //     input: ($event as CustomEvent).detail.value,
+  //     sessionToken: this.sessionToken,
+  //     language: 'es-419',
+  //     componentRestrictions: { country: 'EC' },
+  //   }))
+
+  //   this.autocompletePredictions = predictions
+  // }
+  // }
+
+  public selectAddress(prediction: google.maps.GeocoderResult) {
+    // this.conectionsService
+    //   .mapGeocode({ placeId: prediction.place_id, region: 'EC' })
+    //   .subscribe(result => {
+
+        console.log(prediction);
+
+        this.myUbication.address = prediction.formatted_address
+
+        this.myUbication.position = prediction.geometry.location.toJSON()
+        this.markerOptions.position = prediction.geometry.location.toJSON()
+        this.mapOptions.center = prediction.geometry.location.toJSON()
         this.mapOptions.zoom = this.mapOptions.maxZoom
         this.googleMap.panTo(this.myUbication.position);
         this.autocompletePredictions = []
-      })
+        this.searchInput.value = this.myUbication.address
+
+            this.addressList = false
+
+      // })
   }
 
   public searchAddresCancel(elementRef: any) {
@@ -137,19 +174,26 @@ export class ModalMapComponent implements OnInit {
     this.conectionsService
       .mapGeocode({ location: this.googleMap.getCenter().toJSON() })
       .subscribe(_geoCodeResults => {
-        const {formatted_address, place_id, geometry} = _geoCodeResults[0]
-        const {location} = geometry;
+        console.log(_geoCodeResults);
+
+        const { formatted_address, place_id, geometry } = _geoCodeResults[0]
+        const { location } = geometry;
         this.myUbication.address = formatted_address;
         this.myUbication.placeId = place_id;
         this.myUbication.position = location.toJSON()
         this.markerOptions.position = this.googleMap.getCenter().toJSON()
+        this.searchInput.value = this.myUbication.address
+
       })
   }
 
   public mapDrag() {
     this.markerOptions.position = this.googleMap.getCenter().toJSON()
 
+
+
   }
+
 
   public centerMyUbication() {
     this.googleMap.panTo(this.myUbication.position);
@@ -171,54 +215,62 @@ export class ModalMapComponent implements OnInit {
   }
 
 
+
   private debounceTimer
   public autocompleteItems: google.maps.GeocoderResult[] = []
   onSearchChange(e: any) {
 
     let address = (e as CustomEvent).detail.value;
-    console.log(address);
 
-    if (this.debounceTimer) clearTimeout(this.debounceTimer)
-    this.debounceTimer = setTimeout(() => {
-      if (address != '') {
-        this.mapGeocoder
-          .geocode({ address })
-          .subscribe(({ results, status }) => {
-            switch (status) {
-              case google.maps.GeocoderStatus.OK:
-                if (results.length == 1) {
-                  this.myUbication.address = results[0].formatted_address
-                  this.myUbication.position = results[0].geometry.location.toJSON()
-                  this.markerOptions.position = results[0].geometry.location.toJSON()
-                  this.mapOptions.center = results[0].geometry.location.toJSON()
-                  this.mapOptions.zoom = this.mapOptions.maxZoom
-                  this.googleMap.panTo(this.myUbication.position);
-                  this.autocompletePredictions = []
-                  console.log(results);
-                  return
-                }
-                this.autocompleteItems = results
-                break;
-              case google.maps.GeocoderStatus.ERROR:
-                console.error('error map geocoder');
-                break;
-              case google.maps.GeocoderStatus.ZERO_RESULTS:
-                // this.searchBar.value = ""
-                this.autocompleteItems = []
-                this.toolsService.showAlert({
-                  header: 'Sin Resultados 🤷‍♂️',
-                  subHeader: 'Es posible que la direccion no exista o este mal escrita',
-                  cssClass: 'alert-warn',
-                  buttons: ['ok']
-                })
-                break;
-            }
-          })
-      }
-    }, 3000);
+    if (this.addressList && this.searchInput.value != '') {
+      // console.log(address);
+      if (this.debounceTimer) clearTimeout(this.debounceTimer)
+      this.debounceTimer = setTimeout(() => {
+        if (address != '') {
+          this.mapGeocoder
+            .geocode({ address })
+            .subscribe(async ({ results, status }) => {
+              switch (status) {
+                case google.maps.GeocoderStatus.OK:
+                  if (results.length == 1) {
+                    this.myUbication.address = results[0].formatted_address
+                    this.myUbication.position = results[0].geometry.location.toJSON()
+                    this.markerOptions.position = results[0].geometry.location.toJSON()
+                    this.mapOptions.center = results[0].geometry.location.toJSON()
+                    this.mapOptions.zoom = this.mapOptions.maxZoom
+                    this.googleMap.panTo(this.myUbication.position);
+                    this.autocompletePredictions = []
+                    this.addressList = false
+                    const element = await this.searchInput.getInputElement()
+                    element.blur()
+                    console.log(results);
+                    return
+                  }
+
+                  this.autocompleteItems = results
+                  console.log(this.autocompleteItems);
+                  break;
+                case google.maps.GeocoderStatus.ERROR:
+                  console.error('error map geocoder');
+                  break;
+                case google.maps.GeocoderStatus.ZERO_RESULTS:
+                  // this.searchBar.value = ""
+                  this.autocompleteItems = []
+                  this.toolsService.showAlert({
+                    header: 'Sin Resultados 🤷‍♂️',
+                    subHeader: 'Es posible que la direccion no exista o este mal escrita',
+                    cssClass: 'alert-warn',
+                    buttons: ['ok']
+                  })
+                  break;
+              }
+            })
+        }
+      }, 3000);
+    }
   }
 
-  public onExit(){
+  public onExit() {
     this.modalController.dismiss()
   }
 

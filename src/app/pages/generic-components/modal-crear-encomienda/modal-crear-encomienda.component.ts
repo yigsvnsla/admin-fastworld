@@ -3,7 +3,7 @@ import { ToolsService } from './../../../services/tools.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { InputCustomEvent, IonDatetime, IonicSlides, IonSegment, ModalController, SegmentCustomEvent, TextareaCustomEvent } from '@ionic/angular'
+import { InputCustomEvent, IonDatetime, IonicSlides, IonModal, IonSegment, ModalController, SegmentCustomEvent, TextareaCustomEvent } from '@ionic/angular'
 import { addHours, format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import * as lib from 'libphonenumber-js';
@@ -21,13 +21,16 @@ SwiperCore.use([IonicSlides])
 
 export class ModalCrearEncomiendaComponent implements OnInit {
     @Input() userID: number
+    @Input() _user:any
 
+    @ViewChild('modal') modal:IonModal
     @ViewChild('dateTimePrograming ') dateTimePrograming: IonDatetime
 
     public productList$: BehaviorSubject<any[]>
     public encomiendaForm: FormGroup
     public receiverForm: FormGroup
     public categories: string[]
+    public startListUbication: any[] = [];
 
 
     private get dateMinTimeOutPrograming(): string {
@@ -37,8 +40,12 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         return date.toISOString()
     }
 
-    private set setStartUbication(v: any) { this.encomiendaForm.get(['route', 'start']).setValue(v); }
-    private set setEndUbication(v: any) { this.encomiendaForm.get(['route', 'end']).setValue(v); }
+    public setStartUbication(v: any) {
+      this.encomiendaForm.get(['route', 'start']).setValue(v);
+      console.log(this.encomiendaForm.get(['route', 'start']).value);
+
+    }
+    // private  setEndUbication(v: any) { this.encomiendaForm.get(['route', 'end']).setValue(v); }
 
     constructor(
         private modalController: ModalController,
@@ -53,7 +60,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     public ionViewWillEnter() { }
 
     public ngOnInit() {
-        console.log(this.userID);
+        console.log(this._user);
 
         this.instanceForm()
     }
@@ -63,6 +70,8 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         this.instanceForm();
     }
 
+
+
     public setTimeOutProgramingChange($event: Event) { this.encomiendaForm.get('timeOut').setValue(($event as IonDatetimeCustomEvent<any>).detail.value) }
 
     public timeOutFormat(time: string | number) { return typeof time == 'number' ? `${time} Minutos` : format(parseISO(time), "EEEE MMMM d 'del' y - h:mm aaa", { locale: es }) }
@@ -71,6 +80,11 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
     public async onExit() { (await this.modalController.getTop()).dismiss() }
 
+    public async popoverDidPresentUserUbication() {
+      this.startListUbication = []
+      const { direction } = this._user.business
+      this.startListUbication.push(direction)
+    }
 
     public timeOutSegmentChange($event: Event) { this.encomiendaForm.get('timeOut').setValue(null) }
 
@@ -82,9 +96,9 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         const list = this.productList$.value
         list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
         this.productList$.next(list)
+        await this.modal.dismiss()
         this.instanceForm()
     }
-
 
     public editItem(item) { }
 
@@ -135,7 +149,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
                 keyboardClose: true,
                 cssClass: 'modal-fullscreen'
             })
-        if (modal) { this.setStartUbication = modal }
+        if (modal) { this.encomiendaForm.get(['route', 'start']).setValue(modal) }
     }
 
     public async onOpenModalMapEnd() {
@@ -146,7 +160,11 @@ export class ModalCrearEncomiendaComponent implements OnInit {
                 keyboardClose: true,
                 cssClass: 'modal-fullscreen'
             })
-        if (modal) { this.setEndUbication = modal }
+        if (modal) {
+          this.encomiendaForm.get(['route', 'end']).setValue(modal);
+          // this.setEndUbication = modal
+
+        }
     }
 
     public async setTimeOutToday() {

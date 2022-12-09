@@ -137,15 +137,21 @@ export class ClientesComponents implements OnInit {
     })
   }
 
-  public showCreateEncomienda(_id:number){
-    this.toolsService.showModal({
+  public async showCreateEncomienda(_id:number){
+    let _user = await this.conectionsService.get(`user/basic/${_id}?populate=*`).pipe(delay(500)).toPromise()
+
+    console.log(_user);
+
+
+    await this.toolsService.showModal({
       component:ModalCrearEncomiendaComponent,
       cssClass:['modal-fullscreen'],
       keyboardClose:true,
       mode:'ios',
       backdropDismiss:false,
       componentProps:{
-        userID:_id
+        userID:_id,
+        _user : _user
       }
     })
   }

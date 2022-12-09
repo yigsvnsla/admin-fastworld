@@ -22,7 +22,7 @@ export class ToolsService {
     pop.present()
 
     return new Promise<HTMLIonPopoverElement>(async (resolve, reject) => {
-      
+
       return resolve(pop)
     })
   }
@@ -39,13 +39,13 @@ export class ToolsService {
 
     const actionSheet = await this.actionSheetController.create(options)
     await actionSheet.present();
-  
+
     return new Promise<HTMLIonActionSheetElement>(async(value)=>{
       return value(actionSheet)
     })
   }
 
-  async showAlert(alertOptions:AlertOptions){    
+  async showAlert(alertOptions:AlertOptions){
     let alert = await this.alertController.create(alertOptions)
       alert.present()
     return new Promise<HTMLIonAlertElement>(async (value)=>{
@@ -53,9 +53,9 @@ export class ToolsService {
     })
   }
 
-  async showToast(message: string) : Promise<HTMLIonToastElement> {
+  async showToast(config:any) : Promise<HTMLIonToastElement> {
     let toast = await this.toastController.create({
-      message: message,
+      ...config,
       duration: 1000
     })
     toast.present();
@@ -78,31 +78,31 @@ export class ToolsService {
     let load = this.showLoading()
     let modal: HTMLIonModalElement = await this.modalController.create(options);
     modal.present();
-    (await load).dismiss()  
-    
+    (await load).dismiss()
+
     return new Promise(async (value) => {
       value((await modal.onDidDismiss()).data)
     })
   }
 
-  compareObjets(objet_base:object, objet_compare:object){      
+  compareObjets(objet_base:object, objet_compare:object){
     for (let [key, val] of Object.entries(objet_base)) {
-      // si esta propiedad existe 
+      // si esta propiedad existe
       if(objet_compare.hasOwnProperty(key)){
         // si el valor de la llave en el objeto comparador es diferente
         if (objet_compare[key] !== val) {
           // si el valor de la llave es de tipo objeto,
           // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
           if (typeof objet_compare[key] == 'object'){
-            return this.compareObjets(objet_compare[key],val)              
+            return this.compareObjets(objet_compare[key],val)
           }
-          console.error(`Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}`);  
+          console.error(`Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}`);
           return false;
         }
       }
       // si esta propiedad no existe
       else{
-        console.error(key,`propiedad no existe en el objeto comparador`);          
+        console.error(key,`propiedad no existe en el objeto comparador`);
         return false;
       }
     }
@@ -112,7 +112,7 @@ export class ToolsService {
   async menuControl():Promise<MenuController>{
     return this.menuController;
   }
-  
+
   typeOf(value:any,base:string){
     return typeof value == base ? true : false
   }

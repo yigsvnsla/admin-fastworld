@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="( this.productList$ | async ) as list" class="ion-padding">
+<ion-content *ngIf="( this.productList$ | async ) as list" >
   <section *ngIf="list.length <= 0;" class="emptyList ion-padding">
     <ion-img style="max-width: 25%;" id="img-list" [src]="'../../../../../assets/svg/undraw_empty_re_opql.svg'">
     </ion-img>
@@ -243,7 +243,7 @@
                 <ion-text color="orange">¿A donde retiramos?</ion-text>
               </ion-card-title>
             </ion-card-header>
-            <ion-item id="item-ubication-start" lines="full" class="curved" button (click)="this.onOpenModalMapStart()">
+            <ion-item id="item-ubication-start" lines="full" class="curved" button>
               <ion-label>
                 <p>
                   <ion-text color="orange">Dirección</ion-text>
@@ -253,6 +253,27 @@
               </ion-label>
               <ion-icon slot="start" name="pin"></ion-icon>
             </ion-item>
+            <ion-popover [dismissOnSelect]="true" (didPresent)="popoverDidPresentUserUbication()" size="cover" alignment="center" side="bottom" trigger="item-ubication-start" triggerAction="click">
+              <ng-template >
+                <ion-content class="ion-padding">
+                  <ion-item-group>
+                    <ion-item-divider>
+                      <ion-label>Opciones</ion-label>
+                    </ion-item-divider>
+                    <ion-item (click)="setStartUbication(item)" *ngFor="let item of startListUbication" button>
+                      <ion-label>
+                        <p>Dirección guardada<p>
+                        <h4>{{item.address}}</h4>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item (click)="onOpenModalMapStart()" button>
+                      <ion-label>Otra ubicación</ion-label>
+                      <ion-icon slot="start" name="map"></ion-icon>
+                    </ion-item>
+                  </ion-item-group>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
             <ion-item *ngIf="this.encomiendaForm.get('route').get('start').value != null" class="item-center-icon">
               <ion-icon slot="start" name="pencil"></ion-icon>
               <ion-textarea (ionChange)="setStartUbicationMessage($event)" [rows]="4" inputmode="text"
