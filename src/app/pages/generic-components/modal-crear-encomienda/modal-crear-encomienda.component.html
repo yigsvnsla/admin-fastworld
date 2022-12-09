@@ -1,325 +1,348 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button color="orange" (click)="this.onExit()">
-                <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-segment #segmentSelectPage [swipeGesture]="false" value="lista" >
-            <ion-segment-button (click)="this.getSwiper.slidePrev()" value="lista">
-                <ion-label>Lista</ion-label>
-            </ion-segment-button>
-            <ion-segment-button (click)="this.getSwiper.slideNext()" value="agregar">
-                <ion-label>Agregar</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-        <ion-buttons slot="end">
-            <ion-button style="visibility: hidden;" color="orange" (click)="this.onExit()">
-                <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
-
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="orange" (click)="this.onExit()">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button style="visibility: hidden;" color="orange" (click)="this.onExit()">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
-<ion-content>
-    <swiper (swiper)="this.setSwiperInstance($event)" [config]="this.swiperConfig">
-        <ng-template swiperSlide>
-            <ion-content *ngIf="( this.productList$ | async ) as list">
-                <section *ngIf="list.length <= 0;" class="emptyList ion-padding">
-                    <ion-img style="max-width: 25%;" id="img-list" [src]="'../../../../../assets/svg/undraw_empty_re_opql.svg'"></ion-img>
-                    <ion-card-header class="ion-text-center">
-                        <ion-card-title>No tienes encomiendas para enviar</ion-card-title>
-                        <ion-card-subtitle>pulsa el siguiente boton para iniciar los envios</ion-card-subtitle>
-                    </ion-card-header>
-                    <ion-chip button (click)="this.getSwiper.slideNext()" color="orange" mode="ios" outline="true">
-                        <ion-label>Crear Encomiendas</ion-label>
-                        <ion-icon name="add"></ion-icon>
-                    </ion-chip>
-                </section>
-                <section *ngIf="list.length > 0">
-                    <ion-fab style="z-index: 0;" vertical="top" horizontal="end" slot="fixed">
-                        <ion-fab-button color="orange" (click)="this.getSwiper.slideNext()">
-                            <ion-icon name="add"></ion-icon>
-                        </ion-fab-button>
-                    </ion-fab>
-                    <ion-item-group>
-                        <ion-item-divider style="border-bottom: 0;">
-                            <ion-card-header>
-                                <ion-card-title>Lista de Encomiendas</ion-card-title>
-                                <ion-card-subtitle>cantidad de envios: {{list.length}}</ion-card-subtitle>
-                            </ion-card-header>
-                        </ion-item-divider>
-                        <!-- <cdk-virtual-scroll-viewport>
-                            <ion-list>
-                                <ng-container *cdkVirtualFor="let item of list;let i = index">>
-                                    <ion-item-divider>
-                                        <ion-label>Encomienda <ion-text color="orange">#{{ i + 1 }}</ion-text></ion-label>
-                                    </ion-item-divider>
-                                </ng-container>
-                            </ion-list>
-                          </cdk-virtual-scroll-viewport> -->
-                        <ng-container *ngFor="let item of list; let i = index">
-                            <ion-item-divider>
-                                <ion-label>Encomienda <ion-text color="orange">#{{ i + 1 }}</ion-text></ion-label>
-                            </ion-item-divider>
-                            <ion-item-sliding>
-                                <ion-item lines="none">
-                                    <ion-grid>
-                                        <ion-row>
-                                            <ion-col sizeXs="12">
-                                                <ion-card-header *ngIf="item.receiver != null;else fromTicket"  class="ion-no-padding">
-                                                    <ion-card-title style="display: flex; align-items: center;" class="ion-text-wrap">
-                                                        <ion-icon class="ion-hide-sm-down" style="margin: 6px;" name="person"></ion-icon>
-                                                        <ion-text>{{(item.receiver?.name | titlecase )}}</ion-text>
-                                                    </ion-card-title>
-                                                    <ion-grid class="ion-no-padding">
-                                                        <ion-row style="margin-top: 6px;">
-                                                            <ion-col size="6">
-                                                                <ion-card-subtitle style="display: flex; align-items: center; margin-left: 9px;">
-                                                                    <ion-icon style="margin-right: 6px;" name="call"></ion-icon>
-                                                                    <ion-text>{{item.receiver?.phone}}</ion-text>
-                                                                </ion-card-subtitle>
-                                                            </ion-col>
-                                                            <ion-col size="6">
-                                                                <ion-card-subtitle style="display: flex; align-items: center; margin-left: 9px;">
-                                                                    <ion-icon style="margin-right: 6px;" name="cube"></ion-icon>
-                                                                    <ion-text>{{(item.route.value | currency)}} - {{item.route.distance}}Km</ion-text>
-                                                                </ion-card-subtitle>
-                                                            </ion-col>
-                                                        </ion-row>
-                                                    </ion-grid>
-                                                </ion-card-header>
-                                                <ng-template #fromTicket>
-                                                    <ion-card-header>
-                                                        <ion-card-subtitle>Encomienda pautada para confirmaciòn del cliente</ion-card-subtitle>
-                                                        <ion-card-title>TICKET 📦</ion-card-title>
-                                                    </ion-card-header>
-                                                </ng-template>
-                                            </ion-col>
-                                        </ion-row>
-                                        <ion-row>
-                                            <ion-col size="12">
-                                                <ion-row>
-                                                    <ion-col size="6">
-                                                        <ion-label>
-                                                            <p><ion-text color="orange"><ion-icon name="timer"></ion-icon>{{this._typeof(item.timeOut, 'number') ? 'Tiempo de Espera' : 'Retiro pautado para el dia' }}</ion-text></p>
-                                                            <h2>{{ (this.timeOutFormat(item.timeOut) | titlecase) }}</h2>
-                                                        </ion-label>
-                                                    </ion-col>
-                                                    <ion-col size="6">
-                                                        <ion-label>
-                                                            <p><ion-text color="orange"><ion-icon name="grid"></ion-icon>Categoria</ion-text></p>
-                                                            <h2>{{item.category}}</h2>
-                                                        </ion-label>
-                                                    </ion-col>
-                                                </ion-row>
-                                                <ion-row *ngIf="item.receiver != null">
-                                                    <ion-col size="12">
-                                                        <ion-label class="ion-text-wrap">
-                                                            <p><ion-icon name="pin"></ion-icon>Dirección</p>
-                                                            <h2>{{item.route.end.address}}</h2>
-                                                        </ion-label>
-                                                    </ion-col>
-                                                </ion-row>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-grid>
-                                </ion-item>
-                                <ion-item-options side="end">
-                                    <ion-item-option color="primary" (click)="editItem(item)">
-                                        <ion-icon slot="icon-only" name="pencil"></ion-icon>
-                                    </ion-item-option>
-                                    <ion-item-option color="danger" (click)="deleteItem(item)">
-                                        <ion-icon slot="icon-only" name="trash"></ion-icon>
-                                    </ion-item-option>
-                                </ion-item-options>
-                            </ion-item-sliding>
-                        </ng-container>
-                        <ion-item-divider>
-                            <ion-label>Recuerde</ion-label>
-                        </ion-item-divider>
-                        <ion-item>
-                            <ion-icon name="grid" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">Dimenciones maximas del envio 47x43x40</ion-label>
-                        </ion-item>
-                        <ion-item>
-                            <ion-icon name="bicycle" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">Todos sus nuestros conductores son verificados</ion-label>
-                        </ion-item>
-                        <ion-item>
-                            <ion-icon name="archive" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">Peso maximo de envio 5kg</ion-label>
-                        </ion-item>
-                        <ion-item>
-                            <ion-icon name="flask" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">No puedes enviar productos quimicos, armas, dinero, joyas o sustancias quimicas</ion-label>
-                        </ion-item>
-                    </ion-item-group>
-                    <ion-button [disabled]="this.list.length == 0" color="orange" class="ion-margin" type="submit" expand="block" shape="round" (click)="this.post()">
-                        <ion-label>Generar Encomienda</ion-label>
-                        <ion-icon slot="end" name="send"></ion-icon>
-                    </ion-button>
-                </section>
-            </ion-content>
-        </ng-template>
-        <ng-template swiperSlide>
-            <ion-content>
-                <ion-card [formGroup]="encomiendaForm">
-                    <ion-card-content>
-                        <ion-card-header>
-                            <ion-card-subtitle>Ingresa la informacion del producto <br> para agregarlo a la lista</ion-card-subtitle>
-                            <ion-card-title>
-                            <ion-text color="orange">¿Que vas a Enviar?</ion-text>
-                        </ion-card-title>
-                    </ion-card-header>
-                    <ion-item-group>
-                        <ion-item>
-                            <ion-label>Categoria</ion-label>
-                            <ion-select formControlName="category" multiple="false" placeholder="Seleccionar">
-                                <ion-select-option *ngFor="let categori of this.categories" [value]="categori">{{categori}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                      </ion-item-group>
-                    </ion-card-content>
 
-                    <ion-card-content formGroupName="payment">
-                        <ion-card-header>
-                            <ion-card-subtitle>Establezca el valor<br>que el motorizado tiene que cobrar</ion-card-subtitle>
-                            <ion-card-title><ion-text color="orange">Valor de la Contra-Entrega</ion-text></ion-card-title>
-                        </ion-card-header>
-                        <ion-item class="item-center-icon">
-                            <ion-label position="stacked">Valor de Contra-Entrega</ion-label>
-                            <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="value" placeholder="$0.00"></ion-input>
-                            <ion-icon slot="start" name="logo-usd"></ion-icon>
-                        </ion-item>
-                    </ion-card-content>
-                    
-                    <ion-card-content>
-                        <ion-card-header>
-                            <ion-card-title>
-                            <ion-text color="orange">Tiempo aproximado de retiro</ion-text>
-                            </ion-card-title>
-                        </ion-card-header>
-                        <ion-segment (ionChange)="this.timeOutSegmentChange($event)" value="today" [swipeGesture]="false" #timeOutSegment >
-                            <ion-segment-button value="today">
-                                <ion-icon color="dark" name="checkmark"></ion-icon>
-                                <ion-label color="dark">Del Dia</ion-label>
-                            </ion-segment-button>
-                            <ion-segment-button value="programing" >
-                                <ion-icon color="dark" name="calendar"></ion-icon>
-                                <ion-label color="dark" >Programada</ion-label>
-                            </ion-segment-button>
-                        </ion-segment>
-                        <section [hidden]="(timeOutSegment.value == 'programing')">
-                            <ion-item button (click)="this.setTimeOutToday()">
-                                <ion-label>
-                                    <p>Tiempo de espera</p>
-                                    <h2>{{ this.encomiendaForm.get('timeOut').value != null ? (this.timeOutFormat(this.encomiendaForm.get('timeOut').value) | titlecase) : 'Seleccionar' }}</h2>
-                                </ion-label>
-                                <ion-icon slot="start" name="timer"></ion-icon>
-                            </ion-item>
-                        </section>
-                        <section [hidden]="(timeOutSegment.value == 'today')">
-                            <ion-item>
-                                <ion-label> Retiro pautado para el dia </ion-label>
-                                <ion-datetime-button datetime="datetime-programing"></ion-datetime-button>
-                                <ion-modal id="dateTimeModalStart" [keepContentsMounted]="true" >
-                                    <ng-template>
-                                        <ion-datetime #dateTimePrograming (ionChange)="this.setTimeOutProgramingChange($event)" hour-cycle="h12" locale="es-ES" color="orange" presentation="date-time" id="datetime-programing" [showDefaultButtons]="true" [minuteValues]="'0,15,30,45'" ></ion-datetime>
-                                    </ng-template>
-                                </ion-modal>
-                            </ion-item>
-                        </section>
-                    </ion-card-content>
-              
-                    <ion-card-content>
-                        <ion-card-header>
-                            <ion-card-subtitle>Ubicacion de retiro</ion-card-subtitle>
-                            <ion-card-title>
-                                <ion-text color="orange">¿A donde retiramos?</ion-text>
-                            </ion-card-title>
-                        </ion-card-header>
-                        <ion-item id="item-ubication-start" lines="full" class="curved" button (click)="this.onOpenModalMapStart()">
-                            <ion-label>
-                                <p><ion-text color="orange">Dirección</ion-text></p>
-                                <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('start').value != null ? this.encomiendaForm.get('route').get('start').value.address:'Seleccionar'}}</h2>
-                            </ion-label>
-                            <ion-icon slot="start" name="pin"></ion-icon>
-                        </ion-item>
-                        <ion-item *ngIf="this.encomiendaForm.get('route').get('start').value != null" class="item-center-icon">
-                            <ion-icon slot="start" name="pencil"></ion-icon>
-                            <ion-textarea (ionChange)="setStartUbicationMessage($event)"  [rows]="4" inputmode="text" [autoGrow]="false" value="" placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) "></ion-textarea>
-                        </ion-item>
-                    </ion-card-content>
-                    
-                    <ion-card-content>
-                        <ion-card-header>
-                            <ion-card-subtitle>Ingresa la ubicación de Entrega en el mapa</ion-card-subtitle>
-                            <ion-card-title>
-                                <ion-text color="orange">Direccion de Entrega</ion-text>
-                            </ion-card-title>
-                        </ion-card-header>
-                        <ion-segment (ionChange)="onChangeSegmentLocation($event)" #segmentLocation [value]="'mapa'">
-                            <ion-segment-button [value]="'mapa'" >
-                                <ion-icon name="locate"></ion-icon>
-                                <ion-label>mapa</ion-label>
-                            </ion-segment-button>
-                            <ion-segment-button [value]="'ticket'">
-                                <ion-icon name="newspaper"></ion-icon>
-                                <ion-label>ticket</ion-label>
-                            </ion-segment-button>
-                        </ion-segment>
-                        <section *ngIf="segmentLocation.value == 'mapa'">
-                            <ion-card-content class="ion-no-padding">
-                                <ion-card-header>
-                                    <ion-item lines="full" (click)="this.onOpenModalMapEnd()" class="curved" button>
-                                        <ion-label>
-                                            <p><ion-text color="orange">Dirección </ion-text></p>
-                                            <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('end').value != null ? this.encomiendaForm.get('route').get('end').value.address:'Seleccionar'}}</h2>
-                                        </ion-label>
-                                        <ion-icon slot="start" name="pin"></ion-icon>
-                                    </ion-item>
-                                    <ion-item class="item-center-icon">
-                                        <ion-icon slot="start" name="pencil"></ion-icon>
-                                        <ion-textarea (ionChange)="setEndUbicationMessage($event)" [rows]="4" inputmode="text" [autoGrow]="false" value="" placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) "></ion-textarea>
-                                    </ion-item>
-                                </ion-card-header>
-                                <ion-card-header>
-                                    <ion-card-subtitle>Ingresa el nombre y numero de contacto de quien dirigido el la encomienda</ion-card-subtitle>
-                                    <ion-card-title><ion-text color="orange">Informacion de Contacto</ion-text></ion-card-title>
-                                </ion-card-header>
-                                <ion-card-content >
-                                    <ion-item-group formGroupName="receiver" >
-                                        <ion-item class="item-center-icon">
-                                            <ion-label position="stacked">Nombre y Apellido</ion-label>
-                                            <ion-input formControlName="name" type="text" placeholder="Ingresar Nombre"></ion-input>
-                                            <ion-icon slot="start" name="person"></ion-icon>
-                                        </ion-item>
-                                        <ion-item class="item-center-icon">
-                                            <ion-label position="stacked">Telefono</ion-label>
-                                            <ion-input formControlName="phone" type="tel" placeholder="Ingresar Numero de Telefono"></ion-input>
-                                            <ion-icon slot="start" name="call"></ion-icon>
-                                        </ion-item>
-                                    </ion-item-group>
-                                </ion-card-content>
-                            </ion-card-content>
-                        </section>
-                        <section *ngIf="segmentLocation.value == 'ticket'">
-                            <ion-card-content id="section-ticket">
-                                <img style="max-width: 25%;" id="img-ticket" [src]="'../../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'">
-                                <ion-card-subtitle class="ion-text-center">Esta opcion una vez creada su encomienda se creara un enlace de confirmación el cual podra encontrar en las opciones de la misma en la seccion <i>"Activas"</i></ion-card-subtitle>
-                            </ion-card-content>
-                        </section>
-                    </ion-card-content>
-                    
-                    <section class="ion-text-center">
-                        <ion-button [disabled]="this.encomiendaForm.invalid " (click)="this.setProduct()" class="ion-margin" shape="round" color="orange">
-                            <ion-icon slot="start" name="add"></ion-icon>
-                            <ion-label>Agregar</ion-label>
-                        </ion-button>
-                    </section>
-                </ion-card> 
-            </ion-content>
-        </ng-template>
-    </swiper>
+<ion-content *ngIf="( this.productList$ | async ) as list" class="ion-padding">
+  <section *ngIf="list.length <= 0;" class="emptyList ion-padding">
+    <ion-img style="max-width: 25%;" id="img-list" [src]="'../../../../../assets/svg/undraw_empty_re_opql.svg'">
+    </ion-img>
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>No tienes encomiendas para enviar</ion-card-title>
+      <ion-card-subtitle>pulsa el siguiente boton para iniciar los envios</ion-card-subtitle>
+    </ion-card-header>
+    <ion-chip button id="open-modal"color="orange" mode="ios" outline="true">
+      <ion-label>Crear Encomiendas</ion-label>
+      <ion-icon name="add"></ion-icon>
+    </ion-chip>
+  </section>
+  <section *ngIf="list.length > 0">
+    <ion-fab id="open-modal" style="z-index: 0;" vertical="top" horizontal="end" slot="fixed">
+      <ion-fab-button color="orange">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <ion-item-group>
+      <ion-item-divider style="border-bottom: 0;">
+        <ion-card-header>
+          <ion-card-title>Lista de Encomiendas</ion-card-title>
+          <ion-card-subtitle>cantidad de envios: {{list.length}}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-item-divider>
+
+      <ng-container *ngFor="let item of list; let i = index">
+        <ion-item-divider>
+          <ion-label>Encomienda <ion-text color="orange">#{{ i + 1 }}</ion-text>
+          </ion-label>
+        </ion-item-divider>
+        <ion-item-sliding>
+          <ion-item lines="none">
+            <ion-grid>
+              <ion-row>
+                <ion-col sizeXs="12">
+                  <ion-card-header *ngIf="item.receiver != null;else fromTicket" class="ion-no-padding">
+                    <ion-card-title style="display: flex; align-items: center;" class="ion-text-wrap">
+                      <ion-icon class="ion-hide-sm-down" style="margin: 6px;" name="person"></ion-icon>
+                      <ion-text>{{(item.receiver?.name | titlecase )}}</ion-text>
+                    </ion-card-title>
+                    <ion-grid class="ion-no-padding">
+                      <ion-row style="margin-top: 6px;">
+                        <ion-col size="6">
+                          <ion-card-subtitle style="display: flex; align-items: center; margin-left: 9px;">
+                            <ion-icon style="margin-right: 6px;" name="call"></ion-icon>
+                            <ion-text>{{item.receiver?.phone}}</ion-text>
+                          </ion-card-subtitle>
+                        </ion-col>
+                        <ion-col size="6">
+                          <ion-card-subtitle style="display: flex; align-items: center; margin-left: 9px;">
+                            <ion-icon style="margin-right: 6px;" name="cube"></ion-icon>
+                            <ion-text>{{(item.route.value | currency)}} - {{item.route.distance}}Km</ion-text>
+                          </ion-card-subtitle>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-header>
+                  <ng-template #fromTicket>
+                    <ion-card-header>
+                      <ion-card-subtitle>Encomienda pautada para confirmaciòn del cliente</ion-card-subtitle>
+                      <ion-card-title>TICKET 📦</ion-card-title>
+                    </ion-card-header>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-label>
+                        <p>
+                          <ion-text color="orange">
+                            <ion-icon name="timer"></ion-icon>
+                            {{this._typeof(item.timeOut, 'number') ? 'Tiempo de Espera' : 'Retiro pautado para el dia' }}
+                          </ion-text>
+                        </p>
+                        <h2>{{ (this.timeOutFormat(item.timeOut) | titlecase) }}</h2>
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-label>
+                        <p>
+                          <ion-text color="orange">
+                            <ion-icon name="grid"></ion-icon>Categoria
+                          </ion-text>
+                        </p>
+                        <h2>{{item.category}}</h2>
+                      </ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="item.receiver != null">
+                    <ion-col size="12">
+                      <ion-label class="ion-text-wrap">
+                        <p>
+                          <ion-icon name="pin"></ion-icon>Dirección
+                        </p>
+                        <h2>{{item.route.end.address}}</h2>
+                      </ion-label>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="editItem(item)">
+              <ion-icon slot="icon-only" name="pencil"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteItem(item)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ng-container>
+      <ion-item-divider>
+        <ion-label>Recuerde</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-icon name="grid" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">Dimenciones maximas del envio 47x43x40</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="bicycle" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">Todos sus nuestros conductores son verificados</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="archive" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">Peso maximo de envio 5kg</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="flask" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">No puedes enviar productos quimicos, armas, dinero, joyas o sustancias
+          quimicas</ion-label>
+      </ion-item>
+    </ion-item-group>
+    <ion-button [disabled]="this.list.length == 0" color="orange" class="ion-margin" type="submit" expand="block"
+      shape="round" (click)="this.post()">
+      <ion-label>Generar Encomienda</ion-label>
+      <ion-icon slot="end" name="send"></ion-icon>
+    </ion-button>
+  </section>
+
+  <ion-modal #modal trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0,  1]" backdropDismiss="false">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <ion-card [formGroup]="encomiendaForm">
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-subtitle>Ingresa la informacion del producto <br> para agregarlo a la lista</ion-card-subtitle>
+              <ion-card-title>
+                <ion-text color="orange">¿Que vas a Enviar?</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-item-group>
+              <ion-item>
+                <ion-label>Categoria</ion-label>
+                <ion-select formControlName="category" multiple="false" placeholder="Seleccionar">
+                  <ion-select-option *ngFor="let categori of this.categories" [value]="categori">{{categori}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-item-group>
+          </ion-card-content>
+
+          <ion-card-content formGroupName="payment">
+            <ion-card-header>
+              <ion-card-subtitle>Establezca el valor<br>que el motorizado tiene que cobrar</ion-card-subtitle>
+              <ion-card-title>
+                <ion-text color="orange">Valor de la Contra-Entrega</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-item class="item-center-icon">
+              <ion-label position="stacked">Valor de Contra-Entrega</ion-label>
+              <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false"
+                type="tel" formControlName="value" placeholder="$0.00"></ion-input>
+              <ion-icon slot="start" name="logo-usd"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-title>
+                <ion-text color="orange">Tiempo aproximado de retiro</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-segment (ionChange)="this.timeOutSegmentChange($event)" value="today" [swipeGesture]="false"
+              #timeOutSegment>
+              <ion-segment-button class="orange"value="today">
+                <ion-icon color="dark" name="checkmark"></ion-icon>
+                <ion-label color="dark">Del Dia</ion-label>
+              </ion-segment-button>
+              <ion-segment-button class="orange" value="programing">
+                <ion-icon color="dark" name="calendar"></ion-icon>
+                <ion-label color="dark">Programada</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+            <section [hidden]="(timeOutSegment.value == 'programing')">
+              <ion-item button (click)="this.setTimeOutToday()">
+                <ion-label>
+                  <p>Tiempo de espera</p>
+                  <h2>{{ this.encomiendaForm.get('timeOut').value != null ?
+                    (this.timeOutFormat(this.encomiendaForm.get('timeOut').value) | titlecase) : 'Seleccionar' }}</h2>
+                </ion-label>
+                <ion-icon slot="start" name="timer"></ion-icon>
+              </ion-item>
+            </section>
+            <section [hidden]="(timeOutSegment.value == 'today')">
+              <ion-item>
+                <ion-label> Retiro pautado para el dia </ion-label>
+                <ion-datetime-button datetime="datetime-programing"></ion-datetime-button>
+                <ion-modal id="dateTimeModalStart" [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime #dateTimePrograming (ionChange)="this.setTimeOutProgramingChange($event)"
+                      hour-cycle="h12" locale="es-ES" color="orange" presentation="date-time" id="datetime-programing"
+                      [showDefaultButtons]="true" [minuteValues]="'0,15,30,45'"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-item>
+            </section>
+          </ion-card-content>
+
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-subtitle>Ubicacion de retiro</ion-card-subtitle>
+              <ion-card-title>
+                <ion-text color="orange">¿A donde retiramos?</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-item id="item-ubication-start" lines="full" class="curved" button (click)="this.onOpenModalMapStart()">
+              <ion-label>
+                <p>
+                  <ion-text color="orange">Dirección</ion-text>
+                </p>
+                <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('start').value != null ?
+                  this.encomiendaForm.get('route').get('start').value.address:'Seleccionar'}}</h2>
+              </ion-label>
+              <ion-icon slot="start" name="pin"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="this.encomiendaForm.get('route').get('start').value != null" class="item-center-icon">
+              <ion-icon slot="start" name="pencil"></ion-icon>
+              <ion-textarea (ionChange)="setStartUbicationMessage($event)" [rows]="4" inputmode="text"
+                [autoGrow]="false" value=""
+                placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) "></ion-textarea>
+            </ion-item>
+          </ion-card-content>
+
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-subtitle>Ingresa la ubicación de Entrega en el mapa</ion-card-subtitle>
+              <ion-card-title>
+                <ion-text color="orange">Direccion de Entrega</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-segment (ionChange)="onChangeSegmentLocation($event)" #segmentLocation [value]="'mapa'">
+              <ion-segment-button class="orange" [value]="'mapa'">
+                <ion-icon name="locate"></ion-icon>
+                <ion-label>mapa</ion-label>
+              </ion-segment-button>
+              <ion-segment-button class="orange"  [value]="'ticket'">
+                <ion-icon name="newspaper"></ion-icon>
+                <ion-label>ticket</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+            <section *ngIf="segmentLocation.value == 'mapa'">
+              <ion-card-content class="ion-no-padding">
+                <ion-card-header>
+                  <ion-item lines="full" (click)="this.onOpenModalMapEnd()" class="curved" button>
+                    <ion-label>
+                      <p>
+                        <ion-text color="orange">Dirección </ion-text>
+                      </p>
+                      <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('end').value != null ?
+                        this.encomiendaForm.get('route').get('end').value.address:'Seleccionar'}}</h2>
+                    </ion-label>
+                    <ion-icon slot="start" name="pin"></ion-icon>
+                  </ion-item>
+                  <ion-item class="item-center-icon">
+                    <ion-icon slot="start" name="pencil"></ion-icon>
+                    <ion-textarea (ionChange)="setEndUbicationMessage($event)" [rows]="4" inputmode="text"
+                      [autoGrow]="false" value=""
+                      placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) ">
+                    </ion-textarea>
+                  </ion-item>
+                </ion-card-header>
+                <ion-card-header>
+                  <ion-card-subtitle>Ingresa el nombre y numero de contacto de quien dirigido el la encomienda
+                  </ion-card-subtitle>
+                  <ion-card-title>
+                    <ion-text color="orange">Informacion de Contacto</ion-text>
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-item-group formGroupName="receiver">
+                    <ion-item class="item-center-icon">
+                      <ion-label position="stacked">Nombre y Apellido</ion-label>
+                      <ion-input formControlName="name" type="text" placeholder="Ingresar Nombre"></ion-input>
+                      <ion-icon slot="start" name="person"></ion-icon>
+                    </ion-item>
+                    <ion-item class="item-center-icon">
+                      <ion-label position="stacked">Telefono</ion-label>
+                      <ion-input formControlName="phone" type="tel" placeholder="Ingresar Numero de Telefono">
+                      </ion-input>
+                      <ion-icon slot="start" name="call"></ion-icon>
+                    </ion-item>
+                  </ion-item-group>
+                </ion-card-content>
+              </ion-card-content>
+            </section>
+            <section *ngIf="segmentLocation.value == 'ticket'">
+              <ion-card-content id="section-ticket">
+                <img style="max-width: 25%;" id="img-ticket" [src]="'../../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'">
+                <ion-card-subtitle class="ion-text-center">
+                  Esta opcion una vez creada su encomienda se creara un enlace
+                  de confirmación el cual podra encontrar en las opciones de la misma en la seccion <i>"Activas"</i>
+                </ion-card-subtitle>
+              </ion-card-content>
+            </section>
+          </ion-card-content>
+
+          <section class="ion-text-center">
+            <ion-button [disabled]="this.encomiendaForm.invalid " (click)="this.setProduct()" class="ion-margin"
+              shape="round" color="orange">
+              <ion-icon slot="start" name="add"></ion-icon>
+              <ion-label>Agregar</ion-label>
+            </ion-button>
+          </section>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
