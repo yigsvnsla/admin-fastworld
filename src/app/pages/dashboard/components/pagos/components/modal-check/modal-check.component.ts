@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-modal-check',
@@ -7,8 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModalCheckComponent implements OnInit {
 
-  constructor() { }
+  @Input() id: any;
+  @Input() business: any;
+  @Input() resume: {
+    total: string,
+    value: number,
+    left: number
+  }
 
-  ngOnInit() {}
+  constructor(private modal: ModalController) { }
+
+  ngOnInit() { }
+
+
+  async onExit(obj?: any) {
+    this.modal.dismiss(obj)
+  }
 
 }
