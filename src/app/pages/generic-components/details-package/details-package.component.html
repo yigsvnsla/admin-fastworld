@@ -48,7 +48,7 @@
         </ion-col>
 
         <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
-          <ion-card class="data" *ngIf="item.attributes.driver != null; else notConductor">
+          <ion-card class="data" *ngIf="item.attributes.driver.data != null; else notConductor">
             <ion-card-header>
               <ion-card-subtitle style="display: flex; align-items: center;">
                 <ion-icon style="margin: 8px" name="bicycle"></ion-icon>

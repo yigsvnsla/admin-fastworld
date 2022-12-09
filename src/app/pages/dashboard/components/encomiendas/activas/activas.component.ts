@@ -36,8 +36,8 @@ export class ActivasComponent implements OnInit {
     private toolsService:ToolsService,
     private socketService: SocketService
   ) {
-    this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[$and][0][createdAt][$gte]=${startOfDay(new Date()).toISOString()}&filters[$and][2][shipping_status][$notContains]=entregado`
-    // this.setPath = 'admin/packages?filters[shipping_status][$notContains]=invalido&filters[shipping_status][$notContains]=entregado&populate=*&sort=id:DESC&'
+    // this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[$and][0][createdAt][$gte]=${startOfDay(new Date()).toISOString()}&filters[$and][2][shipping_status][$notContains]=entregado`
+    this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[shipping_status][$notContains]=entregado`
     this.setPagination = {
       start:0,
       limit:25,
@@ -80,6 +80,8 @@ export class ActivasComponent implements OnInit {
     })
   }
 
+
+
   public ngOnInit(): void {
     this.socketService.on('product-updated', (product: any | any[]) => {
       const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
@@ -115,6 +117,41 @@ export class ActivasComponent implements OnInit {
     this.socketService.removeAllListeners('product-updated')
     this.socketService.removeAllListeners('product-created')
   }
+
+    public sharePackage(_id: number) {
+      this.toolsService.showLoading()
+        .then(async loading => {
+          const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
+          loading.dismiss();
+          (await this.toolsService.showAlert({
+            backdropDismiss: false,
+            header: 'Enlace Generado 🌎',
+            subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
+            keyboardClose: true,
+            mode: 'ios',
+            cssClass: 'alert-primary',
+            inputs: [{
+              type: 'text',
+              value: 'https://fastworld.app/ticket/' + id,
+              name: 'url'
+            }],
+            buttons: [{
+              text: 'copiar',
+              role: 'success',
+              handler: async (data) => {
+                navigator.clipboard.writeText(data.url);
+                await this.toolsService.showToast({
+                  message: 'Enlace copiado',
+                  icon: 'copy',
+                  mode: 'ios',
+                  buttons: ['Aceptar']
+                })
+              }
+            }]
+          }))
+        })
+    }
+
 
   private async getInformation() {
     this.loading = true;
