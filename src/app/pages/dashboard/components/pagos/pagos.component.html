@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <app-btn-menu slot="start"></app-btn-menu>
+    <ion-title>Modulo de pago</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar #searchBar id="searchBar" [debounce]="500" (ionChange)="handleSearch($event)"
+      (ionClear)="handleCrear($event)">
+    </ion-searchbar>
+    <ion-popover trigger="searchBar" size="cover" triggerAction="context-menu" [isOpen]="!dataSource.isEmpty()"
+      showBackdrop="false">
+      <ng-template>
+        <cdk-virtual-scroll-viewport class="scroller" itemSize="56" minBufferPx="300"
+          maxBufferPx="300">
+          <ion-list  *ngIf="!dataSource.isEmpty()">
+            <ion-item button (click)="onClickUser(item.id)" *cdkVirtualFor="let item of dataSource">
+              <ion-label>#{{item.id}} {{item.attributes.name | titlecase}} {{item.attributes.lastname | titlecase}}
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </cdk-virtual-scroll-viewport>
+      </ng-template>
+    </ion-popover>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="user != 0">
+  <pagos-resumen [id]="this.user"></pagos-resumen>
+</ion-content>

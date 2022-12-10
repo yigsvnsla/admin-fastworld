@@ -1,0 +1,34 @@
+.scroller {
+  height: 100%;
+}
+
+ion-card {
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+ngx-datatable {
+  flex-grow: 1;
+}
+
+ion-modal {
+  &.modal-dialogs {
+    --width: fit-content;
+    --min-width: 250px;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+
+    h1 {
+      margin: 20px 20px 10px 20px;
+
+    }
+  }
+}

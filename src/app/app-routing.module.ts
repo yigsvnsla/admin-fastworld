@@ -17,6 +17,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule),
     canActivate:[AutoLoginGuard]
   },
+
 ];
 
 @NgModule({

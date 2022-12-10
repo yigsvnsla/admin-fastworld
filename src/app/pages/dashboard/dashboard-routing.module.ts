@@ -10,60 +10,64 @@ import { DashboardPage } from './dashboard.page';
 import { HistorialComponent } from './components/encomiendas/historial/historial.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
 import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
-
+import { PagosComponent } from './components/pagos/pagos.component';
 const routes: Routes = [
   {
     path: '',
     component: DashboardPage,
-    children:[
+    children: [
       {
-        path:'',
-        pathMatch:'full',
-        redirectTo:'encomiendas/activas'
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'encomiendas/activas'
       },
       {
-        path:'home',
-        component:HomeComponent
+        path: 'home',
+        component: HomeComponent
       },
       {
-        path:'encomiendas',
-        children:[
+        path: 'pagos',
+        component: PagosComponent
+      },
+      {
+        path: 'encomiendas',
+        children: [
           {
-            path:'activas',
-            component:ActivasComponent
+            path: 'activas',
+            component: ActivasComponent
           },
           {
-            path:'historial',
-            component:HistorialComponent
+            path: 'historial',
+            component: HistorialComponent
           },
           {
-            path:'seguimiento',
-            component:SeguimientoComponent
+            path: 'seguimiento',
+            component: SeguimientoComponent
           }
         ]
       },
       {
-        path:'usuarios',
-        children:[
+        path: 'usuarios',
+        children: [
           {
-            path:'crear',
-            component:CrearUsuarioComponent
+            path: 'crear',
+            component: CrearUsuarioComponent
           },
           {
-            path:'crear/:type',
-            component:CrearUsuarioComponent
+            path: 'crear/:type',
+            component: CrearUsuarioComponent
           },
           {
-            path:'clientes',
-            component:ClientesComponents
+            path: 'clientes',
+            component: ClientesComponents
           },
           {
-            path:'conductores',
-            component:ConductoresComponents
+            path: 'conductores',
+            component: ConductoresComponents
           },
           {
-            path:'encargados',
-            component:EncargadosComponent
+            path: 'encargados',
+            component: EncargadosComponent
           }
 
         ]
@@ -76,4 +80,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardPageRoutingModule {}
+export class DashboardPageRoutingModule { }

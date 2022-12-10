@@ -1,0 +1,98 @@
+<ion-card *ngIf="validUser">
+  <!-- <ion-card-header>
+    <ion-card-title>{{user.business | titlecase}}</ion-card-title>
+    <ion-card-subtitle>Cliente: {{user.name | titlecase}}</ion-card-subtitle>
+  </ion-card-header> -->
+  <ion-card-header>
+    <ion-toolbar>
+      <ion-title>
+        <ion-label>
+          <h1>{{user.business | titlecase}}</h1>
+          <h3>Cliente: {{user.name | titlecase}}</h3>
+        </ion-label>
+      </ion-title>
+    </ion-toolbar>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-row>
+      <ion-col size="3">
+        <ion-item button>
+          <ion-icon name="logo-usd" slot="start"></ion-icon>
+          <ion-label position="stacked">Deuda</ion-label>
+          <ion-input value="{{user.pending | number}}" readonly=""></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item button>
+          <ion-icon name="cube-outline" slot="start"></ion-icon>
+          <ion-label position="stacked">Cantidad de encomiendas</ion-label>
+          <ion-input value="{{user.count | number}}" readonly=""></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-button id="btn-pay" expand="block" shape="round" color="success">
+          <ion-icon name="card-outline" slot="start"></ion-icon>
+          <ion-label>Pagar</ion-label>
+        </ion-button>
+        <ion-modal #modalPayment (ionChange)="ionChangesInputCurrency($event)" class="modal-dialogs" id="modalPayment" #modal
+          (willPresent)="modalOnWillPresent($event)" trigger="btn-pay">
+          <ng-template>
+            <div class="wrapper">
+              <ion-header>
+                <ion-toolbar color="success">
+                  <ion-title>Pagar</ion-title>
+                </ion-toolbar>
+              </ion-header>
+              <ion-item-group [formGroup]="this.formPayment">
+                <ion-item-divider style="margin-right: 16px;">
+                  <ion-label>Ingresar monto a pagar</ion-label>
+                </ion-item-divider>
+                <ion-item>
+                  <ion-label position="stacked">Valor Recibido</ion-label>
+                  <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false"
+                    (keydown.enter)="false" type="tel" formControlName="value" placeholder="$0.00"></ion-input>
+                </ion-item>
+                <!-- <ion-item>
+                  <ion-label position="stacked">Descripción </ion-label>
+                  <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                </ion-item> -->
+              </ion-item-group>
+
+              <ion-footer>
+                <ion-toolbar class="ion-text-center">
+                  <ion-button (click)="pay()" [disabled]="this.formPayment.invalid" color="success" fill="solid"
+                    shape="round">
+                    <ion-label>Entregar</ion-label>
+                  </ion-button>
+                </ion-toolbar>
+              </ion-footer>
+            </div>
+          </ng-template>
+        </ion-modal>
+      </ion-col>
+    </ion-row>
+    <ion-item-divider>
+      <ion-label>Ultimos pagos realizados</ion-label>
+    </ion-item-divider>
+    <ngx-datatable class="dark fullscreen">
+      <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+        name="Referencia" prop="id">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+        name="Fecha" prop="createdAt">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+        name="Pagado" prop="value">
+        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ion-card-content>
+</ion-card>
