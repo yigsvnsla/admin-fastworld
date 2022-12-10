@@ -48,6 +48,41 @@
                 <ng-container *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ng-container>
             </ng-template>
         </ngx-datatable-column>
+            <!-- column receiver -->
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Destinatario" prop="attributes.receiver">
+      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">
+        <ion-label *ngIf="value" [id]="'receiver'+'-'+rowIndex" style="cursor: pointer;">{{ ( value.name | titlecase ) }}</ion-label>
+        <ion-label *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ion-label>
+        <ion-popover [showBackdrop]="true" [trigger]="'receiver'+'-'+rowIndex" side="left" reference="event" triggerAction="click" style="--offset-y: -65px" alignment="center" >
+          <ng-template>
+            <ion-content>
+              <ion-card>
+                <ion-card-header class="ion-no-padding">
+                  <ion-item>
+                    <ion-label position="stacked" style="display: flex; align-items: center;">
+                      <ion-icon name="person"></ion-icon>
+                      <ion-text color="orange">Destinatario: {{value.id}}</ion-text>
+                    </ion-label>
+                    <h4>{{ ( value.name | titlecase ) }}</h4>
+                  </ion-item>
+                </ion-card-header>
+                <ion-card-header class="ion-no-padding">
+                <ion-card-subtitle  style="display: flex; align-items: center; justify-content: center;">
+                  <ion-fab-button href="tel:{{value.phone}}" size="small">
+                    <ion-icon name="call"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + value.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                  </ion-fab-button>
+                </ion-card-subtitle>
+              </ion-card-header>
+              </ion-card>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </ng-template>
+    </ngx-datatable-column>
         <!-- column timeOut  -->
         <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Tiempo de Retiro" prop="attributes.pickup">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
