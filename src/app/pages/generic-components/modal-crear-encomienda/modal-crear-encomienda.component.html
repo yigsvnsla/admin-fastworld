@@ -27,8 +27,8 @@
     </ion-chip>
   </section>
   <section *ngIf="list.length > 0">
-    <ion-fab id="open-modal" style="z-index: 0;" vertical="top" horizontal="end" slot="fixed">
-      <ion-fab-button color="orange">
+    <ion-fab   style="z-index: 1000;" vertical="top" horizontal="end" slot="fixed">
+      <ion-fab-button color="orange" id="open-modal" (click)="openModal()">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>

@@ -6,6 +6,7 @@ import { delay } from 'rxjs/operators';
 import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
 import { startOfDay } from 'date-fns';
+import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
 
 @Component({
   selector: 'app-activas',
@@ -187,6 +188,19 @@ export class ActivasComponent implements OnInit {
     return
 
 
+  }
+
+  public onSearchPackage(_id:number){
+    this.toolsService.showModal({
+      component:DetailsPackageComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:_id
+      }
+    })
   }
 
 }

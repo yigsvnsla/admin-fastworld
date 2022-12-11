@@ -313,4 +313,8 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             })
     }
 
+    public async openModal(){
+      this.modal.present()
+    }
+
 }

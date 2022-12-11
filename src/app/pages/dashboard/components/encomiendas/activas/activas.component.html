@@ -95,12 +95,15 @@
         <ngx-datatable-column [minWidth]="290" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Opciones" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <ion-fab-button (click)="sharePackage(value)" color="orange"  size="small">
-                    <ion-icon name="share"></ion-icon>
-                </ion-fab-button>
-                <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
-                    <ion-icon name="repeat"></ion-icon>
-                </ion-fab-button>
+              <ion-fab-button (click)="this.onSearchPackage(value)" color="orange"  size="small">
+                <ion-icon name="search"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button (click)="sharePackage(value)" color="orange"  size="small">
+                <ion-icon name="share"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
+                <ion-icon name="repeat"></ion-icon>
+               </ion-fab-button>
                 <!-- <ion-fab-button color="success"  size="small">
                     <ion-icon name="cloud-download"></ion-icon>
                 </ion-fab-button>
