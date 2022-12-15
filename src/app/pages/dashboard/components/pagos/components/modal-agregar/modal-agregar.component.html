@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <ion-header>
+    <ion-toolbar color="success">
+      <ion-title>{{title | titlecase}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-item-group [formGroup]="formBase">
+    <ion-item-divider style="margin-right: 16px;">
+      <ion-label>Ingrese el monto</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-label position="stacked">Monto</ion-label>
+      <ion-input (keyup.enter)="validate($event)" (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false"
+        type="tel" formControlName="value" placeholder="$0.00"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="comment">
+      <ion-label position="stacked">Descripción</ion-label>
+      <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+    </ion-item>
+  </ion-item-group>
+  <ion-footer>
+    <ion-toolbar class="ion-text-center">
+      <ion-button #btnConfirm (click)="exit()" [disabled]="formBase.invalid" color="success" fill="solid" shape="round">
+        <ion-label>Entregar</ion-label>
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</div>

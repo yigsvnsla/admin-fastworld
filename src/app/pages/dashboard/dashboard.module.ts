@@ -33,6 +33,8 @@ import { ModalAdminRoleComponent } from '../generic-components/modal-admin-role/
 import { PagosComponent } from './components/pagos/pagos.component';
 import { ResumenComponent } from './components/pagos/components/resumen/resumen.component';
 import { ModalCheckComponent } from './components/pagos/components/modal-check/modal-check.component';
+import { ModalAgregarComponent } from './components/pagos/components/modal-agregar/modal-agregar.component';
+import { ViewDataTableComponent } from './components/pagos/components/view-data-table/view-data-table.component';
 
 @NgModule({
   imports: [
@@ -73,7 +75,9 @@ import { ModalCheckComponent } from './components/pagos/components/modal-check/m
     EncargadosComponent,
     PagosComponent,
     ResumenComponent,
-    ModalCheckComponent
+    ModalCheckComponent,
+    ModalAgregarComponent,
+    ViewDataTableComponent
   ]
 })
 export class DashboardPageModule {}

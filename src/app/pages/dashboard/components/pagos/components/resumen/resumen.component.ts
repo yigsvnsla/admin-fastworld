@@ -5,6 +5,8 @@ import { stringify } from 'qs'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputCustomEvent, IonModal } from '@ionic/angular';
 import { ModalCheckComponent } from '../modal-check/modal-check.component';
+import { ModalAgregarComponent } from '../modal-agregar/modal-agregar.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'pagos-resumen',
@@ -18,16 +20,15 @@ export class ResumenComponent implements OnInit, OnChanges {
 
   user: any = {};
   validUser = false
-  pagos = new Source(this.http)
+  dataPath = ''
 
-  /* Forms */
-  formPayment: FormGroup;
+  updateTable: BehaviorSubject<string> = new BehaviorSubject('')
 
   constructor(private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder) { }
 
   ngOnInit() {
-    this.formPayment = this.builder.nonNullable.group({
-      value: ['$0.00', [Validators.required]],
+    this.updateTable.subscribe(res=>{
+      console.log(res)
     })
   }
 
@@ -40,9 +41,8 @@ export class ResumenComponent implements OnInit, OnChanges {
     let loading = await this.tools.showLoading('Obteniendo informacion...');
     try {
       this.user = await this.http.get(`payments/${this.id}`).toPromise();
-      this.pagos.setPath = `payments/history/${this.user.id}`
       this.validUser = true
-      console.log(this.user)
+      this.updateTable.next(`payments/history/${this.user.id}`)
     } catch (error) {
       console.log('Error al obtener informacion', error)
     } finally {
@@ -51,11 +51,8 @@ export class ResumenComponent implements OnInit, OnChanges {
   }
 
 
-  async pay() {
-    const { value } = this.formPayment.value
+  async pay({ value }) {
     let estimate = parseFloat(value.replace('$', '').replaceAll('.', '').replace(',', '.'))
-    await this.modalPayment.dismiss()
-
     if (estimate < 2.50) {
       this.tools.showAlert({
         cssClass: 'alert-danger',
@@ -65,20 +62,24 @@ export class ResumenComponent implements OnInit, OnChanges {
       })
       return;
     }
-
     let loading = await this.tools.showLoading('Calculando');
     try {
       let response = await this.http.post('payments/calculate', {
         estimate,
         id: this.id
       }).toPromise()
+      console.log(response)
       this.tools.showModal({
         component: ModalCheckComponent,
         componentProps: {
           resume: response,
           id: this.id,
-          business: this.user.id
+          business: this.user.id,
+          charges: this.user.charges,
+          estimate: estimate
         }
+      }).then(async res => {
+        if (res) await this.fetchUser()
       })
     } catch (error) {
       console.log(error)
@@ -87,28 +88,50 @@ export class ResumenComponent implements OnInit, OnChanges {
     }
   }
 
-
-  modalOnWillPresent($event) {
-    this.formPayment.reset()
+  async addCharges({ value, comment }) {
+    let estimate = parseFloat(value.replace('$', '').replaceAll('.', '').replace(',', '.'))
+    let loading = await this.tools.showLoading('Agregando cargos...');
+    try {
+      let response = await this.http.post('payments/charges', {
+        value: estimate,
+        description: comment,
+        business: this.user.id
+      }).toPromise()
+      await this.fetchUser()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      loading.dismiss()
+    }
   }
 
-  public ionChangesInputCurrency(_$event: Event) {
-    const $event = (_$event as InputCustomEvent)
-    let value = $event.detail.value;
-    const decimal: string = ',';
-    const thousand: string = '.';
-    if (RegExp(/$/g).test($event.detail.value)) $event.detail.value.replace('$', '');
-    if ($event.detail.value == '') this.formPayment.get(['value']).setValue(value = '0' + decimal + '00');
-    value = value + '';
-    value = value.replace(/[\D]+/g, '');
-    value = value + '';
-    value = value.replace(/([0-9]{2})$/g, decimal + '$1');
-    var parts = value.toString().split(decimal);
-    if (parts[0] == '') parts[0] = '0';
-    parts[0] = parseInt(parts[0]).toString();
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
-    value = parts.join(decimal);
-    this.formPayment.get(['value']).setValue('$' + value)
+  showCargoModal() {
+    this.tools.showModal({
+      component: ModalAgregarComponent,
+      cssClass: 'modal-dialogs',
+      componentProps: {
+        title: 'Agregar cargos'
+      }
+    }).then(res => {
+      if (res) {
+        this.addCharges(res)
+      }
+    })
+  }
+
+  showPagoModal() {
+    this.tools.showModal({
+      component: ModalAgregarComponent,
+      cssClass: 'modal-dialogs',
+      componentProps: {
+        title: 'Agregar saldo',
+        comment: false
+      }
+    }).then(res => {
+      if (res) {
+        this.pay(res)
+      }
+    })
   }
 
 

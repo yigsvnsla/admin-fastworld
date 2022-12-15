@@ -179,7 +179,7 @@ export class MenuFilterComponent implements OnInit {
               var a = document.createElement("a"), url = URL.createObjectURL(file);
               a.href = url;
               a.download = "prueba.xlsx";
-              
+
                 // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
                 if (response) {
                     await this.toolsServices.showAlert({
