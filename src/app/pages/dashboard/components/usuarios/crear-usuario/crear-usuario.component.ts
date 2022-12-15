@@ -61,14 +61,15 @@ export class CrearUsuarioComponent implements OnInit {
         code: ['', [
           Validators.required,
           Validators.nullValidator,
-          Validators.pattern(/(^\d{9}$|^\d{13}$)/),
+          Validators.pattern(/(^\d{10}$|^\d{13}$)/),
+
           (codeControl: AbstractControl<number>) => {
             if (codeControl.value != null) {
               let val: string = codeControl.value.toString()
               if (val != '') {
-                if (val.length == 9) this.formRegister.get('documents').get('type').setValue('dni');
+                if (val.length == 10) this.formRegister.get('documents').get('type').setValue('dni');
                 if (val.length == 13) this.formRegister.get('documents').get('type').setValue('ruc');
-                if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formRegister.get('documents').get('type').reset();
+                if (!(RegExp(/(^\d{10}$|^\d{13}$)/).test(val))) this.formRegister.get('documents').get('type').reset();
                 return null
               }
             }

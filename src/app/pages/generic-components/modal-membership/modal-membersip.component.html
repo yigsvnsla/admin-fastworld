@@ -31,7 +31,7 @@
                     <h2>{{ this.tempMembership ? ( this.tempMembership.type | titlecase) :'Ninguna'}}</h2>
                 </ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item [hidden]="this.tempMembership.type == null">
                 <ion-label>
                     <p>Asignar/Extender Vigencia</p>
                     <h2>{{ selectDate.value != undefined ? selectDate.value != 0 ? ('Meses: ' + selectDate.value ) : 'Personalizado' : 'Seleccionar'}}</h2>

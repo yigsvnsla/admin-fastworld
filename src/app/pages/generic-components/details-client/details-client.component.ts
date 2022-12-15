@@ -11,6 +11,7 @@ import { ViewChild } from '@angular/core';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { format, isValidPhoneNumber } from 'libphonenumber-js';
 import { ModalMembershipComponent } from '../modal-membership/modal-membersip.component';
+import { ModalCrearEncomiendaComponent } from '../modal-crear-encomienda/modal-crear-encomienda.component';
 
 @Component({
   selector: 'app-details-user',
@@ -229,6 +230,20 @@ export class DetailsClientComponent implements OnInit {
       if (value) {
         this.user.business.membreship = value
         this.user$.next(this.user)
+      }
+    })
+  }
+
+  public async showCreateEncomienda(){
+    await this.toolsService.showModal({
+      component:ModalCrearEncomiendaComponent,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        userID:this.user.id,
+        _user : this.user
       }
     })
   }

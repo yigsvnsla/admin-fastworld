@@ -12,56 +12,102 @@
     <ng-container *ngIf=" ( this.user$ | async ) as user; else loadingUser">
         <ion-grid fixed>
 
-            <ion-row>
-                <ion-col sizeXs="12" sizeSm="6">
+          <ion-row >
+            <ion-col style="justify-content: center;display: flex;">
+                <ion-chip (click)="asingPackage()" color="orange" mode="ios" outline="true">
+                  <ion-icon name="share"></ion-icon>
+                  <ion-label>Asignar</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col style="justify-content: center;display: flex;">
+              <!-- <ion-fab-button color="danger" size="small"> -->
+                <ion-chip color="danger" mode="ios" outline="true">
+                  <ion-icon name="close"></ion-icon>
+                  <ion-label>Reportar</ion-label>
+                </ion-chip>
+              <!-- </ion-fab-button> -->
+            </ion-col>
+            <ion-col style="justify-content: center;display: flex;">
+              <ion-chip color="tertiary" mode="ios" outline="true">
+                <ion-icon name="map"></ion-icon>
+                <ion-label>Ubicacion</ion-label>
+              </ion-chip>
+            </ion-col>
+            <ion-col style="justify-content: center;display: flex;">
+              <ion-chip color="orange" mode="ios" outline="true">
+                <ion-icon name="list"></ion-icon>
+                <ion-label>Historial</ion-label>
+              </ion-chip>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+
+              <ion-col size="6">
+                  <ion-card>
+                      <ion-card-header>
+                          <ion-card-subtitle>Licencia</ion-card-subtitle>
+                          <ion-card-title>{{this.user.driver.licence_id}}</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                          <ion-img [src]="'https://s1.fastworld.app'+ this.user.driver.license.formats.small.url"></ion-img>
+                      </ion-card-content>
+                  </ion-card>
+              </ion-col>
+              <ion-col size="6">
+                  <ion-card>
+                      <ion-card-header>
+                          <ion-card-subtitle>Placa</ion-card-subtitle>
+                          <ion-card-title>{{this.user.driver.plate_id}}</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                          <ion-img [src]="'https://s1.fastworld.app'+ this.user.driver.plate.formats.small.url"></ion-img>
+                      </ion-card-content>
+                  </ion-card>
+              </ion-col>
+              <ion-col sizeXs="12" sizeSm="12">
+                <ion-row>
+                  <ion-col size="12">
                     <ion-card>
-                        <ion-card-header style="padding-bottom: 0;">
-                            <ion-toolbar>
-                                <ion-card-subtitle>Información Basica</ion-card-subtitle>
-                                <ion-card-title>Vehiculo</ion-card-title>
-                                <ion-fab-button (click)="this.formDriver.enable()" color="orange" size="small" slot="end">
-                                    <ion-icon name="pencil"></ion-icon>
-                                </ion-fab-button>
-                            </ion-toolbar>
-                        </ion-card-header>
-                        <ion-card-content class="ion-no-padding">
-                            <ion-item-group [formGroup]="this.formDriver">
-                                <ion-item mode="md">
-                                    <ion-label position="stacked">Color</ion-label>
-                                    <ion-input formControlName="color" type="text" placeholder="Awesome Input"></ion-input>
-                                    <ion-icon slot="start" name="add"></ion-icon>
-                                </ion-item>
-                                <ion-item mode="md">
-                                    <ion-label position="stacked">Marca</ion-label>
-                                    <ion-input formControlName="maker" type="text" placeholder="Awesome Input"></ion-input>
-                                    <ion-icon slot="start" name="add"></ion-icon>
-                                </ion-item>
-                                <ion-item mode="md">
-                                    <ion-label position="stacked">Modelo</ion-label>
-                                    <ion-input formControlName="model" type="text" placeholder="Awesome Input"></ion-input>
-                                    <ion-icon slot="start" name="add"></ion-icon>
-                                </ion-item>
-                                <ion-item mode="md">
-                                    <ion-label position="stacked">Año</ion-label>
-                                    <ion-input formControlName="year" type="text" placeholder="Awesome Input"></ion-input>
-                                    <ion-icon slot="start" name="add"></ion-icon>
-                                </ion-item>                                
-                            </ion-item-group>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-                <ion-col size="6">
-                    <ion-card>
-                        <ion-card-header>
-                            <ion-card-subtitle>Awesome Subtitle</ion-card-subtitle>
-                            <ion-card-title>Awesome Title</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            Awesome content
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
+                      <ion-card-header style="padding-bottom: 0;">
+                          <ion-toolbar>
+                              <ion-card-subtitle>Información Basica</ion-card-subtitle>
+                              <ion-card-title>Vehiculo</ion-card-title>
+                              <ion-fab-button (click)="this.formDriver.enable()" color="orange" size="small" slot="end">
+                                  <ion-icon name="pencil"></ion-icon>
+                              </ion-fab-button>
+                          </ion-toolbar>
+                      </ion-card-header>
+                      <ion-card-content class="ion-no-padding">
+                          <ion-item-group [formGroup]="this.formDriver">
+                              <ion-item mode="md">
+                                  <ion-label position="stacked">Color</ion-label>
+                                  <ion-input formControlName="color" type="text" placeholder="Awesome Input"></ion-input>
+                                  <ion-icon slot="start" name="add"></ion-icon>
+                              </ion-item>
+                              <ion-item mode="md">
+                                  <ion-label position="stacked">Marca</ion-label>
+                                  <ion-input formControlName="maker" type="text" placeholder="Awesome Input"></ion-input>
+                                  <ion-icon slot="start" name="add"></ion-icon>
+                              </ion-item>
+                              <ion-item mode="md">
+                                  <ion-label position="stacked">Modelo</ion-label>
+                                  <ion-input formControlName="model" type="text" placeholder="Awesome Input"></ion-input>
+                                  <ion-icon slot="start" name="add"></ion-icon>
+                              </ion-item>
+                              <ion-item mode="md">
+                                  <ion-label position="stacked">Año</ion-label>
+                                  <ion-input formControlName="year" type="text" placeholder="Awesome Input"></ion-input>
+                                  <ion-icon slot="start" name="add"></ion-icon>
+                              </ion-item>
+                          </ion-item-group>
+                      </ion-card-content>
+                  </ion-card>
+                  </ion-col>
+                </ion-row>
+
+            </ion-col>
+          </ion-row>
 
             <ion-row>
                 <ion-col size="12">
@@ -69,7 +115,7 @@
                         <ion-card-header style="padding-bottom: 0;">
                             <ion-toolbar>
                                 <ion-card-subtitle>Información Basica</ion-card-subtitle>
-                                <ion-card-title>Cliente  <ion-text color="orange">{{user.id}} </ion-text></ion-card-title>
+                                <ion-card-title>Motorizado <ion-text color="orange">{{user.id}} </ion-text></ion-card-title>
                                 <ion-fab-button (click)="this.formBasic.enable()" color="orange" size="small" slot="end">
                                     <ion-icon name="pencil"></ion-icon>
                                 </ion-fab-button>
