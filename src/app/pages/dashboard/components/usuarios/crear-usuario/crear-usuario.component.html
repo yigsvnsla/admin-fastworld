@@ -33,7 +33,7 @@
                 (this.formRegister.get('documents').get('type').value | uppercase) : 'Sin Especificar'}} </ion-text>
             </ion-label>
             <ion-input (keydown.arrowup)="(false)" (keydown.arrowdown)="(false)" (keydown.enter)="this.enterOrGo()"
-              class="input-autocomplete input-number" formControlName="code" type="number" placeholder="DNI / RUC">
+              class="input-autocomplete input-number" formControlName="code" type="text" placeholder="DNI / RUC">
             </ion-input>
           </ion-item>
         </ng-container>

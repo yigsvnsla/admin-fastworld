@@ -8,9 +8,23 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen">
+    <ngx-datatable
+      (activate)="onActivate($event)"
+      (select)="onSelect($event)"
+      (scroll)="onScroll($event.offsetY)"
+      [selectionType]="SelectionType.single"
+      [rows]="this.source"
+      [columnMode]="ColumnMode.standard"
+      [headerHeight]="headerHeight"
+      [rowHeight]="rowHeight"
+      [loadingIndicator]="loading"
+      [scrollbarV]="true"
+      [reorderable]="false"
+      [swapColumns]="false"
+      [selected]="selected"
+      class="dark fullscreen">
         <!-- colunm id -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Paquete" prop="id">
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Ticket" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
         </ngx-datatable-column>
@@ -92,7 +106,7 @@
             </ng-template>
         </ngx-datatable-column>
         <!-- column options -->
-        <ngx-datatable-column [minWidth]="290" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Opciones" prop="id">
+        <!-- <ngx-datatable-column [minWidth]="330" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Opciones" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <ion-fab-button (click)="this.onSearchPackage(value)" color="orange"  size="small">
@@ -104,16 +118,18 @@
               <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
                 <ion-icon name="repeat"></ion-icon>
                </ion-fab-button>
-                <!-- <ion-fab-button color="success"  size="small">
-                    <ion-icon name="cloud-download"></ion-icon>
+               <ion-fab-button color="success"  size="small">
+                 <ion-icon name="checkmark"></ion-icon>
                 </ion-fab-button>
-                <ion-fab-button color="primary"  size="small">
-                    <ion-icon name="pencil"></ion-icon>
-                </ion-fab-button> -->
                 <ion-fab-button color="danger" size="small">
                     <ion-icon name="close"></ion-icon>
                 </ion-fab-button>
+                <ion-fab-button color="tertiary"  size="small">
+                  <ion-icon name="map"></ion-icon>
+                </ion-fab-button>
+
             </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
     </ngx-datatable>
 </ion-content>
+

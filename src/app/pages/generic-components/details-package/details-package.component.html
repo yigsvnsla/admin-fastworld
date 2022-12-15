@@ -10,7 +10,108 @@
 </ion-header>
 <ion-content>
   <ng-container *ngIf="(this.package | async) as item; else loadingPackage">
-    <ion-grid>
+    <ion-grid fixed>
+      <ion-row >
+        <ion-col style="justify-content: center;display: flex;">
+            <ion-chip (click)="sharePackage(item.id)" color="warning" mode="ios" outline="true">
+              <ion-icon name="share"></ion-icon>
+              <ion-label>Ticket</ion-label>
+            </ion-chip>
+        </ion-col>
+        <ion-col style="justify-content: center;display: flex;">
+            <ion-chip (click)="this.onTransferPackage(item.id)" color="orange" mode="ios" outline="true">
+              <ion-icon name="repeat"></ion-icon>
+              <ion-label>Traspasar</ion-label>
+            </ion-chip>
+        </ion-col>
+        <ion-col style="justify-content: center;display: flex;">
+            <ion-chip id="btn-status-delivered-message-modal" color="success" mode="ios" outline="true">
+              <ion-icon name="checkmark"></ion-icon>
+              <ion-label>Entregar</ion-label>
+            </ion-chip>
+            <ion-modal  class="modal-dialogs" id="{{'status-delivered-message-modal'}}" #modal trigger="{{'btn-status-delivered-message-modal'}}">
+              <ng-template>
+                <div class="wrapper">
+                  <ion-header>
+                    <ion-toolbar color="success">
+                      <ion-title>Entregar</ion-title>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-item-group [formGroup]="this.dialogForm">
+                    <ion-item-divider style="margin-right: 16px;">
+                      <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                    </ion-item-divider>
+                    <ion-item>
+                      <ion-label position="stacked">Valor Recibido</ion-label>
+                      <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label position="stacked">Descripción </ion-label>
+                      <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                    </ion-item>
+                  </ion-item-group>
+
+                  <ion-footer>
+                    <ion-toolbar class="ion-text-center">
+                      <ion-button [disabled]="this.dialogForm.invalid" color="success" (click)="this.updateStatusPackage(item.id, 'entregado')" fill="solid" shape="round">
+                        <ion-label>Entregar</ion-label>
+                      </ion-button>
+                    </ion-toolbar>
+                  </ion-footer>
+                </div>
+              </ng-template>
+            </ion-modal>
+        </ion-col>
+        <ion-col style="justify-content: center;display: flex;">
+            <ion-chip id="btn-status-decline-message-modal" color="danger" mode="ios" outline="true">
+              <ion-icon name="close"></ion-icon>
+              <ion-label>Reportar</ion-label>
+            </ion-chip>
+            <ion-modal class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal'}}">
+              <ng-template>
+                <div class="wrapper">
+                  <ion-header>
+                    <ion-toolbar color="danger">
+                      <ion-title>Rechazar</ion-title>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-item-group [formGroup]="this.dialogForm">
+                    <ion-item-divider style="margin-right: 16px;">
+                      <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                    </ion-item-divider>
+                    <ion-item>
+                      <ion-label position="stacked">Descripción </ion-label>
+                      <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''" formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                    </ion-item>
+                  </ion-item-group>
+                  <ion-footer>
+                    <ion-toolbar class="ion-text-center">
+                      <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(item.id, 'rechazado'); modal.dismiss()" fill="solid" shape="round">
+                        <ion-label>Rechazar</ion-label>
+                      </ion-button>
+                    </ion-toolbar>
+                  </ion-footer>
+                </div>
+              </ng-template>
+            </ion-modal>
+        </ion-col>
+        <ion-col style="justify-content: center;display: flex;">
+          <ng-container *ngIf="(item.attributes?.receiver);else notMap">
+            <a  style="text-decoration: none;" [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction?.position.lat + ',' + item.attributes.receiver.direction.position?.lng " target="_blank" rel="noreferrer external">
+              <ion-chip  color="tertiary" mode="ios" outline="true">
+                <ion-icon name="map"></ion-icon>
+                <ion-label>Ruta</ion-label>
+              </ion-chip>
+            </a>
+          </ng-container>
+          <ng-template #notMap>
+            <ion-chip [disabled]="true" color="tertiary" mode="ios" outline="true">
+              <ion-icon name="map"></ion-icon>
+              <ion-label>Ruta</ion-label>
+            </ion-chip>
+          </ng-template>
+        </ion-col>
+      </ion-row>
 
       <ion-row>
         <ion-col sizeXs="12" sizeSm="6" style="display: flex; justify-content: center; align-items: center;">
@@ -104,7 +205,9 @@
                       <ion-text color="orange">Ubicacion de Retiro</ion-text>
                     </ion-card-subtitle>
 
-                    <ion-item button detail-icon="map">
+                    <ion-item button detail-icon="map"
+                    [href]="'https://maps.google.com/?q=' +  item.attributes.location.position.lat + ',' +  item.attributes.location.position.lng"
+                    target="_blank" rel="noreferrer external">
                       <ion-label class="ion-text-wrap">
                         <p style="display: flex; align-items: center;">
                           <ion-icon style="margin: 8px" name="grid"></ion-icon>
@@ -479,7 +582,6 @@
 
         </ion-col>
       </ion-row>
-
 
     </ion-grid>
   </ng-container>

@@ -37,7 +37,7 @@ section{
         }
     }
 }
-    
+
 
 ion-card{
     &.not-data {
@@ -47,7 +47,7 @@ ion-card{
             justify-content: center;
             &>ion-img{
                 width: 200px;
-    
+
             }
         }
     }
@@ -62,5 +62,20 @@ ion-card{
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+ion-modal {
+  &.modal-dialogs {
+      --width: fit-content;
+      --min-width: 250px;
+      --height: fit-content;
+      --border-radius: 6px;
+      --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+
+      h1 {
+          margin: 20px 20px 10px 20px;
+
+      }
+  }
 }
 

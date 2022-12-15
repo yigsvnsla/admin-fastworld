@@ -59,7 +59,7 @@ export class DetailsDriverComponent implements OnInit {
           header: 'Membrecia',
           buttons: ['Cancelar', { text: 'Aceptar', handler: () => console.log(this.formBasic)  }]
         })
-    
+
       }
 
     private instanceForm(data: any) {
@@ -71,7 +71,7 @@ export class DetailsDriverComponent implements OnInit {
             color:[data.driver.color,[Validators.required]],
             maker:[data.driver.maker,[Validators.required]],
             model:[data.driver.model,[Validators.required]],
-            year:[data.driver.year,[Validators.required]]            
+            year:[data.driver.year,[Validators.required]]
         })
 
         this.formDriver.disable()
@@ -123,5 +123,38 @@ export class DetailsDriverComponent implements OnInit {
         this.formBasic.disable()
     }
 
+
+    async asingPackage(){
+        await this.toolsService.showAlert({
+          cssClass: 'alert-success',
+          keyboardClose: true,
+          mode: 'ios',
+          header: 'Ingresar id del Ticket',
+          inputs:[
+            {
+              id:'label',
+              type:'number',
+              name:'input'
+            }
+          ],
+          buttons: ['Cancelar', { text: 'Aceptar', handler: (x) => {
+            this.toolsService.showAlert({
+              header: 'Agregar Ruta',
+              subHeader: '¿Desea agregar esta encomienda a sus lista de rutas de envios?',
+              message: 'Recuerde que puede ver asignada esta encomienda en la seccion de activas del menu lateral.',
+              buttons: ['Cancelar', {
+                text: 'Agregar', role: 'success', handler: async () => {
+                  let loading = await this.toolsService.showLoading("Obteniendo encomienda...");
+                  this.conectionService.post('package/pickup', { id: x.input })
+                    .toPromise()
+                    // .then(res => this.source.deleteItemToSource(id))
+                    .finally(() => loading.dismiss())
+                }
+              }]
+            })
+          } }]
+        })
+
+    }
 
 }

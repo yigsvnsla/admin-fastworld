@@ -12,13 +12,54 @@
 <ion-content>
     <ng-container *ngIf=" ( this.user$ | async ) as user; else loadingUser">
         <ion-grid fixed>
+
+          <ion-row >
+            <ion-col style="justify-content: center;display: flex;">
+                <ion-chip (click)="showCreateEncomienda()"  color="orange" mode="ios" outline="true">
+                  <ion-icon name="add"></ion-icon>
+                  <ion-label>Crear</ion-label>
+                </ion-chip>
+            </ion-col>
+
+            <ion-col style="justify-content: center;display: flex;">
+              <ng-container *ngIf="this.user.status == 'reportado'">
+                <ion-chip color="success" mode="ios" outline="true">
+                  <ion-icon name="checkmark"></ion-icon>
+                  <ion-label>Desbloquear</ion-label>
+                </ion-chip>
+              </ng-container>
+              <ng-container *ngIf="this.user.status != 'reportado'">
+                <ion-chip color="danger" mode="ios" outline="true">
+                  <ion-icon name="close"></ion-icon>
+                  <ion-label>Reportar</ion-label>
+                </ion-chip>
+              </ng-container>
+            </ion-col>
+
+            <ion-col style="justify-content: center;display: flex;">
+              <a style="text-decoration: none;" [href]="'https://maps.google.com/?q=' +  user?.business.direction.position.lat + ',' +  user?.business.direction.position.lng" target="_blank" rel="noreferrer external">
+              <ion-chip color="tertiary" mode="ios" outline="true">
+                <ion-icon name="map"></ion-icon>
+                <ion-label>Ubicacion</ion-label>
+              </ion-chip>
+              </a>
+            </ion-col>
+
+            <ion-col style="justify-content: center;display: flex;">
+              <ion-chip color="orange" mode="ios" outline="true">
+                <ion-icon name="list"></ion-icon>
+                <ion-label>Historial</ion-label>
+              </ion-chip>
+            </ion-col>
+          </ion-row>
+
             <ion-row>
                 <ion-col sizeXs="12" sizeMd="6">
                     <ion-card>
                         <ion-card-header>
                             <ion-toolbar>
                                 <ion-card-subtitle>Nombre del Negocio</ion-card-subtitle>
-                                <ion-card-title>{{user.business.name | titlecase}}</ion-card-title>        
+                                <ion-card-title>{{user.business.name | titlecase}}</ion-card-title>
                                 <ion-fab-button (click)="this.showAlertInputNameBusisness()" color="orange" size="small" slot="end">
                                     <ion-icon name="pencil"></ion-icon>
                                 </ion-fab-button>

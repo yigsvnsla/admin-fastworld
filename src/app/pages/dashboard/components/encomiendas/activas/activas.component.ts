@@ -1,6 +1,6 @@
 import { ToolsService } from 'src/app/services/tools.service';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService, SocketService } from 'src/app/services/connections.service';
@@ -26,10 +26,10 @@ export class ActivasComponent implements OnInit {
     limit: number
     total?: number
   }
-
-
   public loading: boolean
   public ColumnMode = ColumnMode;
+  public SelectionType = SelectionType
+  public selected = []
 
   constructor(
     private conectionsService: ConectionsService,
@@ -81,8 +81,6 @@ export class ActivasComponent implements OnInit {
     })
   }
 
-
-
   public ngOnInit(): void {
     this.socketService.on('product-updated', (product: any | any[]) => {
       const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
@@ -119,40 +117,38 @@ export class ActivasComponent implements OnInit {
     this.socketService.removeAllListeners('product-created')
   }
 
-    public sharePackage(_id: number) {
-      this.toolsService.showLoading()
-        .then(async loading => {
-          const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
-          loading.dismiss();
-          (await this.toolsService.showAlert({
-            backdropDismiss: false,
-            header: 'Enlace Generado 🌎',
-            subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
-            keyboardClose: true,
-            mode: 'ios',
-            cssClass: 'alert-primary',
-            inputs: [{
-              type: 'text',
-              value: 'https://fastworld.app/ticket/' + id,
-              name: 'url'
-            }],
-            buttons: [{
-              text: 'copiar',
-              role: 'success',
-              handler: async (data) => {
-                navigator.clipboard.writeText(data.url);
-                await this.toolsService.showToast({
-                  message: 'Enlace copiado',
-                  icon: 'copy',
-                  mode: 'ios',
-                  buttons: ['Aceptar']
-                })
-              }
-            }]
-          }))
-        })
-    }
-
+  public sharePackage(_id: number) {
+    this.toolsService.showLoading()
+      .then(async loading => {
+        const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
+        loading.dismiss();
+        (await this.toolsService.showAlert({
+          header: 'Enlace Generado 🌎',
+          subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
+          keyboardClose: true,
+          mode: 'ios',
+          cssClass: 'alert-primary',
+          inputs: [{
+            type: 'text',
+            value: 'https://fastworld.app/ticket/' + id,
+            name: 'url'
+          }],
+          buttons: [{
+            text: 'copiar',
+            role: 'success',
+            handler: async (data) => {
+              navigator.clipboard.writeText(data.url);
+              await this.toolsService.showToast({
+                message: 'Enlace copiado',
+                icon: 'copy',
+                mode: 'ios',
+                buttons: ['Aceptar']
+              })
+            }
+          }]
+        }))
+      })
+  }
 
   private async getInformation() {
     this.loading = true;
@@ -201,6 +197,18 @@ export class ActivasComponent implements OnInit {
         id:_id
       }
     })
+  }
+
+  onSelect({ selected }) {
+    let {id} = selected[0]
+
+    this.onSearchPackage(id)
+
+  }
+
+  onActivate(event) {
+
+    // console.log('Activate Event', event);
   }
 
 }

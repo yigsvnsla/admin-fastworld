@@ -1,9 +1,11 @@
 import { ToolsService } from 'src/app/services/tools.service';
 import { delay, tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ModalController } from '@ionic/angular';
+import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import { ConectionsService } from 'src/app/services/connections.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ModalTransferPackageComponent } from '../modal-transfer-package/modal-transfer-package.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-details-package',
@@ -11,16 +13,25 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./details-package.component.scss'],
 })
 export class DetailsPackageComponent implements OnInit {
+  @ViewChild('modal') modal: IonModal
 
   @Input() public id : number
+  public dialogForm: FormGroup;
 
   public package : Observable<any>
   public history : Observable<any>
   constructor(
     private conectionsService:ConectionsService,
     private modalController:ModalController,
-    private toolsService:ToolsService
-  ) { }
+    private toolsService:ToolsService,
+    private formBuilder: FormBuilder
+
+  ) {
+    this.dialogForm = this.formBuilder.nonNullable.group({
+      money_catch: ['$0.00', [Validators.required]],
+      comment: ['Sin Novedad', [Validators.required]]
+    })
+  }
 
   public ngOnInit(): void {
     this.loadPackage()
@@ -63,6 +74,103 @@ export class DetailsPackageComponent implements OnInit {
       header: 'Confirmar pago',
       buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
     })
+  }
+
+  public sharePackage(_id: number) {
+    this.toolsService.showLoading()
+      .then(async loading => {
+        const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
+        loading.dismiss();
+        (await this.toolsService.showAlert({
+          header: 'Enlace Generado 🌎',
+          subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
+          keyboardClose: true,
+          mode: 'ios',
+          cssClass: 'alert-primary',
+          inputs: [{
+            type: 'text',
+            value: 'https://fastworld.app/ticket/' + id,
+            name: 'url'
+          }],
+          buttons: [{
+            text: 'copiar',
+            role: 'success',
+            handler: async (data) => {
+              navigator.clipboard.writeText(data.url);
+              await this.toolsService.showToast({
+                message: 'Enlace copiado',
+                icon: 'copy',
+                mode: 'ios',
+                buttons: ['Aceptar']
+              })
+            }
+          }]
+        }))
+      })
+  }
+
+  public onTransferPackage(row:any){
+    this.toolsService.showModal({
+      cssClass: ['modal-fit-content'],
+      component: ModalTransferPackageComponent,
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        idPackage:row
+      }
+    }).then(value => {
+      if (value) {
+
+        // this.user$.next(this.user)
+      }
+    })
+  }
+
+  public async updateStatusPackage(_id: number, status: string) {
+    let loading = await this.toolsService.showLoading('Actualizando...');
+    const { money_catch, comment } = this.dialogForm.value
+
+    try {
+      let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
+        money_catch,
+        comment,
+        status
+      }).toPromise()
+      // if ( status == 'recibido' ){
+      //   this.source.addItemToSource(response.data);
+      // }
+      // if ( status != 'recibido' ){
+      //   this.source.deleteItemToSource(_id)
+      // }
+
+      console.log('response', response)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      this
+      loading.dismiss()
+      this.modal.dismiss()
+    }
+  }
+
+  public ionChangesInputCurrency(_$event: Event) {
+    const $event = (_$event as InputCustomEvent)
+    let value = $event.detail.value;
+    const decimal: string = ',';
+    const thousand: string = '.';
+    if (RegExp(/$/g).test($event.detail.value)) $event.detail.value.replace('$', '');
+    if ($event.detail.value == '') this.dialogForm.get(['money_catch']).setValue(value = '0' + decimal + '00');
+    value = value + '';
+    value = value.replace(/[\D]+/g, '');
+    value = value + '';
+    value = value.replace(/([0-9]{2})$/g, decimal + '$1');
+    var parts = value.toString().split(decimal);
+    if (parts[0] == '') parts[0] = '0';
+    parts[0] = parseInt(parts[0]).toString();
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+    value = parts.join(decimal);
+    this.dialogForm.get(['money_catch']).setValue('$' + value)
   }
 
   public async onExit(){
