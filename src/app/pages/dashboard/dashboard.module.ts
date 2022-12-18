@@ -35,7 +35,7 @@ import { ResumenComponent } from './components/pagos/components/resumen/resumen.
 import { ModalCheckComponent } from './components/pagos/components/modal-check/modal-check.component';
 import { ModalAgregarComponent } from './components/pagos/components/modal-agregar/modal-agregar.component';
 import { ViewDataTableComponent } from './components/pagos/components/view-data-table/view-data-table.component';
-
+import { ModalUserHistorial } from "../generic-components/modal-user-historial/modal-user-historial.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -77,7 +77,8 @@ import { ViewDataTableComponent } from './components/pagos/components/view-data-
     ResumenComponent,
     ModalCheckComponent,
     ModalAgregarComponent,
-    ViewDataTableComponent
+    ViewDataTableComponent,
+    ModalUserHistorial
   ]
 })
 export class DashboardPageModule {}

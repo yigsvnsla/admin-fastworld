@@ -1,3 +1,4 @@
+import { ModalUserHistorial } from './../modal-user-historial/modal-user-historial.component';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { delay } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -244,6 +245,20 @@ export class DetailsClientComponent implements OnInit {
       componentProps:{
         userID:this.user.id,
         _user : this.user
+      }
+    })
+  }
+
+  public async onShowHistory(){
+    this.toolsService.showModal({
+      component:ModalUserHistorial,
+      cssClass:['modal-fullscreen'],
+      keyboardClose:true,
+      mode:'ios',
+      backdropDismiss:false,
+      componentProps:{
+        id:this.id,
+        prefix:'client'
       }
     })
   }

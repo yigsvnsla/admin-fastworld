@@ -1,18 +1,22 @@
-import { ToolsService } from 'src/app/services/tools.service';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
-import { ConectionsService } from '../../../../../services/connections.service';
 import { delay } from 'rxjs/operators';
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
-import { DetailsClientComponent } from 'src/app/pages/generic-components/details-client/details-client.component';
-import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
+import { ConectionsService } from 'src/app/services/connections.service';
+import { ToolsService } from 'src/app/services/tools.service';
+import { DetailsClientComponent } from '../details-client/details-client.component';
+import { DetailsDriverComponent } from '../details-driver/details-driver.component';
+import { DetailsPackageComponent } from '../details-package/details-package.component';
 
 @Component({
-  selector: 'app-historial',
-  templateUrl: './historial.component.html',
-  styleUrls: ['./historial.component.scss'],
+  selector: 'modal-user-historial',
+  templateUrl: 'modal-user-historial.component.html',
+  styleUrls:['modal-user-historial.component.scss']
 })
-export class HistorialComponent implements OnInit {
+
+export class ModalUserHistorial implements OnInit {
+
+  @Input() public id:number
+  @Input() public prefix:string
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
@@ -40,13 +44,7 @@ export class HistorialComponent implements OnInit {
   public SelectionType = SelectionType
 
   test($event){
-    console.log($event);
-    this.setPagination = {
-      start: 0,
-      limit: 25
-    }
-    this.setPath = 'admin/packages?populate=*&sort=id:DESC&'+$event
-    this.getInformation()
+
   }
 
   constructor(
@@ -84,7 +82,13 @@ export class HistorialComponent implements OnInit {
 
   public ngOnInit(): void {
 
-
+    // console.log($event);
+    this.setPagination = {
+      start: 0,
+      limit: 25
+    }
+    this.setPath = `/packages?populate=*&sort=id:DESC&filters[]`
+    this.getInformation()
   }
 
   private async getInformation() {
@@ -92,6 +96,8 @@ export class HistorialComponent implements OnInit {
     let loading = this.toolsService.showLoading()
     const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     this.pagination = meta.pagination
+    console.log(data);
+
     if(this.pagination.start == 0){
       this.source = data
     }else{
@@ -135,18 +141,18 @@ export class HistorialComponent implements OnInit {
     })
   }
 
-  public showProfileClient(_id:number){
-    this.toolsService.showModal({
-      component:DetailsClientComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
-      }
-    })
-  }
+  // public showProfileClient(_id:number){
+  //   this.toolsService.showModal({
+  //     component:DetailsClientComponent,
+  //     cssClass:['modal-fullscreen'],
+  //     keyboardClose:true,
+  //     mode:'ios',
+  //     backdropDismiss:false,
+  //     componentProps:{
+  //       id:_id
+  //     }
+  //   })
+  // }
 
   public showProfileDriver(_id:number){
     this.toolsService.showModal({
