@@ -6,18 +6,18 @@ import { ToolsService } from 'src/app/services/tools.service';
 import { DetailsClientComponent } from '../details-client/details-client.component';
 import { DetailsDriverComponent } from '../details-driver/details-driver.component';
 import { DetailsPackageComponent } from '../details-package/details-package.component';
+import { stringify } from 'qs'
 
 @Component({
   selector: 'modal-user-historial',
   templateUrl: 'modal-user-historial.component.html',
-  styleUrls:['modal-user-historial.component.scss']
+  styleUrls: ['modal-user-historial.component.scss']
 })
 
 export class ModalUserHistorial implements OnInit {
 
-  @Input() public id:number
-  @Input() public prefix:string
-
+  @Input() public id: number
+  @Input() public prefix: string
   readonly rowHeight = 50;
   readonly headerHeight = 50;
   public source: any[] = []
@@ -27,14 +27,13 @@ export class ModalUserHistorial implements OnInit {
     limit: number
     total?: number
   }
-
-  public columns = [ {
+  public columns = [{
     name: 'id',
     prop: 'id',
-  },{
+  }, {
     name: 'Categoria',
     prop: 'attributes.category',
-  },{
+  }, {
     name: 'Remitente',
     prop: 'attributes.shipping_status',
   },]
@@ -43,25 +42,33 @@ export class ModalUserHistorial implements OnInit {
   public ColumnMode = ColumnMode;
   public SelectionType = SelectionType
 
-  test($event){
+  test($event) {
 
   }
 
   constructor(
-    private toolsService:ToolsService,
+    private toolsService: ToolsService,
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
-
-
-
-
     this.setPagination = {
-      start:0,
-      limit:25,
-      total:0
+      start: 0,
+      limit: 25,
+      total: 0
     }
     this.loading = false
+  }
+
+  buildUser() {
+    return stringify({
+      sort: 'id:DESC',
+      populate: '*',
+      filters: {
+        sender: {
+          basic: this.id
+        }
+      }
+    })
   }
 
   public get getPagination(): {
@@ -87,7 +94,7 @@ export class ModalUserHistorial implements OnInit {
       start: 0,
       limit: 25
     }
-    this.setPath = `/packages?populate=*&sort=id:DESC&filters[]`
+    this.setPath = `packages?${this.buildUser()}`
     this.getInformation()
   }
 
@@ -98,9 +105,9 @@ export class ModalUserHistorial implements OnInit {
     this.pagination = meta.pagination
     console.log(data);
 
-    if(this.pagination.start == 0){
+    if (this.pagination.start == 0) {
       this.source = data
-    }else{
+    } else {
       this.source = [...this.source, ...data]
     }
     (await loading).dismiss()
@@ -119,7 +126,7 @@ export class ModalUserHistorial implements OnInit {
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length  >= this.pagination.total) {
+      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
         this.loading = false
         return
       }
@@ -128,15 +135,15 @@ export class ModalUserHistorial implements OnInit {
     return
   }
 
-  public onSearchPackage(_id:number){
+  public onSearchPackage(_id: number) {
     this.toolsService.showModal({
-      component:DetailsPackageComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsPackageComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
@@ -154,28 +161,28 @@ export class ModalUserHistorial implements OnInit {
   //   })
   // }
 
-  public showProfileDriver(_id:number){
+  public showProfileDriver(_id: number) {
     this.toolsService.showModal({
-      component:DetailsDriverComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsDriverComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
-  public onTransferPackage(_id:number){
+  public onTransferPackage(_id: number) {
 
   }
 
-  public onDonwloadInfoPackage(_id:number){
+  public onDonwloadInfoPackage(_id: number) {
 
   }
 
-  public onDeletePackage(_id:number){
+  public onDeletePackage(_id: number) {
 
   }
 }
