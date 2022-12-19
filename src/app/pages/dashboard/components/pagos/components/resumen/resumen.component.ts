@@ -3,7 +3,7 @@ import { ConectionsService, Source } from 'src/app/services/connections.service'
 import { ToolsService } from 'src/app/services/tools.service';
 import { stringify } from 'qs'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { InputCustomEvent, IonModal } from '@ionic/angular';
+import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import { ModalCheckComponent } from '../modal-check/modal-check.component';
 import { ModalAgregarComponent } from '../modal-agregar/modal-agregar.component';
 import { BehaviorSubject } from 'rxjs';
@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './resumen.component.html',
   styleUrls: ['./resumen.component.scss'],
 })
-export class ResumenComponent implements OnInit, OnChanges {
+export class ResumenComponent implements OnInit {
 
   @Input() id: number;
   @ViewChild('modalPayment') modalPayment: IonModal
@@ -24,17 +24,14 @@ export class ResumenComponent implements OnInit, OnChanges {
 
   updateTable: BehaviorSubject<string> = new BehaviorSubject('')
 
-  constructor(private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder) { }
+  constructor(private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder,
+    private modal: ModalController) { }
 
   ngOnInit() {
-    this.updateTable.subscribe(res=>{
-      console.log(res)
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
     this.fetchUser()
   }
+
+
 
 
   async fetchUser() {
@@ -134,5 +131,8 @@ export class ResumenComponent implements OnInit, OnChanges {
     })
   }
 
+  exit() {
+    this.modal.dismiss()
+  }
 
 }

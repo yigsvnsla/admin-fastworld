@@ -1,7 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConectionsService, Source } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { stringify } from 'qs'
+import { delay } from 'rxjs/operators';
+import { ResumenComponent } from './components/resumen/resumen.component';
 
 @Component({
   selector: 'app-pagos',
@@ -12,67 +15,118 @@ export class PagosComponent implements OnInit {
 
   @ViewChild('searchBar') searchBar: any
 
-  path = 'basic/client'
-  user = 8;
+  /* user = 8; */
+  readonly rowHeight = 50;
+  readonly headerHeight = 50;
+  public source: any[] = []
+  private path: string
+  private pagination: paginationModel = {
+    start: 0,
+    limit: 25,
+    total: 0
+  }
+  public loading: boolean = false;
+  public ColumnMode = ColumnMode;
+  public SelectionType = SelectionType
+  public get getPagination(): paginationModel { return this.pagination }
+  public set setPagination(v: paginationModel) { this.pagination = v; }
 
-
-  constructor(private http: ConectionsService, private tools: ToolsService) { }
-  /* DataSource initied */
-  dataSource = new Source(this.http)
-
-  ngOnInit() { }
-
-
-  /* Searching method */
-  handleSearch(event: any) {
-    const { value } = event.detail
-    if (value == '' || value.trim() == '') {
-      this.dataSource.clear()
-      return;
+  set setPath(v: string) {
+    if (v == '' || v == undefined) return;
+    this.path = `${v}?${this.buildUser()}`;
+    this.pagination = {
+      start: 0,
+      limit: 25,
+      total: 0
     }
-    let query = this.buildQuery({
-      filters: {
-        $or: [
-          !isNaN(value) ? this.buildObj('id', value) : {},
-          this.buildObj('identification', value),
-          this.buildObj('name.$containsi', value),
-          this.buildObj('business.name.$containsi', value),
-        ]
-      }
+    this.getInformation(true)
+  }
+
+
+  constructor(private http: ConectionsService, private tools: ToolsService, private el: ElementRef) { }
+
+  ngOnInit() {
+    this.setPath = 'business/payments'
+  }
+
+
+
+  buildUser() {
+    return stringify({
+      sort: 'id:DESC',
+      populate: '*'
     })
-    query = this.path.includes('?') ? `&${query}` : `?${query}`
-    this.dataSource.setPath = this.path + query
-  }
-  handleCrear(event) {
-    this.dataSource.clear()
   }
 
-  /*Click handler */
-  onClickUser(id) {
-    this.searchBar.value = ''
-    this.dataSource.clear()
-    this.user = id
-  }
 
-  /*Pages tools */
-  buildObj(key, value) {
-    let paths = key.split('.')
-    let builded = value;
-    if (paths.length > 1) {
-      for (let i = paths.length - 1; i >= 0; i--) {
-        builded = { [paths[i]]: builded }
-      }
-      return builded
+  /**
+   * DataTable
+   */
+
+  private async getInformation(clear = false) {
+    this.loading = true;
+    /* let loading = this.toolsService.showLoading() */
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
+    this.pagination = meta.pagination
+    this.setPagination = {
+      start: this.source.length,
+      limit: 25,
+      total: this.source.length + meta.total
     }
-    return { [key]: value }
+    if(clear) this.source = data;
+    else this.source = [...this.source, ...data];
+    /* (await loading).dismiss() */
+    console.log(data)
+    this.loading = false;
+  }
+  private async getData(route) {
+    let path = ''
+    if (this.path.includes('?')) {
+      path = this.path + `&${route}`
+    } else {
+      path = this.path + `?${route}`
+    }
+    return await this.http
+      .get<any>(path)
+      .pipe(delay(1000))
+      .toPromise()
+  }
+  public onScroll(offsetY: number) {
+    // total height of all rows in the viewport
+    const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
+    // check if we scrolled to the end of the viewport
+    if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
+      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
+        this.loading = false
+        return
+      }
+      this.getInformation();
+    }
+    return
   }
 
-  buildQuery(obj: any) {
-    return stringify(obj)
+  public onSelect({ selected }) {
+    this.tools.showModal({
+      component: ResumenComponent,
+      cssClass: 'modal-fullscreen',
+      componentProps: {
+        id: selected[0].id
+      }
+    }).then(res => {
+      this.setPath = 'business/payments'
+    })
   }
 
+  integer(value) {
+    return parseInt(value)
+  }
 
 
 }
 
+interface paginationModel {
+  start: number
+  limit: number
+  total?: number
+}
 

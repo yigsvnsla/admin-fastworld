@@ -34,7 +34,8 @@
     headerClass="center"
     prop="attributes.description">
     <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
-    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+      <p>{{value}}</p>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column

@@ -35,7 +35,7 @@ export class ViewDataTableComponent implements OnInit {
       limit: 25,
       total: 0
     }
-    this.getInformation()
+    this.getInformation(true)
   }
 
   constructor(
@@ -46,12 +46,18 @@ export class ViewDataTableComponent implements OnInit {
 
   ngOnInit() { }
 
-  private async getInformation() {
+  private async getInformation(clear = false) {
     this.loading = true;
     /* let loading = this.toolsService.showLoading() */
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
+    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
     this.pagination = meta.pagination
-    this.source = [...this.source, ...data];
+    this.setPagination = {
+      start: this.source.length,
+      limit: 25,
+      total: this.source.length + meta.total
+    }
+    if(clear) this.source = data;
+    else this.source = [...this.source, ...data];
     /* (await loading).dismiss() */
     console.log(data)
     this.loading = false;
