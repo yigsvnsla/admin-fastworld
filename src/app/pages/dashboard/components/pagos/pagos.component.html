@@ -11,14 +11,12 @@
 </ion-header>
 
 <ion-content>
-  <ngx-datatable #table class="dark fullscreen"
-  (select)="onSelect($event)"
-  [selectionType]="SelectionType.single"
-  (scroll)="this.onScroll($event.offsetY)" [rows]="this.source"
-    [columnMode]="this.ColumnMode.force" [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading"
-    [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
-      name="ID" headerClass="center" cellClass="center" prop="id">
+  <ngx-datatable #table class="dark fullscreen" (select)="onSelect($event)" [selectionType]="SelectionType.single"
+    (scroll)="this.onScroll($event.offsetY)" [rows]="this.source" [columnMode]="this.ColumnMode.force"
+    [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false"
+    [swapColumns]="false">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="ID"
+      headerClass="center" cellClass="center" prop="id">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}
       </ng-template>
@@ -34,7 +32,7 @@
       name="Encomiendas" prop="attributes.pending" headerClass="center" cellClass="center">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
-        <ng-container *ngIf="value > 0">
+        <ng-container *ngIf="value < 0">
           <ion-chip color="danger">
             <ion-icon name="cash"></ion-icon>
             <ion-label>
@@ -42,7 +40,7 @@
             </ion-label>
           </ion-chip>
         </ng-container>
-        <ng-container *ngIf="value <= 0">
+        <ng-container *ngIf="value >= 0">
           <ion-chip color="success">
             <ion-icon name="checkmark"></ion-icon>
             <ion-label>

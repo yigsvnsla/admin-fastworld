@@ -49,8 +49,6 @@ export class PagosComponent implements OnInit {
     this.setPath = 'business/payments'
   }
 
-
-
   buildUser() {
     return stringify({
       sort: 'id:DESC',
@@ -66,7 +64,7 @@ export class PagosComponent implements OnInit {
   private async getInformation(clear = false) {
     this.loading = true;
     /* let loading = this.toolsService.showLoading() */
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
+    const { data, meta } = await this.getData(  `&pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
     this.pagination = meta.pagination
     this.setPagination = {
       start: this.source.length,
@@ -79,6 +77,7 @@ export class PagosComponent implements OnInit {
     console.log(data)
     this.loading = false;
   }
+
   private async getData(route) {
     let path = ''
     if (this.path.includes('?')) {
@@ -91,6 +90,7 @@ export class PagosComponent implements OnInit {
       .pipe(delay(1000))
       .toPromise()
   }
+
   public onScroll(offsetY: number) {
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
@@ -120,8 +120,6 @@ export class PagosComponent implements OnInit {
   integer(value) {
     return parseInt(value)
   }
-
-
 }
 
 interface paginationModel {

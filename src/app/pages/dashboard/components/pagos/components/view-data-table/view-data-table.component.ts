@@ -88,6 +88,10 @@ export class ViewDataTableComponent implements OnInit {
     return
   }
 
+  async forceUpdate(url){
+    this.setPath = url;
+  }
+
 }
 
 interface paginationModel {

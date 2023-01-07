@@ -45,12 +45,12 @@
                 <ion-icon name="logo-usd" slot="start"></ion-icon>
                 <ion-label>
                   <p>Encomiendas</p>
-                  <ng-container *ngIf="user.pending > 0">
+                  <ng-container *ngIf="user.pending < 0">
                     <ion-text color="danger">
                       <h1>{{user.pending | currency}}</h1>
                     </ion-text>
                   </ng-container>
-                  <ng-container *ngIf="user.pending == 0">
+                  <ng-container *ngIf="user.pending >= 0">
                     <ion-text color="success">
                       <h1>{{user.pending | currency}}</h1>
                     </ion-text>
@@ -82,6 +82,6 @@
     <!-- <ion-item-divider>
       <ion-label>Ultimos pagos realizados</ion-label>
     </ion-item-divider> -->
-    <resume-datatable [setPath]="updateTable | async"></resume-datatable>
+    <resume-datatable #datatable [setPath]="dataPath"></resume-datatable>
   </ion-card-content>
 </ion-card>
