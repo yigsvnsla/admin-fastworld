@@ -4,6 +4,7 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
+import * as qs from 'qs';
 
 @Component({
     selector: 'app-conductores',
@@ -89,9 +90,49 @@ export class ConductoresComponents implements OnInit{
 
     }
 
-    private async getInformation() {
+    public onSearchChange($event) {
+      this.path = `basic/driver?populate=*&${qs.stringify({
+        filters: {
+          $or: [
+            {
+              id:{
+                $containsi:$event.detail.value
+              }
+            },
+            {
+              name: {
+                $containsi: $event.detail.value
+              }
+            } ,
+            {
+              lastname: {
+                $containsi: $event.detail.value
+              }
+            } ,
+            {
+              identification: {
+                $containsi: $event.detail.value
+              }
+            }
+          ]
+        }
+      })}`
+
+      this.getInformation(true)
+
+    }
+
+    private async getInformation(clear: boolean = false) {
       this.loading = true;
       let loading = this.toolsService.showLoading()
+      if(clear) {
+        this.source = []
+        this.setPagination = {
+          start: 0,
+          limit: 25,
+          total: 0
+        }
+      }
       const { data, meta } = await this.getData(this.path + `&sort=id:ASC&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
       const { page, pageSize, pageCount, total } = meta.pagination
       this.pagination = meta.pagination

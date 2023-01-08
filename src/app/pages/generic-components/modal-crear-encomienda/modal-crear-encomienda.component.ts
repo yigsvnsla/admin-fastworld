@@ -92,69 +92,105 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
     public setEndUbicationMessage($event: Event) { this.encomiendaForm.get(['route', 'end']).value.message = ($event as TextareaCustomEvent).detail.value }
 
-    public async setProduct() {
-        const list = this.productList$.value
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
-        list.push({ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value })
+    public async setProduct( destiny:string ) {
+        const send = async () => {
+          const loading = await this.toolsService.showLoading('Actualizando informacion...')
+          try {
+            // const { id } = await this.localStorageService.get(environment.user_tag)
+            const _package=  [{ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value }]
+            const response = await this.conectionsService.post(`packages/client`, { client:this.userID, packages: _package}).toPromise();
+            if (response) {
+              const _id = response.data[0].id
+              if(destiny == 'ticket'){
+                this.toolsService.showLoading()
+                .then(async loading => {
+                  const { id } = await this.conectionsService.get<any>(`ticket/generate/${_id}`).toPromise()
+                  loading.dismiss();
+                  (await this.toolsService.showAlert({
+                    backdropDismiss: false,
+                    header: 'Enlace Generado 🌎',
+                    subHeader: 'Comparta este elace a su cliente para validar los datos de entrega',
+                    keyboardClose: true,
+                    mode: 'ios',
+                    cssClass: 'alert-primary',
+                    inputs: [{
+                      type: 'text',
+                      value: 'https://fastworld.app/ticket/' + id,
+                      name: 'url'
+                    }],
+                    buttons: [{
+                      text: 'copiar',
+                      role: 'success',
+                      handler: async (data) => {
+                        navigator.clipboard.writeText(data.url);
+                        await this.toolsService.showToast({
+                          message: 'Enlace copiado',
+                          icon: 'copy',
+                          mode: 'ios',
+                          buttons: ['Aceptar']
+                        })
+                      }
+                    }]
+                  }))
+                })
+              }
+              (await this.modalController.getTop()).dismiss()
+              this.instanceForm()
+              // this.router.navigateByUrl('dashboard/encomienda/activas')
+              console.log(response);
+            }
+          } catch (error) {
+            console.error(error);
+          } finally {
+            loading.dismiss()
+          }
+        }
 
-        this.productList$.next(list)
-        await this.modal.dismiss()
-        this.instanceForm()
+        await this.toolsService.showAlert({
+          cssClass: 'alert-danger',
+          keyboardClose: true,
+          mode: 'ios',
+          header: 'Crear Encomienda',
+          subHeader:'¿Desea enviar esta encomienda?',
+          buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
+        })
+
     }
 
     public editItem(item) { }
 
     public deleteItem(item) { }
 
-    public async post() {
-      console.log(this.userID)
-        const send = async () => {
-            const loading = await this.toolsService.showLoading('Actualizando informacion...')
-            try {
-                const response = await this.conectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-                if (response) {
-                    await this.toolsService.showAlert({
-                        cssClass: 'alert-success',
-                        keyboardClose: true,
-                        mode: 'ios',
-                        header: 'Exito',
-                        buttons: [{ text: 'Aceptar' }]
-                    })
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                loading.dismiss()
-            }
-        }
+    // public async post() {
+    //   console.log(this.userID)
+    //     const send = async () => {
+    //         const loading = await this.toolsService.showLoading('Actualizando informacion...')
+    //         try {
+    //             const response = await this.conectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+    //             if (response) {
+    //                 await this.toolsService.showAlert({
+    //                     cssClass: 'alert-success',
+    //                     keyboardClose: true,
+    //                     mode: 'ios',
+    //                     header: 'Exito',
+    //                     buttons: [{ text: 'Aceptar' }]
+    //                 })
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //         } finally {
+    //             loading.dismiss()
+    //         }
+    //     }
 
-        await this.toolsService.showAlert({
-            cssClass: 'alert-success',
-            keyboardClose: true,
-            mode: 'ios',
-            header: 'Membrecia',
-            buttons: ['Cancelar', { text: 'Aceptar', handler: () => send()}]
-        })
-    }
+    //     await this.toolsService.showAlert({
+    //         cssClass: 'alert-success',
+    //         keyboardClose: true,
+    //         mode: 'ios',
+    //         header: 'Membrecia',
+    //         buttons: ['Cancelar', { text: 'Aceptar', handler: () => send()}]
+    //     })
+    // }
 
     public onChangeSegmentLocation($event: Event) {
         const { detail } = $event as SegmentCustomEvent

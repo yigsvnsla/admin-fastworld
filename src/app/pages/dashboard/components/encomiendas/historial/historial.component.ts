@@ -15,55 +15,96 @@ import { DetailsDriverComponent } from 'src/app/pages/generic-components/details
 export class HistorialComponent implements OnInit {
 
   readonly rowHeight = 50;
-  readonly headerHeight = 50;
+  readonly headerHeight = 30;
   public source: any[] = []
-  private path: string
+  public path: string
+  public query: string
   private pagination: {
     start: number
     limit: number
     total?: number
   }
 
-  public columns = [ {
+  public columns = [{
     name: 'id',
     prop: 'id',
-  },{
+  }, {
     name: 'Categoria',
     prop: 'attributes.category',
-  },{
+  }, {
     name: 'Remitente',
     prop: 'attributes.shipping_status',
   },]
-
+  public segments: any[]
   public loading: boolean
   public ColumnMode = ColumnMode;
   public SelectionType = SelectionType
 
-  test($event){
-    console.log($event);
-    this.setPagination = {
-      start: 0,
-      limit: 25
-    }
-    this.setPath = 'admin/packages?populate=*&sort=id:DESC&'+$event
-    this.getInformation()
-  }
+  // test($event){
+  // console.log($event);
+  // this.setPagination = {
+  //   start: 0,
+  //   limit: 25
+  // }
+  // this.setPath = 'admin/packages?populate=*&sort=id:DESC&'+$event
+  // this.getInformation()
+  // }
 
   constructor(
-    private toolsService:ToolsService,
+    private toolsService: ToolsService,
     private conectionsService: ConectionsService,
     private el: ElementRef
   ) {
-
-
-
-
+    this.setPath = 'admin/packages?populate=*&sort=id:DESC&'
+    this.query = ''
     this.setPagination = {
-      start:0,
-      limit:25,
-      total:0
+      start: 0,
+      limit: 25,
+      total: 0
     }
-    this.loading = false
+    this.loading = false;
+
+    this.segments = [
+      {
+        name: 'Todos',
+        icon: '',
+        color: 'medium',
+        value: ''
+
+      }, {
+        name: 'Pendientes',
+        icon: '',
+        color: 'dark',
+        value: 'pendiente'
+      }, {
+        name: 'Aceptados',
+        icon: '',
+        color: 'tertiary',
+        value: 'aceptado'
+      }, {
+        name: 'Recibidos',
+        icon: '',
+        color: 'primary',
+        value: 'recibido'
+      }, {
+        name: 'Entregados',
+        icon: '',
+        color: 'success',
+        value: 'entregado'
+      }, {
+        name: 'Reportados',
+        icon: '',
+        color: 'danger',
+        value: 'rechazado',
+      },
+      {
+        name: 'Sin Confirmar',
+        icon: '',
+        color: 'warning',
+        value: 'invalido'
+      },
+
+    ]
   }
 
   public get getPagination(): {
@@ -87,14 +128,31 @@ export class HistorialComponent implements OnInit {
 
   }
 
-  private async getInformation() {
+
+  public getFilter($event: string) {
+    // console.log($event);
+    this.query = $event;
+    this.getInformation(true)
+  }
+
+  private async getInformation(clear: boolean = false) {
     this.loading = true;
     let loading = this.toolsService.showLoading()
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
+    if (clear) {
+      this.source = []
+      this.setPagination = {
+        start: 0,
+        limit: 25,
+        total: 0
+      }
+    }
+    const { data, meta } = await this.getData(this.path + this.query + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     this.pagination = meta.pagination
-    if(this.pagination.start == 0){
+    console.log(data);
+
+    if (this.pagination.start == 0) {
       this.source = data
-    }else{
+    } else {
       this.source = [...this.source, ...data]
     }
     (await loading).dismiss()
@@ -113,7 +171,7 @@ export class HistorialComponent implements OnInit {
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length  >= this.pagination.total) {
+      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
         this.loading = false
         return
       }
@@ -122,54 +180,54 @@ export class HistorialComponent implements OnInit {
     return
   }
 
-  public onSearchPackage(_id:number){
+  public onSearchPackage(_id: number) {
     this.toolsService.showModal({
-      component:DetailsPackageComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsPackageComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
-  public showProfileClient(_id:number){
+  public showProfileClient(_id: number) {
     this.toolsService.showModal({
-      component:DetailsClientComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsClientComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
-  public showProfileDriver(_id:number){
+  public showProfileDriver(_id: number) {
     this.toolsService.showModal({
-      component:DetailsDriverComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsDriverComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
-  public onTransferPackage(_id:number){
+  public onTransferPackage(_id: number) {
 
   }
 
-  public onDonwloadInfoPackage(_id:number){
+  public onDonwloadInfoPackage(_id: number) {
 
   }
 
-  public onDeletePackage(_id:number){
+  public onDeletePackage(_id: number) {
 
   }
 }

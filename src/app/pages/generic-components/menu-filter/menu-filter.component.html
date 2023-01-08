@@ -1,62 +1,47 @@
-<ion-menu  contentId="menu-historial" menuId="menu-historial" side="end" type="overlay">
-    <ion-header >
-      <ion-toolbar color="orange" class="ion-text-center">
-        <ion-card-header>
-          <ion-card-title><b>Opciones</b></ion-card-title>
-        </ion-card-header>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ng-container [formGroup]="this.qsForm">
-        <ion-item-group>
-          <ion-item-divider>
-            <ion-label>Filtrar Busqueda</ion-label>
-          </ion-item-divider>
-          <ion-item >
-            <ion-label position="stacked">Buscar por</ion-label>
-            <ion-icon slot="start" name="funnel"></ion-icon>
-            <ion-select formControlName="$containsi" interface="popover">
-              <ion-select-option value="id">Identificador</ion-select-option>
-              <ion-select-option value="name">Nombre Negocio</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-item-group>
-
-        <ion-item-group class="ion-text-center">
-        <ion-item-divider>
-          <ion-label>Seleccionar rango de busqueda </ion-label>
-        </ion-item-divider>
-        <ion-item >
-          <ion-label position="stacked">Rango <ion-text class="ion-hide-sm-down">de Busqueda</ion-text></ion-label>
-          <ion-select formControlName="$between" #dateRangeSelect   interface="popover">
-            <ion-select-option [value]="0">Hoy</ion-select-option>
-            <ion-select-option [value]="1">Ultimos 7 dias</ion-select-option>
-            <ion-select-option [value]="2">Del mes</ion-select-option>
-            <ion-select-option [value]="3">Ultimos 3 meses</ion-select-option>
-            <ion-select-option [value]="4">Personalizado</ion-select-option>
-          </ion-select>
-          <ion-icon slot="start" name="list"></ion-icon>
+<ion-menu contentId="menu-historial" menuId="menu-historial" side="end" type="overlay">
+  <ion-header>
+    <ion-toolbar color="orange" class="ion-text-center">
+      <ion-card-header>
+        <ion-card-title><b>Opciones</b></ion-card-title>
+      </ion-card-header>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-item-group class="ion-text-center">
+      <ion-item-divider>
+        <ion-label>Seleccionar rango de busqueda </ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label position="stacked">Rango <ion-text class="ion-hide-sm-down">de Busqueda</ion-text>
+        </ion-label>
+        <ion-select [value]="0" #dateRangeSelect (ionChange)="this.dateRangeChange($event)" interface="popover">
+          <ion-select-option [value]="0">Hoy</ion-select-option>
+          <ion-select-option [value]="1">Ultimos 7 dias</ion-select-option>
+          <ion-select-option [value]="2">Del mes</ion-select-option>
+          <ion-select-option [value]="3">Ultimos 3 meses</ion-select-option>
+          <ion-select-option [value]="4">Personalizado</ion-select-option>
+        </ion-select>
+        <ion-icon slot="start" name="list"></ion-icon>
+      </ion-item>
+      <section *ngIf="dateRangeSelect.value == 4">
+        <ion-item>
+          <ion-label position="stacked">Fecha de Inicio</ion-label>
+          <ion-input type="date"></ion-input>
+          <ion-icon slot="end" name="calendar"></ion-icon>
         </ion-item>
-        <section *ngIf="dateRangeSelect.value == 4">
-          <ion-item>
-            <ion-label position="stacked">Fecha de Inicio</ion-label>
-            <ion-input  type="date" ></ion-input>
-            <ion-icon slot="end" name="calendar"></ion-icon>
-          </ion-item>
-          <ion-item>
-            <ion-label position="stacked">Fecha de Inicio</ion-label>
-            <ion-input type="date" ></ion-input>
-            <ion-icon slot="end" name="calendar"></ion-icon>
-          </ion-item>
-          <ion-button class="ion-margin" color="orange" shape="round">
-            <ion-label>Buscar</ion-label>
-            <ion-icon slot="start" name="search"></ion-icon>
-          </ion-button>
-        </section>
+        <ion-item>
+          <ion-label position="stacked">Fecha de Inicio</ion-label>
+          <ion-input type="date"></ion-input>
+          <ion-icon slot="end" name="calendar"></ion-icon>
+        </ion-item>
+        <ion-button class="ion-margin" color="orange" shape="round">
+          <ion-label>Buscar</ion-label>
+          <ion-icon slot="start" name="search"></ion-icon>
+        </ion-button>
+      </section>
+    </ion-item-group>
 
-      </ion-item-group>
-    </ng-container>
-      <ion-item-group class="ion-text-center">
+    <!-- <ion-item-group class="ion-text-center">
         <ion-item-divider>
           <ion-label>Exportar Datos</ion-label>
         </ion-item-divider>
@@ -72,7 +57,7 @@
           <ion-label>Generar </ion-label>
           <ion-icon slot="start" name="download"></ion-icon>
         </ion-button>
-      </ion-item-group>
-    </ion-content>
-  </ion-menu>
-  <ion-router-outlet id="menu-historial"></ion-router-outlet>
+      </ion-item-group> -->
+  </ion-content>
+</ion-menu>
+<ion-router-outlet id="menu-historial"></ion-router-outlet>

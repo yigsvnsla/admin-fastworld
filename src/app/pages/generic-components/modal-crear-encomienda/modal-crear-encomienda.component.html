@@ -12,7 +12,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<!--
 <ion-content *ngIf="( this.productList$ | async ) as list" >
   <section *ngIf="list.length <= 0;" class="emptyList ion-padding">
     <ion-img style="max-width: 25%;" id="img-list" [src]="'../../../../../assets/svg/undraw_empty_re_opql.svg'">
@@ -366,4 +366,209 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+</ion-content> -->
+
+<ion-content class="ion-padding">
+  <ion-card [formGroup]="encomiendaForm">
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-subtitle>Ingresa la informacion del producto <br> para agregarlo a la lista</ion-card-subtitle>
+        <ion-card-title>
+          <ion-text color="orange">¿Que vas a Enviar?</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-item-group>
+        <ion-item>
+          <ion-label>Categoria</ion-label>
+          <ion-select formControlName="category" multiple="false" placeholder="Seleccionar">
+            <ion-select-option *ngFor="let categori of this.categories" [value]="categori">{{categori}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+    </ion-card-content>
+
+    <ion-card-content formGroupName="payment">
+      <ion-card-header>
+        <ion-card-subtitle>Establezca el valor<br>que el motorizado tiene que cobrar</ion-card-subtitle>
+        <ion-card-title>
+          <ion-text color="orange">Valor de la Contra-Entrega</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-item class="item-center-icon">
+        <ion-label position="stacked">Valor de Contra-Entrega</ion-label>
+        <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false"
+          type="tel" formControlName="value" placeholder="$0.00"></ion-input>
+        <ion-icon slot="start" name="logo-usd"></ion-icon>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-text color="orange">Tiempo aproximado de retiro</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-segment (ionChange)="this.timeOutSegmentChange($event)" value="today" [swipeGesture]="false"
+        #timeOutSegment>
+        <ion-segment-button class="orange"value="today">
+          <ion-icon color="dark" name="checkmark"></ion-icon>
+          <ion-label color="dark">Del Dia</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="orange" value="programing">
+          <ion-icon color="dark" name="calendar"></ion-icon>
+          <ion-label color="dark">Programada</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <section [hidden]="(timeOutSegment.value == 'programing')">
+        <ion-item button (click)="this.setTimeOutToday()">
+          <ion-label>
+            <p>Tiempo de espera</p>
+            <h2>{{ this.encomiendaForm.get('timeOut').value != null ?
+              (this.timeOutFormat(this.encomiendaForm.get('timeOut').value) | titlecase) : 'Seleccionar' }}</h2>
+          </ion-label>
+          <ion-icon slot="start" name="timer"></ion-icon>
+        </ion-item>
+      </section>
+      <section [hidden]="(timeOutSegment.value == 'today')">
+        <ion-item>
+          <ion-label> Retiro pautado para el dia </ion-label>
+          <ion-datetime-button datetime="datetime-programing"></ion-datetime-button>
+          <ion-modal id="dateTimeModalStart" [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime #dateTimePrograming (ionChange)="this.setTimeOutProgramingChange($event)"
+                hour-cycle="h12" locale="es-ES" color="orange" presentation="date-time" id="datetime-programing"
+                [showDefaultButtons]="true" [minuteValues]="'0,15,30,45'"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+      </section>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-subtitle>Ubicacion de retiro</ion-card-subtitle>
+        <ion-card-title>
+          <ion-text color="orange">¿A donde retiramos?</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-item id="item-ubication-start" lines="full" class="curved" button>
+        <ion-label>
+          <p>
+            <ion-text color="orange">Dirección</ion-text>
+          </p>
+          <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('start').value != null ?
+            this.encomiendaForm.get('route').get('start').value.address:'Seleccionar'}}</h2>
+        </ion-label>
+        <ion-icon slot="start" name="pin"></ion-icon>
+      </ion-item>
+      <ion-popover [dismissOnSelect]="true" (didPresent)="popoverDidPresentUserUbication()" size="cover" alignment="center" side="bottom" trigger="item-ubication-start" triggerAction="click">
+        <ng-template >
+          <ion-content class="ion-padding">
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>Opciones</ion-label>
+              </ion-item-divider>
+              <ion-item (click)="setStartUbication(item)" *ngFor="let item of startListUbication" button>
+                <ion-label>
+                  <p>Dirección guardada<p>
+                  <h4>{{item.address}}</h4>
+                </ion-label>
+              </ion-item>
+              <ion-item (click)="onOpenModalMapStart()" button>
+                <ion-label>Otra ubicación</ion-label>
+                <ion-icon slot="start" name="map"></ion-icon>
+              </ion-item>
+            </ion-item-group>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+      <ion-item *ngIf="this.encomiendaForm.get('route').get('start').value != null" class="item-center-icon">
+        <ion-icon slot="start" name="pencil"></ion-icon>
+        <ion-textarea (ionChange)="setStartUbicationMessage($event)" [rows]="4" inputmode="text"
+          [autoGrow]="false" value=""
+          placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) "></ion-textarea>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-subtitle>Ingresa la ubicación de Entrega en el mapa</ion-card-subtitle>
+        <ion-card-title>
+          <ion-text color="orange">Direccion de Entrega</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-segment (ionChange)="onChangeSegmentLocation($event)" #segmentLocation [value]="'mapa'">
+        <ion-segment-button class="orange" [value]="'mapa'">
+          <ion-icon  color="dark" name="locate"></ion-icon>
+          <ion-label color="dark" >mapa</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="orange"  [value]="'ticket'">
+          <ion-icon color="dark" name="newspaper"></ion-icon>
+          <ion-label color="dark" >ticket</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <section *ngIf="segmentLocation.value == 'mapa'">
+        <ion-card-content class="ion-no-padding">
+          <ion-card-header>
+            <ion-item lines="full" (click)="this.onOpenModalMapEnd()" class="curved" button>
+              <ion-label>
+                <p>
+                  <ion-text color="orange">Dirección </ion-text>
+                </p>
+                <h2 class="ion-text-wrap">{{this.encomiendaForm.get('route').get('end').value != null ?
+                  this.encomiendaForm.get('route').get('end').value.address:'Seleccionar'}}</h2>
+              </ion-label>
+              <ion-icon slot="start" name="pin"></ion-icon>
+            </ion-item>
+            <ion-item class="item-center-icon">
+              <ion-icon slot="start" name="pencil"></ion-icon>
+              <ion-textarea (ionChange)="setEndUbicationMessage($event)" [rows]="4" inputmode="text"
+                [autoGrow]="false" value=""
+                placeholder="(Opcional) Indicaciones de Entrega (Dirección, Etapa, Mz, Villa, etc) ">
+              </ion-textarea>
+            </ion-item>
+          </ion-card-header>
+          <ion-card-header>
+            <ion-card-subtitle>Ingresa el nombre y numero de contacto de quien dirigido el la encomienda
+            </ion-card-subtitle>
+            <ion-card-title>
+              <ion-text color="orange">Informacion de Contacto</ion-text>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item-group formGroupName="receiver">
+              <ion-item class="item-center-icon">
+                <ion-label position="stacked">Nombre y Apellido</ion-label>
+                <ion-input formControlName="name" type="text" placeholder="Ingresar Nombre"></ion-input>
+                <ion-icon slot="start" name="person"></ion-icon>
+              </ion-item>
+              <ion-item class="item-center-icon">
+                <ion-label position="stacked">Telefono</ion-label>
+                <ion-input formControlName="phone" type="tel" placeholder="Ingresar Numero de Telefono">
+                </ion-input>
+                <ion-icon slot="start" name="call"></ion-icon>
+              </ion-item>
+            </ion-item-group>
+          </ion-card-content>
+        </ion-card-content>
+      </section>
+      <section *ngIf="segmentLocation.value == 'ticket'">
+        <ion-card-content id="section-ticket">
+          <img style="max-width: 25%;" id="img-ticket" [src]="'../../../../../assets/svg/undraw_Confirmation_re_b6q5.svg'">
+          <ion-card-subtitle class="ion-text-center">
+            Esta opcion una vez creada su encomienda se creara un enlace
+            de confirmación el cual podra encontrar en las opciones de la misma en la seccion <i>"Activas"</i>
+          </ion-card-subtitle>
+        </ion-card-content>
+      </section>
+    </ion-card-content>
+
+    <section class="ion-text-center">
+      <ion-button [disabled]="this.encomiendaForm.invalid " (click)="this.setProduct(segmentLocation.value)" class="ion-margin" shape="round" color="orange">
+        <ion-icon slot="start" name="add"></ion-icon>
+        <ion-label>Agregar</ion-label>
+      </ion-button>
+    </section>
+  </ion-card>
 </ion-content>

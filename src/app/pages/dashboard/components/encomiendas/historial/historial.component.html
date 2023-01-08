@@ -4,7 +4,7 @@
     <app-btn-menu slot="start"></app-btn-menu>
     <ion-item class="ion-text-start" slot="end">
       <ion-icon color="orange" slot="start" name="search"></ion-icon>
-      <ion-input [debounce]="400" #searchInput placeholder="Buscar" ></ion-input>
+      <ion-input [debounce]="1400" #searchInput placeholder="Buscar" ></ion-input>
       <ion-button  [hidden]="searchInput.value == '' " (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
         <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
       </ion-button>
@@ -13,11 +13,25 @@
       <ion-menu-button menu="menu-historial"></ion-menu-button>
     </ion-buttons>
     <ion-title>Historial Encomiendas</ion-title>
-
   </ion-toolbar>
+  <ion-segment #segmentStatus scrollable [value]="''" >
+    <ion-segment-button
+      style="
+        --indicator-color: var(--ion-color-{{segment.color}});
+        --color-checked: var(--ion-color-{{segment.color}});
+        --color-focused: var(--ion-color-{{segment.color}});
+        --color-hover: var(--ion-color-{{segment.color}});"
+      [value]="segment.value"
+      *ngFor="let segment of segments; let i = index"
+    >
+      <ion-chip [color]="segment.color" mode="ios" outline="true">
+        <ion-label>{{segment.name}}</ion-label>
+      </ion-chip>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
-<app-menu-filter (urlGen)="test($event)" [inputSearch]="searchInput"  path="das"></app-menu-filter>
+<app-menu-filter (urlGen)="getFilter($event)" [inputSearch]="searchInput" [segmentStatus]="segmentStatus" [path]="this.path"></app-menu-filter>
 
 <ion-content>
   <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event.offsetY)" [rows]="this.source" [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
@@ -32,11 +46,11 @@
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <ng-container [ngSwitch]="value">
               <h6 style="margin: 0; font-weight: bold;">
-                  <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'invalido'" color="warning">{{ 'sin confirmar' | uppercase}}</ion-text>
                   <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
                   <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
                   <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ value | uppercase}}</ion-text>
+                  <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ 'reportado' | uppercase}}</ion-text>
                   <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
               </h6>
           </ng-container>

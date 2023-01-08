@@ -228,10 +228,13 @@ export class DetailsClientComponent implements OnInit {
         idBasic: this.id
       }
     }).then(value => {
-      if (value) {
+      console.log(value);
+      if (value == null)this.user.business.membreship = value;
+
+      if (value != undefined) {
         this.user.business.membreship = value
-        this.user$.next(this.user)
       }
+      this.user$.next(this.user)
     })
   }
 

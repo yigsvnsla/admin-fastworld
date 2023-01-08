@@ -5,12 +5,13 @@
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Información Detallada</ion-title>
+    <ion-title>Información Detallada </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ng-container *ngIf="(this.package | async) as item; else loadingPackage">
     <ion-grid fixed>
+
       <ion-row >
         <ion-col style="justify-content: center;display: flex;">
             <ion-chip (click)="sharePackage(item.id)" color="warning" mode="ios" outline="true">
@@ -42,8 +43,12 @@
                       <ion-label>Ingresar descripción y valor recibidos</ion-label>
                     </ion-item-divider>
                     <ion-item>
-                      <ion-label position="stacked">Valor Recibido</ion-label>
-                      <ion-input (ionChange)="ionChangesInputCurrency($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
+                      <ion-label position="stacked">Valor Contra-Entrega</ion-label>
+                      <ion-input id="money_catch" (ionChange)="ionChangesInputCurrencyMoneyCatch($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
+                    </ion-item>
+                    <ion-item *ngIf="item.attributes.shipping_status =='invalido' ">
+                      <ion-label position="stacked">Valor de Ruta</ion-label>
+                      <ion-input id="fee" (ionChange)="ionChangesInputCurrencyFee($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="fee" placeholder="$0.00"></ion-input>
                     </ion-item>
                     <ion-item>
                       <ion-label position="stacked">Descripción </ion-label>
@@ -72,7 +77,7 @@
                 <div class="wrapper">
                   <ion-header>
                     <ion-toolbar color="danger">
-                      <ion-title>Rechazar</ion-title>
+                      <ion-title>Reportar</ion-title>
                     </ion-toolbar>
                   </ion-header>
                   <ion-item-group [formGroup]="this.dialogForm">
@@ -86,8 +91,8 @@
                   </ion-item-group>
                   <ion-footer>
                     <ion-toolbar class="ion-text-center">
-                      <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(item.id, 'rechazado'); modal.dismiss()" fill="solid" shape="round">
-                        <ion-label>Rechazar</ion-label>
+                      <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(item.id, 'rechazado'); " fill="solid" shape="round">
+                        <ion-label>Reportar</ion-label>
                       </ion-button>
                     </ion-toolbar>
                   </ion-footer>
@@ -110,6 +115,12 @@
               <ion-label>Ruta</ion-label>
             </ion-chip>
           </ng-template>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="ion-text-center" size="12">
+            <h1> Encomienda <ion-text color="orange">#{{item.id}}</ion-text></h1>
         </ion-col>
       </ion-row>
 

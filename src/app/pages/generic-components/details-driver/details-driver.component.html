@@ -67,6 +67,48 @@
               </ion-col>
               <ion-col sizeXs="12" sizeSm="12">
                 <ion-row>
+
+                  <ion-col size="12">
+                    <ion-card >
+                      <ion-card-header style="padding-bottom: 0;">
+                          <ion-toolbar>
+                              <ion-card-subtitle>Saldos Y Deudas</ion-card-subtitle>
+                              <ion-card-title>
+                                  <ion-text color="orange"> {{ 'Sin Deudas' }}</ion-text>
+                              </ion-card-title>
+                              <ion-label *ngIf="false">
+                                  <p>Ultima Modificacion</p>
+                                  <p>{{'00-00-2000 00:00 am'}}</p>
+                              </ion-label>
+                          </ion-toolbar>
+                      </ion-card-header>
+                      <ion-card-content class="ion-no-padding">
+                          <ion-grid fixed>
+                              <ion-row>
+                                  <ion-col sizeLg="6">
+                                      <ion-item>
+                                          <ion-icon color="danger" name="cash" slot="start"></ion-icon>
+                                          <ion-label>
+                                              <p>Deuda</p>
+                                              <h4>{{ 0 | currency }}</h4>
+                                          </ion-label>
+                                      </ion-item>
+                                  </ion-col>
+                                  <ion-col sizeLg="6">
+                                      <ion-item>
+                                          <ion-icon color="success" name="cash" slot="start"></ion-icon>
+                                          <ion-label>
+                                              <p>Saldo</p>
+                                              <h4>{{ 0 | currency}}</h4>
+                                          </ion-label>
+                                      </ion-item>
+                                  </ion-col>
+                              </ion-row>
+                          </ion-grid>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+
                   <ion-col size="12">
                     <ion-card>
                       <ion-card-header style="padding-bottom: 0;">
@@ -102,7 +144,7 @@
                               </ion-item>
                           </ion-item-group>
                       </ion-card-content>
-                  </ion-card>
+                    </ion-card>
                   </ion-col>
                 </ion-row>
 

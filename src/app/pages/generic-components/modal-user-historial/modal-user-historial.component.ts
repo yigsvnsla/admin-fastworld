@@ -1,3 +1,4 @@
+import { ModalController } from '@ionic/angular';
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
@@ -49,7 +50,8 @@ export class ModalUserHistorial implements OnInit {
   constructor(
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
-    private el: ElementRef
+    private el: ElementRef,
+    private ModalController:ModalController
   ) {
     this.setPagination = {
       start: 0,
@@ -160,6 +162,10 @@ export class ModalUserHistorial implements OnInit {
   //     }
   //   })
   // }
+
+  public async onExit(){
+    this.ModalController.dismiss()
+  }
 
   public showProfileDriver(_id: number) {
     this.toolsService.showModal({

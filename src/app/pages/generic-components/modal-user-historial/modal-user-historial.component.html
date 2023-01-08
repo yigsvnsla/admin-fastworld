@@ -9,9 +9,12 @@
         <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-item>
-    <ion-buttons slot="end">
-      <ion-menu-button menu="menu-historial"></ion-menu-button>
-    </ion-buttons> -->
+  -->
+    <ion-buttons slot="start">
+      <ion-button color="orange" (click)="this.onExit()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Historial Encomiendas</ion-title>
 
   </ion-toolbar>
@@ -158,21 +161,22 @@
       <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{(value | date:'short')}}</ng-template>
     </ngx-datatable-column>
     <!-- Options -->
-    <!-- <ngx-datatable-column
-        headerClass="center"
-        cellClass="center"
-        [width]="225"
-        [canAutoResize]="true"
-        [resizeable]="false"
-        [draggable]="false"
-        [sortable]="false"
-        name="Opciones"
-        prop="id">
-        <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-fab-button (click)="this.onSearchPackage(value)" color="orange"  size="small">
-            <ion-icon name="search"></ion-icon>
-          </ion-fab-button>
+    <ngx-datatable-column
+    headerClass="center"
+    cellClass="center"
+    [width]="225"
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Opciones"
+    prop="id">
+      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-fab-button (click)="this.onSearchPackage(value)" color="orange"  size="small">
+          <ion-icon name="search"></ion-icon>
+        </ion-fab-button>
+          <!--
           <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
             <ion-icon name="repeat"></ion-icon>
           </ion-fab-button>
@@ -182,7 +186,8 @@
           <ion-fab-button (click)="this.onDeletePackage(value)" color="danger" size="small">
             <ion-icon name="close"></ion-icon>
           </ion-fab-button>
-        </ng-template>
-    </ngx-datatable-column> -->
+        -->
+      </ng-template>
+    </ngx-datatable-column>
   </ngx-datatable>
 </ion-content>

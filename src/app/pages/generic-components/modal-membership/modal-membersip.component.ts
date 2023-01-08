@@ -78,7 +78,8 @@ export class ModalMembershipComponent implements OnInit {
       try {
         const { start, expire, type } = this.tempMembership;
         const response = await this.conectionsService.post(`membreship`, { basic: this.idBasic, start, expire, type: this.tempMembership.type !=  null ? type : null} ).toPromise()
-        if (response) { this.onExit({ id: response.data.id, ...response.data.attributes }) }
+        if (response.message){ this.onExit(null)}
+        if (!response.message) { this.onExit({ id: response.data.id, ...response.data.attributes }) }
       } catch (error) {
         console.error(error);
       } finally {
@@ -95,7 +96,7 @@ export class ModalMembershipComponent implements OnInit {
     })
   }
 
-  public async onExit(data?: any) {
+  public async onExit(data: any) {
     (await this.modalController.getTop()).dismiss(data)
   }
 

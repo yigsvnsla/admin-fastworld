@@ -29,7 +29,8 @@ export class DetailsPackageComponent implements OnInit {
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
       money_catch: ['$0.00', [Validators.required]],
-      comment: ['Sin Novedad', [Validators.required]]
+      comment: ['Sin Novedad', [Validators.required]],
+      fee: ['$0.00',[Validators.required]]
     })
   }
 
@@ -121,6 +122,9 @@ export class DetailsPackageComponent implements OnInit {
       }
     }).then(value => {
       if (value) {
+        this.loadPackage()
+
+        this.onExit()
 
         // this.user$.next(this.user)
       }
@@ -129,14 +133,18 @@ export class DetailsPackageComponent implements OnInit {
 
   public async updateStatusPackage(_id: number, status: string) {
     let loading = await this.toolsService.showLoading('Actualizando...');
-    const { money_catch, comment } = this.dialogForm.value
+    const { money_catch, comment, fee } = this.dialogForm.value
 
     try {
       let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
         money_catch,
+        fee,
         comment,
         status
       }).toPromise()
+
+      console.log(response.data);
+      this.loadPackage()
       // if ( status == 'recibido' ){
       //   this.source.addItemToSource(response.data);
       // }
@@ -150,12 +158,14 @@ export class DetailsPackageComponent implements OnInit {
     } finally {
       this
       loading.dismiss()
-      this.modal.dismiss()
+      this.onExit()
     }
   }
 
-  public ionChangesInputCurrency(_$event: Event) {
+  public ionChangesInputCurrencyMoneyCatch(_$event: Event) {
     const $event = (_$event as InputCustomEvent)
+    console.log($event);
+
     let value = $event.detail.value;
     const decimal: string = ',';
     const thousand: string = '.';
@@ -171,6 +181,27 @@ export class DetailsPackageComponent implements OnInit {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
     value = parts.join(decimal);
     this.dialogForm.get(['money_catch']).setValue('$' + value)
+  }
+
+  public ionChangesInputCurrencyFee(_$event: Event) {
+    const $event = (_$event as InputCustomEvent)
+    console.log($event);
+
+    let value = $event.detail.value;
+    const decimal: string = ',';
+    const thousand: string = '.';
+    if (RegExp(/$/g).test($event.detail.value)) $event.detail.value.replace('$', '');
+    if ($event.detail.value == '') this.dialogForm.get(['money_catch']).setValue(value = '0' + decimal + '00');
+    value = value + '';
+    value = value.replace(/[\D]+/g, '');
+    value = value + '';
+    value = value.replace(/([0-9]{2})$/g, decimal + '$1');
+    var parts = value.toString().split(decimal);
+    if (parts[0] == '') parts[0] = '0';
+    parts[0] = parseInt(parts[0]).toString();
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+    value = parts.join(decimal);
+    this.dialogForm.get(['fee']).setValue('$' + value)
   }
 
   public async onExit(){

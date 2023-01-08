@@ -6,6 +6,7 @@
         </ion-buttons>
         <ion-title>Clientes</ion-title>
     </ion-toolbar>
+    <ion-searchbar placeholder="Nombre" inputmode="text" type="text" (ionChange)="this.onSearchChange($event)" [debounce]="1500"></ion-searchbar>
 </ion-header>
 <ion-content>
     <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen" >

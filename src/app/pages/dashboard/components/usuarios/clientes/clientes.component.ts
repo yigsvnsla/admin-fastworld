@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { DetailsClientComponent } from 'src/app/pages/generic-components/details-client/details-client.component';
+import * as qs from 'qs';
 
 @Component({
   selector: 'app-clientes',
@@ -15,7 +16,7 @@ import { DetailsClientComponent } from 'src/app/pages/generic-components/details
 
 export class ClientesComponents implements OnInit {
 
-  @ViewChild('opcionesRef') opcionesRef:TemplateRef<any>
+  @ViewChild('opcionesRef') opcionesRef: TemplateRef<any>
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
@@ -38,7 +39,7 @@ export class ClientesComponents implements OnInit {
   constructor(
     private conectionsService: ConectionsService,
     private el: ElementRef,
-    private toolsService:ToolsService
+    private toolsService: ToolsService
   ) {
 
     this.columns = [{
@@ -76,20 +77,67 @@ export class ClientesComponents implements OnInit {
     this.path = v;
   }
 
-  test(x){
-    console.log(x);
 
-  }
 
   public ngOnInit(): void {
     this.getInformation()
 
   }
 
-  private async getInformation() {
+  public onSearchChange($event) {
+    this.path = `basic/client?populate=*&${qs.stringify({
+      filters: {
+        $or: [
+          {
+            id:{
+              $containsi:$event.detail.value
+            }
+          },
+          {
+            business: {
+              name: {
+                $containsi: $event.detail.value
+              }
+            }
+          },
+          {
+            name: {
+              $containsi: $event.detail.value
+            }
+          } ,
+          {
+            lastname: {
+              $containsi: $event.detail.value
+            }
+          } ,
+          {
+            identification: {
+              $containsi: $event.detail.value
+            }
+          }
+        ]
+      }
+    })}`
+
+    this.getInformation(true)
+
+  }
+
+
+
+
+
+  private async getInformation(clear: boolean = false) {
     this.loading = true;
     let loading = this.toolsService.showLoading()
-
+    if(clear) {
+      this.source = []
+      this.setPagination = {
+        start: 0,
+        limit: 25,
+        total: 0
+      }
+    }
     const { data, meta } = await this.getData(this.path + `&sort=id:ASC&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
@@ -124,34 +172,30 @@ export class ClientesComponents implements OnInit {
   }
 
 
-  public showProfile(_id:number){
+  public showProfile(_id: number) {
     this.toolsService.showModal({
-      component:DetailsClientComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsClientComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
-  public async showCreateEncomienda(_id:number){
+  public async showCreateEncomienda(_id: number) {
     let _user = await this.conectionsService.get(`user/basic/${_id}?populate=*`).pipe(delay(500)).toPromise()
-
-    console.log(_user);
-
-
     await this.toolsService.showModal({
-      component:ModalCrearEncomiendaComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        userID:_id,
-        _user : _user
+      component: ModalCrearEncomiendaComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        userID: _id,
+        _user: _user
       }
     })
   }
