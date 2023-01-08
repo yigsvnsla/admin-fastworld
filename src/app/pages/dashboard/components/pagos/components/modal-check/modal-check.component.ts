@@ -14,6 +14,7 @@ export class ModalCheckComponent implements OnInit {
   @Input() id: any;
   @Input() business: any;
   @Input() estimate: number;
+  @Input() comment: string;
   @Input() resume: {
     total: number,
     value: number,
@@ -79,7 +80,7 @@ export class ModalCheckComponent implements OnInit {
   async payPackages() {
     return await this.http.post('payments/packages', {
       value: this.resume.value,
-      description: `Pago de ${this.resume.total} encomiendas`,
+      description: this.comment,
       business: this.business,
     }).toPromise()
   }
@@ -88,7 +89,7 @@ export class ModalCheckComponent implements OnInit {
     return await this.http.post('payments/packages', {
       value: this.resume.value,
       balance: this.resume.left,
-      description: `Pago de ${this.resume.total} encomiendas`,
+      description: this.comment,
       business: this.business,
     }).toPromise()
   }

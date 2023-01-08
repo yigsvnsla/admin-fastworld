@@ -7,6 +7,7 @@ import { InputCustomEvent, IonModal, ModalController } from '@ionic/angular';
 import { ModalCheckComponent } from '../modal-check/modal-check.component';
 import { ModalAgregarComponent } from '../modal-agregar/modal-agregar.component';
 import { BehaviorSubject } from 'rxjs';
+import { ViewDataTableComponent } from '../view-data-table/view-data-table.component';
 
 @Component({
   selector: 'pagos-resumen',
@@ -17,12 +18,11 @@ export class ResumenComponent implements OnInit {
 
   @Input() id: number;
   @ViewChild('modalPayment') modalPayment: IonModal
+  @ViewChild('datatable') datatable: ViewDataTableComponent
 
   user: any = {};
   validUser = false
   dataPath = ''
-
-  updateTable: BehaviorSubject<string> = new BehaviorSubject('')
 
   constructor(private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder,
     private modal: ModalController) { }
@@ -39,7 +39,7 @@ export class ResumenComponent implements OnInit {
     try {
       this.user = await this.http.get(`payments/${this.id}`).toPromise();
       this.validUser = true
-      this.updateTable.next(`payments/history/${this.user.id}`)
+      this.dataPath = `payments/history/${this.user.id}`
     } catch (error) {
       console.log('Error al obtener informacion', error)
     } finally {
@@ -48,7 +48,7 @@ export class ResumenComponent implements OnInit {
   }
 
 
-  async pay({ value }) {
+  async pay({ value, comment }) {
     let estimate = parseFloat(value.replace('$', '').replaceAll('.', '').replace(',', '.'))
     if (estimate < 2.50) {
       this.tools.showAlert({
@@ -65,7 +65,6 @@ export class ResumenComponent implements OnInit {
         estimate,
         id: this.id
       }).toPromise()
-      console.log(response)
       this.tools.showModal({
         component: ModalCheckComponent,
         componentProps: {
@@ -73,10 +72,14 @@ export class ResumenComponent implements OnInit {
           id: this.id,
           business: this.user.id,
           charges: this.user.charges,
-          estimate: estimate
+          estimate: estimate,
+          comment
         }
       }).then(async res => {
-        if (res) await this.fetchUser()
+        if (res) {
+          await this.fetchUser()
+          this.datatable.forceUpdate(this.dataPath)
+        }
       })
     } catch (error) {
       console.log(error)
@@ -122,7 +125,7 @@ export class ResumenComponent implements OnInit {
       cssClass: 'modal-dialogs',
       componentProps: {
         title: 'Agregar saldo',
-        comment: false
+        comment: true
       }
     }).then(res => {
       if (res) {
