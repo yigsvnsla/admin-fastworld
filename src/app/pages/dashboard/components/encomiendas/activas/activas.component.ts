@@ -7,6 +7,7 @@ import { ConectionsService, SocketService } from 'src/app/services/connections.s
 import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
 import { startOfDay } from 'date-fns';
 import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
+import * as qs from 'qs';
 
 @Component({
   selector: 'app-activas',
@@ -31,18 +32,46 @@ export class ActivasComponent implements OnInit {
   public SelectionType = SelectionType
   public selected = []
 
+
+
+  _qs = qs.stringify({
+    filters: {
+      $or: [
+        {
+          shipping_status: {
+            $containsi: 'aceptado'
+          },
+        }, {
+          shipping_status: {
+            $containsi: 'recibido'
+          },
+        }, {
+          shipping_status: {
+            $containsi: 'invalido'
+          },
+        },{
+          shipping_status: {
+            $containsi: 'pendiente'
+          },
+        },
+      ]
+    }
+  })
+
   constructor(
     private conectionsService: ConectionsService,
     private el: ElementRef,
-    private toolsService:ToolsService,
+    private toolsService: ToolsService,
     private socketService: SocketService
   ) {
+
+
     // this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[$and][0][createdAt][$gte]=${startOfDay(new Date()).toISOString()}&filters[$and][2][shipping_status][$notContains]=entregado`
-    this.setPath = `admin/packages?sort=id:DESC&populate=*&filters[shipping_status][$notContains]=entregado`
+    this.setPath = `admin/packages?sort=id:DESC&populate=*&${this._qs}`
     this.setPagination = {
-      start:0,
-      limit:25,
-      total:0
+      start: 0,
+      limit: 100,
+      total: 0
     }
     this.loading = false
   }
@@ -63,7 +92,7 @@ export class ActivasComponent implements OnInit {
     this.path = v;
   }
 
-  public onTransferPackage(row:any){
+  public onTransferPackage(row: any) {
     this.toolsService.showModal({
       cssClass: ['modal-fit-content'],
       component: ModalTransferPackageComponent,
@@ -71,7 +100,7 @@ export class ActivasComponent implements OnInit {
       mode: 'ios',
       backdropDismiss: false,
       componentProps: {
-        idPackage:row
+        idPackage: row
       }
     }).then(value => {
       if (value) {
@@ -175,7 +204,7 @@ export class ActivasComponent implements OnInit {
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
-      if (!this.loading && this.source.length != 0 && this.source.length  >= this.pagination.total) {
+      if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
         this.loading = false
         return
       }
@@ -186,21 +215,21 @@ export class ActivasComponent implements OnInit {
 
   }
 
-  public onSearchPackage(_id:number){
+  public onSearchPackage(_id: number) {
     this.toolsService.showModal({
-      component:DetailsPackageComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:_id
+      component: DetailsPackageComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
       }
     })
   }
 
   onSelect({ selected }) {
-    let {id} = selected[0]
+    let { id } = selected[0]
 
     this.onSearchPackage(id)
 

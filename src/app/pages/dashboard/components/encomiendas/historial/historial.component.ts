@@ -59,7 +59,7 @@ export class HistorialComponent implements OnInit {
     this.query = ''
     this.setPagination = {
       start: 0,
-      limit: 25,
+      limit: 100,
       total: 0
     }
     this.loading = false;
@@ -142,7 +142,7 @@ export class HistorialComponent implements OnInit {
       this.source = []
       this.setPagination = {
         start: 0,
-        limit: 25,
+        limit: 100,
         total: 0
       }
     }

@@ -26,15 +26,15 @@
       <section *ngIf="dateRangeSelect.value == 4">
         <ion-item>
           <ion-label position="stacked">Fecha de Inicio</ion-label>
-          <ion-input type="date"></ion-input>
+          <ion-input [value]="inputStart" (ionChange)="inputStart = $event['detail'].value" type="date"></ion-input>
           <ion-icon slot="end" name="calendar"></ion-icon>
         </ion-item>
         <ion-item>
-          <ion-label position="stacked">Fecha de Inicio</ion-label>
-          <ion-input type="date"></ion-input>
+          <ion-label position="stacked">Fecha de Final</ion-label>
+          <ion-input [value]="inputEnd" (ionChange)="inputEnd= $event['detail'].value" type="date"></ion-input>
           <ion-icon slot="end" name="calendar"></ion-icon>
         </ion-item>
-        <ion-button class="ion-margin" color="orange" shape="round">
+        <ion-button [disabled]="inputStart == inputEnd"  (click)="onSearchDate()" class="ion-margin" color="orange" shape="round">
           <ion-label>Buscar</ion-label>
           <ion-icon slot="start" name="search"></ion-icon>
         </ion-button>

@@ -39,8 +39,8 @@
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <ng-container [ngSwitch]="value">
                     <h6 style="margin: 0; font-weight: bold;">
-                        <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
-                        <ion-text *ngSwitchCase="'pendiente'" color="warning">{{ 'sin confirmar' | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'invalido'" color="warning">{{ 'sin confirmar' | uppercase}}</ion-text>
+                        <ion-text *ngSwitchCase="'pendiente'" color="dark">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
                         <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ 'reportado' | uppercase}}</ion-text>
