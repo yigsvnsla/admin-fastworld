@@ -9,32 +9,42 @@
     <ion-searchbar placeholder="Nombre" inputmode="text" type="text" (ionChange)="this.onSearchChange($event)" [debounce]="1500"></ion-searchbar>
 </ion-header>
 <ion-content>
-    <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen" >
+    <ngx-datatable
+    (scroll)="onScroll($event.offsetY)"
+    [rows]="this.source"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="headerHeight"
+    [rowHeight]="rowHeight"
+    [loadingIndicator]="loading"
+    [scrollbarV]="true"
+    [reorderable]="false"
+    [swapColumns]="false"
+    class="dark fullscreen" >
         <!-- colunm id -->
         <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="ID" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
         </ngx-datatable-column>
         <!-- colunm name complete -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Nombre" prop="attributes">
+        <ngx-datatable-column [minWidth]="300" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center"  name="Nombre" prop="attributes">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ ( value.name | uppercase ) }} {{ ( value.lastname | uppercase ) }}</ng-template>
         </ngx-datatable-column>
         <!-- colunm phone -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Telefono" prop="attributes.phone">
+        <!-- <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Telefono" prop="attributes.phone">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
         <!-- colunm dni -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Identificacion" prop="attributes.identification">
+        <!-- <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Identificacion" prop="attributes.identification">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
         <!-- colunm status -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.status">
+        <!-- <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.status">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
         <!-- column Options -->
         <ngx-datatable-column headerClass="center" cellClass="center" [resizeable]="false" [draggable]="false" [sortable]="false" [width]="300" name="Opciones" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
