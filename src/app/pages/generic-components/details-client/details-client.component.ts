@@ -58,19 +58,19 @@ export class DetailsClientComponent implements OnInit {
       type: [null, []],
       identification: [data.identification, [
         Validators.required,
-        Validators.nullValidator,
+        // Validators.nullValidator,
         Validators.pattern(/(^\d{9}$|^\d{13}$)/),
-        (codeControl: AbstractControl<number>) => {
-          if (codeControl.value != null) {
-            let val: string = codeControl.value.toString()
-            if (val != '') {
-              // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
-              // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
-              if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
-              return null
-            }
-          }
-        }
+        // (codeControl: AbstractControl<number>) => {
+        //   if (codeControl.value != null) {
+        //     let val: string = codeControl.value.toString()
+        //     if (val != '') {
+        //       // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
+        //       // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
+        //       // if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
+        //       return null
+        //     }
+        //   }
+        // }
       ]],
       name: [data.name, [Validators.required, Validators.nullValidator]],
       lastname: [data.lastname, [Validators.required, Validators.nullValidator]],
@@ -88,7 +88,7 @@ export class DetailsClientComponent implements OnInit {
       ]],
       user: this.formBuilder.nonNullable.group({
         password: [null, [Validators.required, Validators.nullValidator]],
-        mail: [data.user?.email, [
+        mail: [data.mail, [
           Validators.required,
           Validators.nullValidator,
           Validators.email,

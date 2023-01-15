@@ -69,7 +69,7 @@
                       <ion-card-content class="ion-no-padding" style="display: flex; justify-content: center; align-content: center; flex-direction: column; align-items: center;">
                           <input (change)="imgHandler($event,imgViewPortBusinessLogo);editingLogo=true" style="display: none;" id="image_logo" #imgInputPortBusinessLogo type="file" accept="image/*">
                           <ion-avatar style="width: 140px; height: 140px;" >
-                              <img #imgViewPortBusinessLogo [src]="'https://s1.fastworld.app'+user.business.logo.formats.thumbnail.url" />
+                              <img #imgViewPortBusinessLogo src="https://s1.fastworld.app{{user.business.logo.formats ? user.business.logo.formats.thumbnail.url: user.business.logo.url}}" />
                           </ion-avatar>
                           <ion-grid >
                               <ion-row >

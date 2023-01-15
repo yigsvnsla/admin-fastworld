@@ -90,7 +90,7 @@ export class DetailsPackageComponent implements OnInit {
           cssClass: 'alert-primary',
           inputs: [{
             type: 'text',
-            value: 'https://fastworld.app/ticket/' + id,
+            value: 'https://cliente.fastworld.app/ticket/' + id,
             name: 'url'
           }],
           buttons: [{
@@ -136,6 +136,7 @@ export class DetailsPackageComponent implements OnInit {
     const { money_catch, comment, fee } = this.dialogForm.value
 
     try {
+      console.log(fee)
       let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
         money_catch,
         fee,
