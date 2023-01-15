@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService, SocketService } from 'src/app/services/connections.service';
 import { ModalTransferPackageComponent } from 'src/app/pages/generic-components/modal-transfer-package/modal-transfer-package.component';
-import { startOfDay } from 'date-fns';
 import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
 import * as qs from 'qs';
 
@@ -49,7 +48,7 @@ export class ActivasComponent implements OnInit {
           shipping_status: {
             $containsi: 'invalido'
           },
-        },{
+        }, {
           shipping_status: {
             $containsi: 'pendiente'
           },
@@ -216,7 +215,7 @@ export class ActivasComponent implements OnInit {
 
   }
 
-  public onSearchPackage(_id: number) {
+  public onSearchPackage(_id: number, index: number) {
     this.toolsService.showModal({
       component: DetailsPackageComponent,
       cssClass: ['modal-fullscreen'],
@@ -226,13 +225,30 @@ export class ActivasComponent implements OnInit {
       componentProps: {
         id: _id
       }
+    }).then((val) => {
+      if (val) {
+        this.source[index] = val
+        console.log(this.source[index])
+      }
+
+      // console.log('---->',this.source[index]);
+
+
     })
+
+
   }
 
-  onSelect({ selected }) {
-    let { id } = selected[0]
 
-    this.onSearchPackage(id)
+
+  onSelect($event) {
+
+    console.log($event);
+
+    let { id } = $event.selected[0];
+
+    let index = this.source.findIndex(e => e.id == id)
+    this.onSearchPackage(id, index)
 
   }
 
