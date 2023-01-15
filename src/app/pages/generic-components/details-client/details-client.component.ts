@@ -29,6 +29,7 @@ export class DetailsClientComponent implements OnInit {
   public formBasic: FormGroup
   public editingLogo: boolean = false
   private updateFileLogo = null
+  public balance;
 
   constructor(
     private modalController: ModalController,
@@ -264,5 +265,15 @@ export class DetailsClientComponent implements OnInit {
         prefix:'client'
       }
     })
+  }
+
+  async fetchBalance(){
+    try {
+      let response = await this.conectionService.get<any>(`user/basic/${this.id}`).toPromise()
+      const { pending, charges } = response.payments
+      this.balance = parseFloat(pending + -charges.total);
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
