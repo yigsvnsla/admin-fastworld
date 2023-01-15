@@ -111,24 +111,24 @@
                       <ion-card-content class="ion-no-padding">
                           <ion-grid fixed>
                               <ion-row>
-                                  <ion-col sizeLg="6">
-                                      <ion-item>
-                                          <ion-icon color="danger" name="cash" slot="start"></ion-icon>
-                                          <ion-label>
-                                              <p>Deuda</p>
-                                              <h4>{{ 0 | currency }}</h4>
-                                          </ion-label>
-                                      </ion-item>
-                                  </ion-col>
-                                  <ion-col sizeLg="6">
-                                      <ion-item>
-                                          <ion-icon color="success" name="cash" slot="start"></ion-icon>
-                                          <ion-label>
-                                              <p>Saldo</p>
-                                              <h4>{{ 0 | currency}}</h4>
-                                          </ion-label>
-                                      </ion-item>
-                                  </ion-col>
+                                <ion-col sizeLg="6">
+                                  <ion-item *ngIf="balance > 0; else saldoElse">
+                                      <ion-icon color="success" name="cash" slot="start"></ion-icon>
+                                      <ion-label>
+                                          <p>Saldo</p>
+                                          <ion-text color="danger">{{ balance | currency }}</ion-text>
+                                      </ion-label>
+                                  </ion-item>
+                                  <ng-template #saldoElse>
+                                    <ion-item>
+                                      <ion-icon color="danger" name="cash" slot="start"></ion-icon>
+                                      <ion-label>
+                                          <p>Deuda</p>
+                                          <ion-text color="danger">{{ balance | currency }}</ion-text>
+                                      </ion-label>
+                                  </ion-item>
+                                  </ng-template>
+                              </ion-col>
                               </ion-row>
                           </ion-grid>
                       </ion-card-content>

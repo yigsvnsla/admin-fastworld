@@ -54,7 +54,7 @@ export class DetailsClientComponent implements OnInit {
 
   private instanceForm(data: any) {
     console.log(data);
-
+    this.fetchBalance()
     this.formBasic = this.formBuilder.nonNullable.group({
       type: [null, []],
       identification: [data.identification, [
@@ -269,9 +269,11 @@ export class DetailsClientComponent implements OnInit {
 
   async fetchBalance(){
     try {
-      let response = await this.conectionService.get<any>(`user/basic/${this.id}`).toPromise()
-      const { pending, charges } = response.payments
+      /* let response = await this.conectionService.get<any>(`user/basic/${this.id}?populate=*`).toPromise()
+      console.log(response) */
+      const { pending, charges } = this.user.payments
       this.balance = parseFloat(pending + -charges.total);
+      console.log(this.balance)
     } catch (error) {
       console.log(error)
     }
