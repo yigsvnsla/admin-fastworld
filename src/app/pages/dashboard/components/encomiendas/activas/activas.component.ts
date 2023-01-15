@@ -135,6 +135,7 @@ export class ActivasComponent implements OnInit {
       })
 
     })
+
     this.getInformation()
   }
 

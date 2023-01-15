@@ -414,6 +414,24 @@
                   <ion-col *ngFor="let history of historys" sizeXs="12">
                     <ng-container [ngSwitch]="history.type">
 
+
+                      <ion-item *ngSwitchCase="'pendiente'">
+                        <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
+                        <ion-label>
+                          <p>
+                            <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
+                          <p>
+                          <p>
+                            <ion-text color="dark">Estado: </ion-text><ion-text color="success">Pendiente</ion-text>
+                          </p>
+                          <p>
+                            <!-- <ion-text color="dark">Realizado por: </ion-text> -->
+                            <!-- {{history.basic.name}} {{history.basic.lastname}} -->
+                          <p>
+                          <h2>"{{history.comment}}"</h2>
+                        </ion-label>
+                      </ion-item>
+
                       <ion-item *ngSwitchCase="'creado'">
                         <ion-icon name="caret-forward-circle-outline" slot="start"></ion-icon>
                         <ion-label>

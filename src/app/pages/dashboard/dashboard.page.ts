@@ -39,20 +39,10 @@ export class DashboardPage implements OnInit {
     this.socketService.setAuth = this.cookiesService.get(environment['admin_cookie_tag']).replace(/"/g,'')
     this.socketService.connect()
 
-    this.socketService.on('connect',(arg, callback) =>{
-      console.log('Connect socket');
-
-    })
   }
 
  async ionViewDidEnter() {
-
-
-
   const {admin} = await this.localStorageService.get(environment.admin_user_tag)
-
-
-
 
   if (admin.role == 'administrador'){
     this.encomiendaRoutes = [

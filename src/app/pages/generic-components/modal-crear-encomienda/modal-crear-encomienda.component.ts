@@ -333,7 +333,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
   private instanceForm() {
     this.encomiendaForm = this.formBuilder.group({
       category: [null, [Validators.required]],
-      timeOut: [30, [Validators.required]],
+      timeOut: [null, [Validators.required]],
       route: this.formBuilder.group({
         start: [null, [Validators.required]],
         end: [null, [Validators.required]],
