@@ -15,22 +15,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class DetailsPackageComponent implements OnInit {
   @ViewChild('modal') modal: IonModal
 
-  @Input() public id : number
+  @Input() public id: number
   public dialogForm: FormGroup;
 
-  public package : Observable<any>
-  public history : Observable<any>
+  public package: Observable<any>
+  public history: Observable<any>
   constructor(
-    private conectionsService:ConectionsService,
-    private modalController:ModalController,
-    private toolsService:ToolsService,
+    private conectionsService: ConectionsService,
+    private modalController: ModalController,
+    private toolsService: ToolsService,
     private formBuilder: FormBuilder
 
   ) {
     this.dialogForm = this.formBuilder.nonNullable.group({
       money_catch: ['$0.00', [Validators.required]],
       comment: ['Sin Novedad', [Validators.required]],
-      fee: ['$0.00',[Validators.required]]
+      fee: ['$0.00', [Validators.required]]
     })
   }
 
@@ -38,35 +38,37 @@ export class DetailsPackageComponent implements OnInit {
     this.loadPackage()
   }
 
-  private async loadPackage(){
-    this.package = this.conectionsService.get<any>(`client/packages/${this.id}?populate=*`).pipe(delay(1000),map(res=>res.data),tap(console.log),)
-    this.history = this.conectionsService.get<any>(`history/package/${this.id}?populate=*`).pipe(delay(1000),map(res=>res),tap(console.log))
+  private _refPackage: any = {}
+
+  private async loadPackage() {
+    this.package = this.conectionsService.get<any>(`client/packages/${this.id}?populate=*`).pipe(delay(1000), map(res => res.data), tap((val) => this._refPackage = val),)
+    this.history = this.conectionsService.get<any>(`history/package/${this.id}?populate=*`).pipe(delay(1000), map(res => res), tap(console.log))
   }
 
-  public async paymentPackage(item:any){
+  public async paymentPackage(item: any) {
     const send = async () => {
       const loading = await this.toolsService.showLoading('Transfiriendo...')
       try {
-        if (item.attributes.payment_status == 'pagado'){
+        if (item.attributes.payment_status == 'pagado') {
           await this.toolsService.showAlert({
             cssClass: 'alert-danger',
             keyboardClose: true,
             mode: 'ios',
             header: 'Esta Encomienda ya esta pagada',
-            buttons: ['Cancelar', { text: 'Aceptar'}]
+            buttons: ['Cancelar', { text: 'Aceptar' }]
           })
         }
 
-        if (item.attributes.payment_status == 'pendiente'){
-          const response = await this.conectionsService.post(`packages/payment/${this.id}`, {status:'pagado'}).toPromise()
+        if (item.attributes.payment_status == 'pendiente') {
+          const response = await this.conectionsService.post(`packages/payment/${this.id}`, { status: 'pagado' }).toPromise()
           console.log(response);
         }
       } catch (error) {
-          console.error(error);
+        console.error(error);
       } finally {
-          loading.dismiss()
+        loading.dismiss()
       }
-  }
+    }
 
     await this.toolsService.showAlert({
       cssClass: 'alert-success',
@@ -90,7 +92,7 @@ export class DetailsPackageComponent implements OnInit {
           cssClass: 'alert-primary',
           inputs: [{
             type: 'text',
-            value: 'https://fastworld.app/ticket/' + id,
+            value: 'https://cliente.fastworld.app/ticket/' + id,
             name: 'url'
           }],
           buttons: [{
@@ -110,7 +112,7 @@ export class DetailsPackageComponent implements OnInit {
       })
   }
 
-  public onTransferPackage(row:any){
+  public onTransferPackage(row: any) {
     this.toolsService.showModal({
       cssClass: ['modal-fit-content'],
       component: ModalTransferPackageComponent,
@@ -118,13 +120,13 @@ export class DetailsPackageComponent implements OnInit {
       mode: 'ios',
       backdropDismiss: false,
       componentProps: {
-        idPackage:row
+        idPackage: row
       }
     }).then(value => {
+      this.loadPackage()
       if (value) {
-        this.loadPackage()
 
-        this.onExit()
+        this.modal.dismiss(this._refPackage)
 
         // this.user$.next(this.user)
       }
@@ -136,6 +138,7 @@ export class DetailsPackageComponent implements OnInit {
     const { money_catch, comment, fee } = this.dialogForm.value
 
     try {
+      console.log(fee)
       let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
         money_catch,
         fee,
@@ -158,7 +161,7 @@ export class DetailsPackageComponent implements OnInit {
     } finally {
       this
       loading.dismiss()
-      this.onExit()
+      this.modal.dismiss(this._refPackage)
     }
   }
 
@@ -204,7 +207,7 @@ export class DetailsPackageComponent implements OnInit {
     this.dialogForm.get(['fee']).setValue('$' + value)
   }
 
-  public async onExit(){
+  public async onExit() {
     (await this.modalController.getTop()).dismiss()
   }
 

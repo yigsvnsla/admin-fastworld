@@ -67,6 +67,7 @@
               </ng-template>
             </ion-modal>
         </ion-col>
+
         <ion-col style="justify-content: center;display: flex;">
             <ion-chip id="btn-status-decline-message-modal" color="danger" mode="ios" outline="true">
               <ion-icon name="close"></ion-icon>
@@ -100,6 +101,7 @@
               </ng-template>
             </ion-modal>
         </ion-col>
+
         <ion-col style="justify-content: center;display: flex;">
           <ng-container *ngIf="(item.attributes?.receiver);else notMap">
             <a  style="text-decoration: none;" [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction?.position.lat + ',' + item.attributes.receiver.direction.position?.lng " target="_blank" rel="noreferrer external">
@@ -116,6 +118,7 @@
             </ion-chip>
           </ng-template>
         </ion-col>
+
       </ion-row>
 
       <ion-row>
@@ -203,6 +206,9 @@
                 <ion-card-subtitle style="display: flex; align-items: center;">
                   <ion-icon style="margin: 8px" name="map"></ion-icon>
                   <ion-text color="orange">Información</ion-text>
+                  <ion-text  color="dark">
+                    <h4 style="margin-left: 8px;">{{item.attributes.distance}}/Km</h4>
+                  </ion-text>
                 </ion-card-subtitle>
               </ion-card-subtitle>
               <ion-card-title>Ubicaciones e Indicaciones</ion-card-title>
@@ -292,7 +298,7 @@
               <ion-card-subtitle>
                 <ion-card-subtitle style="display: flex; align-items: center;">
                   <ion-icon style="margin: 8px" name="bicycle"></ion-icon>
-                  <ion-text color="orange">Información</ion-text>
+                  <ion-text color="orange">Información </ion-text>
                 </ion-card-subtitle>
               </ion-card-subtitle>
               <ion-card-title>Costo y Valores</ion-card-title>

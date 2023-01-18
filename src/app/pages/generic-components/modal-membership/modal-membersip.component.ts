@@ -96,7 +96,7 @@ export class ModalMembershipComponent implements OnInit {
     })
   }
 
-  public async onExit(data: any) {
+  public async onExit(data?: any) {
     (await this.modalController.getTop()).dismiss(data)
   }
 

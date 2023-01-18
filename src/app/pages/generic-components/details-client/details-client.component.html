@@ -69,7 +69,7 @@
                       <ion-card-content class="ion-no-padding" style="display: flex; justify-content: center; align-content: center; flex-direction: column; align-items: center;">
                           <input (change)="imgHandler($event,imgViewPortBusinessLogo);editingLogo=true" style="display: none;" id="image_logo" #imgInputPortBusinessLogo type="file" accept="image/*">
                           <ion-avatar style="width: 140px; height: 140px;" >
-                              <img #imgViewPortBusinessLogo [src]="'https://s1.fastworld.app'+user.business.logo.formats.thumbnail.url" />
+                              <img #imgViewPortBusinessLogo src="https://s1.fastworld.app{{user.business.logo.formats ? user.business.logo.formats.thumbnail.url: user.business.logo.url}}" />
                           </ion-avatar>
                           <ion-grid >
                               <ion-row >
@@ -111,24 +111,24 @@
                       <ion-card-content class="ion-no-padding">
                           <ion-grid fixed>
                               <ion-row>
-                                  <ion-col sizeLg="6">
-                                      <ion-item>
-                                          <ion-icon color="danger" name="cash" slot="start"></ion-icon>
-                                          <ion-label>
-                                              <p>Deuda</p>
-                                              <h4>{{ 0 | currency }}</h4>
-                                          </ion-label>
-                                      </ion-item>
-                                  </ion-col>
-                                  <ion-col sizeLg="6">
-                                      <ion-item>
-                                          <ion-icon color="success" name="cash" slot="start"></ion-icon>
-                                          <ion-label>
-                                              <p>Saldo</p>
-                                              <h4>{{ 0 | currency}}</h4>
-                                          </ion-label>
-                                      </ion-item>
-                                  </ion-col>
+                                <ion-col sizeLg="6">
+                                  <ion-item *ngIf="balance > 0; else saldoElse">
+                                      <ion-icon color="success" name="cash" slot="start"></ion-icon>
+                                      <ion-label>
+                                          <p>Saldo</p>
+                                          <ion-text color="danger">{{ balance | currency }}</ion-text>
+                                      </ion-label>
+                                  </ion-item>
+                                  <ng-template #saldoElse>
+                                    <ion-item>
+                                      <ion-icon color="danger" name="cash" slot="start"></ion-icon>
+                                      <ion-label>
+                                          <p>Deuda</p>
+                                          <ion-text color="danger">{{ balance | currency }}</ion-text>
+                                      </ion-label>
+                                  </ion-item>
+                                  </ng-template>
+                              </ion-col>
                               </ion-row>
                           </ion-grid>
                       </ion-card-content>

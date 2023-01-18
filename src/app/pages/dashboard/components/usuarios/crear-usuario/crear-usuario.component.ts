@@ -56,6 +56,10 @@ export class CrearUsuarioComponent implements OnInit {
 
   public ngOnInit() {
     this.loading = false
+    this.instanceForm()
+  }
+
+  public instanceForm(){
     this.formRegister = this.formBuilder.nonNullable.group({
       documents: this.formBuilder.nonNullable.group({
         code: ['', [
@@ -137,6 +141,7 @@ export class CrearUsuarioComponent implements OnInit {
         this.loading = false
         console.log(this.rolSelect.value)
         if(this.rolSelect.value == 'admin') this.showAdminRole(response)
+        this.instanceForm()
       }, (error) => {
         console.error(error);
         this.loading = false

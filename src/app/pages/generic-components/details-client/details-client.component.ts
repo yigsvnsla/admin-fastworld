@@ -1,7 +1,7 @@
 import { ModalUserHistorial } from './../modal-user-historial/modal-user-historial.component';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { delay } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { delay, catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { ToolsService } from '../../../services/tools.service';
 import { IonDatetime, IonModal, ModalController } from '@ionic/angular';
 import { Input } from "@angular/core";
@@ -41,7 +41,11 @@ export class DetailsClientComponent implements OnInit {
   }
 
   public async ionViewWillEnter() {
-    this.user = await this.conectionService.get(`user/basic/${this.id}?populate=*`).pipe(delay(500)).toPromise()
+    try {
+      this.user = await this.conectionService.get(`user/basic/${this.id}?populate=*`).pipe(delay(500)).toPromise()
+    } catch (error) {
+      this.modalController.dismiss()
+    }
     this.instanceForm(this.user)
     this.user$ = new BehaviorSubject<(any | undefined)>(this.user);
     // console.log(this.user);
@@ -54,24 +58,24 @@ export class DetailsClientComponent implements OnInit {
 
   private instanceForm(data: any) {
     console.log(data);
-
+    this.fetchBalance()
     this.formBasic = this.formBuilder.nonNullable.group({
       type: [null, []],
       identification: [data.identification, [
         Validators.required,
-        Validators.nullValidator,
+        // Validators.nullValidator,
         Validators.pattern(/(^\d{9}$|^\d{13}$)/),
-        (codeControl: AbstractControl<number>) => {
-          if (codeControl.value != null) {
-            let val: string = codeControl.value.toString()
-            if (val != '') {
-              // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
-              // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
-              if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
-              return null
-            }
-          }
-        }
+        // (codeControl: AbstractControl<number>) => {
+        //   if (codeControl.value != null) {
+        //     let val: string = codeControl.value.toString()
+        //     if (val != '') {
+        //       // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
+        //       // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
+        //       // if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
+        //       return null
+        //     }
+        //   }
+        // }
       ]],
       name: [data.name, [Validators.required, Validators.nullValidator]],
       lastname: [data.lastname, [Validators.required, Validators.nullValidator]],
@@ -89,7 +93,7 @@ export class DetailsClientComponent implements OnInit {
       ]],
       user: this.formBuilder.nonNullable.group({
         password: [null, [Validators.required, Validators.nullValidator]],
-        mail: [data.user?.email, [
+        mail: [data.mail, [
           Validators.required,
           Validators.nullValidator,
           Validators.email,
@@ -230,7 +234,7 @@ export class DetailsClientComponent implements OnInit {
       }
     }).then(value => {
       console.log(value);
-      if (value == null)this.user.business.membreship = value;
+      if (value == null) this.user.business.membreship = value;
 
       if (value != undefined) {
         this.user.business.membreship = value
@@ -239,39 +243,41 @@ export class DetailsClientComponent implements OnInit {
     })
   }
 
-  public async showCreateEncomienda(){
+  public async showCreateEncomienda() {
     await this.toolsService.showModal({
-      component:ModalCrearEncomiendaComponent,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        userID:this.user.id,
-        _user : this.user
+      component: ModalCrearEncomiendaComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        userID: this.user.id,
+        _user: this.user
       }
     })
   }
 
-  public async onShowHistory(){
+  public async onShowHistory() {
     this.toolsService.showModal({
-      component:ModalUserHistorial,
-      cssClass:['modal-fullscreen'],
-      keyboardClose:true,
-      mode:'ios',
-      backdropDismiss:false,
-      componentProps:{
-        id:this.id,
-        prefix:'client'
+      component: ModalUserHistorial,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: this.id,
+        prefix: 'client'
       }
     })
   }
 
-  async fetchBalance(){
+  async fetchBalance() {
     try {
-      let response = await this.conectionService.get<any>(`user/basic/${this.id}`).toPromise()
-      const { pending, charges } = response.payments
+      /* let response = await this.conectionService.get<any>(`user/basic/${this.id}?populate=*`).toPromise()
+      console.log(response) */
+      const { pending, charges } = this.user.payments
       this.balance = parseFloat(pending + -charges.total);
+      console.log(this.balance)
     } catch (error) {
       console.log(error)
     }
