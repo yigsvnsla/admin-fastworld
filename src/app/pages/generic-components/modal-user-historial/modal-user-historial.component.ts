@@ -67,7 +67,7 @@ export class ModalUserHistorial implements OnInit {
       populate: '*',
       filters: {
         sender: {
-          basic: this.id
+          id: this.id
         }
       }
     })
