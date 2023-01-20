@@ -11,7 +11,7 @@
     <ngx-datatable
       (activate)="onActivate($event)"
       (select)="onSelect($event)"
-      (scroll)="onScroll($event.offsetY)"
+      (scroll)="onScroll($event)"
       [selectionType]="SelectionType.single"
       [rows]="this.source"
       [columnMode]="ColumnMode.standard"
@@ -22,16 +22,17 @@
       [reorderable]="false"
       [swapColumns]="false"
       [selected]="selected"
-      class="dark fullscreen">
+      class="dark fullscreen"
+      [trackByProp]="'id'">
         <!-- colunm id -->
         <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Ticket" prop="id">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
         </ngx-datatable-column>
         <!-- column Sender  -->
-        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Remitente" prop="attributes.sender.data.attributes.business.name">
+        <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Remitente" prop="attributes.sender.data.attributes.business.data.attributes.name">
             <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-            <ng-template let-rowIndex='rowIndex' let-row="row" let-value="value" ngx-datatable-cell-template>{{ value  }} {{rowIndex}}</ng-template>
+            <ng-template let-rowIndex='rowIndex' let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
         </ngx-datatable-column>
         <!-- column state package -->
         <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">

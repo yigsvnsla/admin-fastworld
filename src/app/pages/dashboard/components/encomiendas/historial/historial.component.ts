@@ -166,7 +166,9 @@ export class HistorialComponent implements OnInit {
       .toPromise()
   }
 
-  public onScroll(offsetY: number) {
+  public onScroll({offsetY, offsetX}) {
+    if(offsetX >= 0) return;
+
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
@@ -181,16 +183,20 @@ export class HistorialComponent implements OnInit {
   }
 
   public onSearchPackage(_id: number) {
-    this.toolsService.showModal({
-      component: DetailsPackageComponent,
-      cssClass: ['modal-fullscreen'],
-      keyboardClose: true,
-      mode: 'ios',
-      backdropDismiss: false,
-      componentProps: {
-        id: _id
-      }
-    })
+
+    let tempArr = this.source.filter((value,index,arr)=> value.id != _id)
+    this.source = [...tempArr]
+    console.log(tempArr);
+    // this.toolsService.showModal({
+    //   component: DetailsPackageComponent,
+    //   cssClass: ['modal-fullscreen'],
+    //   keyboardClose: true,
+    //   mode: 'ios',
+    //   backdropDismiss: false,
+    //   componentProps: {
+    //     id: _id
+    //   }
+    // })
   }
 
   public showProfileClient(_id: number) {

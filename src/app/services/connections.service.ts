@@ -90,7 +90,6 @@ export class ConectionsService {
     return this.httpClient
       .get<t>(`${this.api}/${path}`, this.httpHeaders())
       .pipe(
-        retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }

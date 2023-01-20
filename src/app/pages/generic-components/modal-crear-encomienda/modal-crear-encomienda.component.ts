@@ -152,7 +152,9 @@ export class ModalCrearEncomiendaComponent implements OnInit {
       mode: 'ios',
       header: 'Crear Encomienda',
       subHeader: '¿Desea enviar esta encomienda?',
-      buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
+      buttons: ['Cancelar', { text: 'Aceptar', handler: () => {
+        send()
+      } }]
     })
 
   }

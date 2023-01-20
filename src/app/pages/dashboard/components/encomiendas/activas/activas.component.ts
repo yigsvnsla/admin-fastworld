@@ -183,7 +183,7 @@ export class ActivasComponent implements OnInit {
     this.loading = true;
     let loading = this.toolsService.showLoading()
     const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.source.length}&pagination[limit]=${this.pagination.limit}`)
-    const { page, pageSize, pageCount, total } = meta.pagination
+    // const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     this.source = [...this.source, ...data];
     (await loading).dismiss()
@@ -199,10 +199,14 @@ export class ActivasComponent implements OnInit {
       .toPromise()
   }
 
-  public onScroll(offsetY: number) {
+
+
+  public onScroll({ offsetY, offsetX }) {
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
     // check if we scrolled to the end of the viewport
+
+    if (offsetX >= 0) return;
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
       if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
         this.loading = false
@@ -226,12 +230,22 @@ export class ActivasComponent implements OnInit {
         id: _id
       }
     }).then((val) => {
+
+      // console.log(val);
+
       if (val) {
-        this.source[index] = val
-        console.log(this.source[index])
+        // console.log(this.source[index])
+        let tempArr = this.source.map((value, index, arr) => {
+          let _refValue:any = value
+          if(_refValue.id == _id) _refValue = {..._refValue,...val}
+          return _refValue
+        })
+        console.log(tempArr);
+
+        this.source = [...tempArr]
+        console.log('---->', this.source[index]);
       }
 
-      // console.log('---->',this.source[index]);
 
 
     })
@@ -242,12 +256,19 @@ export class ActivasComponent implements OnInit {
 
 
   onSelect($event) {
-
-    console.log($event);
+    // console.log($event);
 
     let { id } = $event.selected[0];
-
     let index = this.source.findIndex(e => e.id == id)
+
+
+    // console.log(tempArr);
+
+    // this.source.splice(index,1)
+    // console.log(this.source)
+
+
+
     this.onSearchPackage(id, index)
 
   }

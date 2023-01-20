@@ -41,8 +41,19 @@ export class DetailsPackageComponent implements OnInit {
   private _refPackage: any = {}
 
   private async loadPackage() {
-    this.package = this.conectionsService.get<any>(`client/packages/${this.id}?populate=*`).pipe(delay(1000), map(res => res.data), tap((val) => this._refPackage = val),)
-    this.history = this.conectionsService.get<any>(`history/package/${this.id}?populate=*`).pipe(delay(1000), map(res => res), tap(console.log))
+    this.package = this.conectionsService
+      .get<any>(`admin/packages/${this.id}?populate=*`)
+      .pipe(
+        delay(1000),
+        map(res => res.data),
+        tap((val) => {this._refPackage = val,console.log(val)}),
+      )
+    this.history = this.conectionsService
+      .get<any>(`history/package/${this.id}?populate=*`)
+      .pipe(
+        delay(1000),
+        // map(res => res),
+      )
   }
 
   public async paymentPackage(item: any) {
@@ -61,7 +72,7 @@ export class DetailsPackageComponent implements OnInit {
 
         if (item.attributes.payment_status == 'pendiente') {
           const response = await this.conectionsService.post(`packages/payment/${this.id}`, { status: 'pagado' }).toPromise()
-          console.log(response);
+          // console.log(response);
         }
       } catch (error) {
         console.error(error);
@@ -138,7 +149,7 @@ export class DetailsPackageComponent implements OnInit {
     const { money_catch, comment, fee } = this.dialogForm.value
 
     try {
-      console.log(fee)
+      // console.log(fee)
       let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
         money_catch,
         fee,
@@ -146,7 +157,7 @@ export class DetailsPackageComponent implements OnInit {
         status
       }).toPromise()
 
-      console.log(response.data);
+      // console.log(response.data);
       this.loadPackage()
       // if ( status == 'recibido' ){
       //   this.source.addItemToSource(response.data);
@@ -208,7 +219,9 @@ export class DetailsPackageComponent implements OnInit {
   }
 
   public async onExit() {
-    (await this.modalController.getTop()).dismiss()
+    // console.log(this._refPackage);
+
+    (await this.modalController.getTop()).dismiss(this._refPackage)
   }
 
 }
