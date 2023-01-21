@@ -111,26 +111,44 @@ export class ActivasComponent implements OnInit {
 
   public ngOnInit(): void {
     this.socketService.on('product-updated', (product: any | any[]) => {
-      const condition = (product.data.attributes.shipping_status == 'aceptado' || product.data.attributes.shipping_status == 'pendiente')
-      console.log(product);
-
-      if (condition) {
-        // this.source.addItemToSource(product.data)
-      }
-
-      if (!condition) {
-        // this.source.deleteItemToSource(product.data.attributes.id)
-      }
+      let _id = product.data.id
+      let tempArr = this.source.map((value, index, arr) => {
+        let _refValue: any = value
+        if ( _refValue.id == _id ) {
+          if (product.data.attributes.shipping_status != 'pendiente'){
+            // delete
+            _refValue = product.data
+          }
+          if (product.data.attributes.shipping_status == 'pendiente'){
+            // add
+            _refValue = value
+          }
+        }
+        return _refValue
+      })
+      this.source = [...tempArr]
     })
+
     this.socketService.on('product-created', (product: any | any[]) => {
       console.log(product);            // if (Array.isArray(product)) {
       product['data'].forEach((value) => {
-        if (value.attributes.shipping_status == 'pendiente') {
-          // this.source.addItemToSource(value)
-        };
-        if (value.attributes.shipping_status != 'pendiente') {
-          // this.source.deleteItemToSource(value.id)
-        }
+        let product = value
+        let _id = product.data.id
+        let tempArr = this.source.map((value, index, arr) => {
+          let _refValue: any = value
+          if ( _refValue.id == _id ) {
+            if (product.data.attributes.shipping_status != 'pendiente'){
+              // delete
+              _refValue = product.data
+            }
+            if (product.data.attributes.shipping_status == 'pendiente'){
+              // add
+              _refValue = value
+            }
+          }
+          return _refValue
+        })
+        this.source = [...tempArr]
       })
 
     })
@@ -202,10 +220,7 @@ export class ActivasComponent implements OnInit {
 
 
   public onScroll({ offsetY, offsetX }) {
-    // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
-    // check if we scrolled to the end of the viewport
-
     if (offsetX >= 0) return;
     if (!this.loading && offsetY + viewHeight >= this.source.length * this.rowHeight) {
       if (!this.loading && this.source.length != 0 && this.source.length >= this.pagination.total) {
@@ -215,8 +230,6 @@ export class ActivasComponent implements OnInit {
       this.getInformation();
     }
     return
-
-
   }
 
   public onSearchPackage(_id: number, index: number) {
@@ -230,55 +243,24 @@ export class ActivasComponent implements OnInit {
         id: _id
       }
     }).then((val) => {
-
-      // console.log(val);
-
       if (val) {
-        // console.log(this.source[index])
         let tempArr = this.source.map((value, index, arr) => {
-          let _refValue:any = value
-          if(_refValue.id == _id) _refValue = {..._refValue,...val}
+          let _refValue: any = value
+          if (_refValue.id == _id) _refValue = { ..._refValue, ...val }
           return _refValue
         })
-        console.log(tempArr);
-
         this.source = [...tempArr]
-        console.log('---->', this.source[index]);
       }
-
-
-
     })
-
-
   }
-
-
 
   onSelect($event) {
-    // console.log($event);
-
     let { id } = $event.selected[0];
     let index = this.source.findIndex(e => e.id == id)
-
-
-    // console.log(tempArr);
-
-    // this.source.splice(index,1)
-    // console.log(this.source)
-
-
-
     this.onSearchPackage(id, index)
-
   }
-
   onActivate(event) {
-
     // console.log('Activate Event', event);
   }
 
 }
-
-
-// vista de la tabla columnas : ticket/ remitente / estado del paquete / contra entrega / repartidor / tiempo de retiro
