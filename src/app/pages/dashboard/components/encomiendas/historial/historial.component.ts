@@ -184,19 +184,26 @@ export class HistorialComponent implements OnInit {
 
   public onSearchPackage(_id: number) {
 
-    let tempArr = this.source.filter((value,index,arr)=> value.id != _id)
-    this.source = [...tempArr]
-    console.log(tempArr);
-    // this.toolsService.showModal({
-    //   component: DetailsPackageComponent,
-    //   cssClass: ['modal-fullscreen'],
-    //   keyboardClose: true,
-    //   mode: 'ios',
-    //   backdropDismiss: false,
-    //   componentProps: {
-    //     id: _id
-    //   }
-    // })
+    this.toolsService.showModal({
+      component: DetailsPackageComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: _id
+      }
+    }).then((val) => {
+      if (val) {
+        let tempArr = this.source.map((value, index, arr) => {
+          let _refValue: any = value
+          if (_refValue.id == _id) _refValue = { ..._refValue, ...val }
+          return _refValue
+        })
+        this.source = [...tempArr]
+      }
+    })
+
   }
 
   public showProfileClient(_id: number) {
