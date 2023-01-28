@@ -7,6 +7,7 @@ import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { DetailsClientComponent } from 'src/app/pages/generic-components/details-client/details-client.component';
 import * as qs from 'qs';
+import { ModalStepsClientComponent } from 'src/app/pages/generic-components/modal-steps-client/modal-steps-client.component';
 
 @Component({
   selector: 'app-clientes',
@@ -89,8 +90,8 @@ export class ClientesComponents implements OnInit {
       filters: {
         $or: [
           {
-            id:{
-              $containsi:$event.detail.value
+            id: {
+              $containsi: $event.detail.value
             }
           },
           {
@@ -104,12 +105,12 @@ export class ClientesComponents implements OnInit {
             name: {
               $containsi: $event.detail.value
             }
-          } ,
+          },
           {
             lastname: {
               $containsi: $event.detail.value
             }
-          } ,
+          },
           {
             identification: {
               $containsi: $event.detail.value
@@ -130,7 +131,7 @@ export class ClientesComponents implements OnInit {
   private async getInformation(clear: boolean = false) {
     this.loading = true;
     let loading = this.toolsService.showLoading()
-    if(clear) {
+    if (clear) {
       this.source = []
       this.setPagination = {
         start: 0,
@@ -172,17 +173,34 @@ export class ClientesComponents implements OnInit {
   }
 
 
-  public showProfile(_id: number) {
-    this.toolsService.showModal({
-      component: DetailsClientComponent,
-      cssClass: ['modal-fullscreen'],
-      keyboardClose: true,
-      mode: 'ios',
-      backdropDismiss: false,
-      componentProps: {
-        id: _id
-      }
-    })
+  public async showProfile(user: any) {
+    if (user.attributes.business.data == null) {
+
+      this.toolsService.showModal({
+        component: ModalStepsClientComponent,
+        cssClass: ['modal-fullscreen'],
+        keyboardClose: true,
+        mode: 'ios',
+        backdropDismiss: false,
+        componentProps: {
+          id: user.id,
+          user: user
+        }
+      })
+    } else {
+      this.toolsService.showModal({
+        component: DetailsClientComponent,
+        cssClass: ['modal-fullscreen'],
+        keyboardClose: true,
+        mode: 'ios',
+        backdropDismiss: false,
+        componentProps: {
+          id: user.id
+        }
+      })
+    }
+
+
   }
 
   public async showCreateEncomienda(_id: number) {

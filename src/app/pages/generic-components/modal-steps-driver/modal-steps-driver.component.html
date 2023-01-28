@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Driver</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="onExit()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div>
+    <ion-card-content class="card-content">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col sizeMd="6" size="12">
+            <img class="dni" #imgViewPortPlaca button (click)="filePlaca.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+            <input (change)="imgHandler($event,imgViewPortPlaca)" style="display: none;" id="image_plate" #filePlaca type="file" accept="image/*">
+            <ion-button class="ion-margin" color="orange" (click)="filePlaca.click();" shape="round">
+              <ion-label>Buscar</ion-label>
+            </ion-button>
+          </ion-col>
+          <ion-col sizeMd="6" size="12">
+            <img class="dni" #imgViewPortPlaca button (click)="filePlaca.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+            <input (change)="imgHandler($event,imgViewPortPlaca)" style="display: none;" id="image_plate" #filePlaca type="file" accept="image/*">
+            <ion-button class="ion-margin" color="orange" (click)="filePlaca.click();" shape="round">
+              <ion-label>Buscar</ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+    <ion-item-group>
+      <ion-item>
+        <ion-label>Marca</ion-label>
+        <ion-input formControlName="maker" type="text" placeholder="ejemplo: kawasaki"></ion-input>
+        <ion-icon slot="start" name="add"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label>Modelo</ion-label>
+        <ion-input formControlName="model" type="text" placeholder="ejemplo: KLR-650"></ion-input>
+        <ion-icon slot="start" name="add"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label>Año</ion-label>
+        <ion-input formControlName="year" class="input-number" type="number" placeholder="ejemplo: 2019"></ion-input>
+        <ion-icon slot="start" name="add"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Color <i>( Ingrese color Predominante )</i></ion-label>
+        <ion-input formControlName="color" type="text" placeholder="ejemplo: negro"></ion-input>
+        <ion-icon slot="start" name="add"></ion-icon>
+      </ion-item>
+      <ion-item >
+        <ion-label position="stacked">Ingresar Numero de Licencia</ion-label>
+        <ion-input type="tel" #licenceId formControlName="licence_id" ></ion-input>
+      </ion-item>
+      <ion-item >
+        <ion-label position="stacked">Ingresar Codigo de Placa</ion-label>
+        <ion-input formControlName="plate_id" type="text"></ion-input>
+      </ion-item>
+    </ion-item-group>
+    <ion-button class="ion-margin" color="orange" (click)="buildPost()" expand="block"  shape="round">
+      <ion-label>Enviar</ion-label>
+    </ion-button>
+  </div>
+</ion-content>

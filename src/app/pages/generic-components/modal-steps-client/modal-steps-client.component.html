@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Businnes</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="onExit()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content >
+  <div [formGroup]="this.stepsForm">
+    <ion-card-content formGroupName="business" class="card-content">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col class="ion-text-center" sizeMd="6" size="12">
+            <ion-card-subtitle>Ingresa una imagen horizontal y nítida de tu documento de identidad o Registro Único de Contribuyente (RUC) de tu negocio</ion-card-subtitle>
+            <ion-card-title>Ingresar Identificación📸</ion-card-title>
+            <img class="dni" #imgViewPortDni button (click)="fileDni.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+            <input formControlName="documentImg" (change)="imgHandler($event,imgViewPortDni)" style="display: none;" id="image_dni" #fileDni type="file" accept="image/*">
+            <ion-button class="ion-margin" color="orange" (click)="fileDni.click();" shape="round">
+              <ion-label>Buscar</ion-label>
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-text-center" sizeMd="6" size="12">
+            <ion-card-subtitle>Ingresa el logo de tu negocio</ion-card-subtitle>
+            <ion-card-title>¿Cual es el logo?🌎</ion-card-title>
+            <img class="logo" #imgViewPortLogo button (click)="fileLogo.click();" [src]="''" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+            <input formControlName="logoImg" (change)="imgHandler($event,imgViewPortLogo)" style="display: none;" id="image_logo" #fileLogo type="file" accept="image/*">
+            <ion-button class="ion-margin" color="orange" (click)="fileLogo.click();" shape="round">
+              <ion-label>Buscar</ion-label>
+            </ion-button>
+          </ion-col>
+
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col sizeMd="6" size="12">
+            <ion-card-subtitle>Ingresa el nombre de tu negocio</ion-card-subtitle>
+            <ion-card-title>¿Como se llama tu negocio? 🏪</ion-card-title>
+            <ion-item   class="ion-margin item-round-shape" mode="md">
+              <ion-label color="dark" position="floating">Nombre del Negocio</ion-label>
+              <ion-input formControlName="name" type="text" ></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col sizeMd="6" size="12">
+            <ion-card-header style="display: flex; flex-direction: column; justify-content: center; align-items: center;" mode="ios">
+              <ion-card-title>¿Donde se ubica tu negocio?</ion-card-title>
+              <h6>Abre el mapa y busca la ubicacion de tu negocio</h6>
+              <ion-item style="width: 300px;" button (click)="showMap()" class="ion-margin item-round-shape" mode="md">
+                <ion-label color="dark">
+                  <p>Ubicación</p>
+                  <h4>{{this.stepsForm.get(['business','ubication']).value == '' ? 'Seleccionar' : this.stepsForm.get(['business','ubication']).value.address}}</h4>
+                </ion-label>
+              </ion-item>
+            </ion-card-header>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button [disabled]="this.stepsForm.invalid" color="orange" (click)="onPost()">
+              <ion-icon slot="end" name="checkmark"></ion-icon>
+              <ion-label>Enviar</ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </div>
+
+</ion-content>

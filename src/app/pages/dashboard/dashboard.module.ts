@@ -1,3 +1,4 @@
+import { ModalStepsClientComponent } from './../generic-components/modal-steps-client/modal-steps-client.component';
 import { EncargadosComponent } from './components/usuarios/encargados/encargados.component';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ModalMembershipComponent } from '../generic-components/modal-membership/modal-membersip.component';
@@ -36,6 +37,7 @@ import { ModalCheckComponent } from './components/pagos/components/modal-check/m
 import { ModalAgregarComponent } from './components/pagos/components/modal-agregar/modal-agregar.component';
 import { ViewDataTableComponent } from './components/pagos/components/view-data-table/view-data-table.component';
 import { ModalUserHistorial } from "../generic-components/modal-user-historial/modal-user-historial.component";
+import { ModalStepsDriverComponent } from '../generic-components/modal-steps-driver/modal-steps-driver.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -78,7 +80,9 @@ import { ModalUserHistorial } from "../generic-components/modal-user-historial/m
     ModalCheckComponent,
     ModalAgregarComponent,
     ViewDataTableComponent,
-    ModalUserHistorial
+    ModalUserHistorial,
+    ModalStepsClientComponent,
+    ModalStepsDriverComponent,
   ]
 })
 export class DashboardPageModule {}
