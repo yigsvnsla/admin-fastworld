@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div>
+  <div [formGroup]="this.stepsForm ">
     <ion-card-content class="card-content">
       <ion-grid fixed>
         <ion-row>
@@ -21,9 +21,9 @@
             </ion-button>
           </ion-col>
           <ion-col sizeMd="6" size="12">
-            <img class="dni" #imgViewPortPlaca button (click)="filePlaca.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
-            <input (change)="imgHandler($event,imgViewPortPlaca)" style="display: none;" id="image_plate" #filePlaca type="file" accept="image/*">
-            <ion-button class="ion-margin" color="orange" (click)="filePlaca.click();" shape="round">
+            <img class="dni" #imgViewPortDni button (click)="fileDni.click();" [src]="' '" alt=""  onerror="this.src=`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'></svg>`;">
+            <input (change)="imgHandler($event,imgViewPortDni)" style="display: none;" id="image_license" #fileDni type="file" accept="image/*">
+            <ion-button class="ion-margin" color="orange" (click)="fileDni.click();" shape="round">
               <ion-label>Buscar</ion-label>
             </ion-button>
           </ion-col>

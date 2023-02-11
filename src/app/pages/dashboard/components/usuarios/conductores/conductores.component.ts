@@ -57,7 +57,7 @@ export class ConductoresComponents implements OnInit {
   //////
 
   public showProfile(user: any) {
-    if (user.attributes.drive == null) {
+    if (user.attributes.driver == null) {
       this.toolsService.showModal({
         component: ModalStepsDriverComponent,
         cssClass: ['modal-fullscreen'],

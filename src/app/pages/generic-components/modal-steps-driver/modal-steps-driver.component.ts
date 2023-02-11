@@ -24,7 +24,7 @@ export class ModalStepsDriverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.stepsForm = this.formBuilder.nonNullable.group({
+    this.stepsForm = this.formBuilder.group({
       maker: ['', [Validators.required, Validators.pattern(/([a-zA-Z])/g),]],
       model: ['', [Validators.required, Validators.pattern(/([a-zA-Z0-9])/g),]],
       year: ['', [Validators.required, Validators.pattern(/([0-9]{4})/g),]],
@@ -61,6 +61,8 @@ export class ModalStepsDriverComponent implements OnInit {
     let form = new FormData();
     console.log(data)
     this.uploadFiles.forEach(({ name, file }) => {
+      console.log(name);
+
       form.append(`files.${name.replace('image_', '')}`, file, file.name);
     });
     form.append('data', JSON.stringify(data))

@@ -88,8 +88,8 @@ export class DetailsDriverComponent implements OnInit {
                         if (val != '') {
                             // if ( val.length == 9 ) this.formBasic.get('documents').get('type').setValue('dni');
                             // if ( val.length == 13 ) this.formBasic.get('documents').get('type').setValue('ruc');
-                            if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
-                            return null
+                            // if (!(RegExp(/(^\d{9}$|^\d{13}$)/).test(val))) this.formBasic.get('documents').get('type').reset();
+                            // return null
                         }
                     }
                 }
@@ -110,7 +110,7 @@ export class DetailsDriverComponent implements OnInit {
             ]],
             user: this.formBuilder.nonNullable.group({
                 password: [null, [Validators.required, Validators.nullValidator]],
-                mail: [data.user?.email, [
+                mail: [data.mail, [
                     Validators.required,
                     Validators.nullValidator,
                     Validators.email,
