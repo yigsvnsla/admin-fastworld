@@ -5,5 +5,17 @@
   </ion-toolbar>
 </ion-header>
 <div style="height: 100%; width: 100%;">
-  <google-map *ngIf="this.apiMap$ | async" [options]="options" width="100%" height="100%" ></google-map>
+  <google-map
+    #map
+    width="100%"
+    height="100%"
+    [options]="mapOptions"
+    *ngIf="this.apiMap$ | async">
+    <map-marker
+      id="marker-{{i}}"
+      #_marker="mapMarker"
+      [options]="marker.option"
+      [position]="marker.position"
+      *ngFor="let marker of this.markers$ | async; let i = index; TrackBy: trackByMarker "></map-marker>
+  </google-map>
 </div>

@@ -259,8 +259,7 @@ export class ActivasComponent implements OnInit {
     let index = this.source.findIndex(e => e.id == id)
     this.onSearchPackage(id, index)
   }
-  onActivate(event) {
-    // console.log('Activate Event', event);
-  }
+
+
 
 }
