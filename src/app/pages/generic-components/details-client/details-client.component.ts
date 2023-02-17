@@ -178,12 +178,11 @@ export class DetailsClientComponent implements OnInit {
   }
 
   public async showAlertInputNameBusisness() {
-
     await this.toolsService.showAlert({
       cssClass: 'alert-success',
       keyboardClose: true,
       mode: 'ios',
-      header: 'Membrecia',
+      header: 'Asignar Nombre',
       inputs: [{
         type: 'text',
         value: this.user.business.name,
@@ -199,7 +198,7 @@ export class DetailsClientComponent implements OnInit {
             const loading = await this.toolsService.showLoading('Actualizando informacion...')
             try {
               const businessName = { name: name }
-              const response = await this.conectionService.put(`businesses/${this.user.business.id}`, businessName).toPromise()
+              const response = await this.conectionService.put(`businesses/${this.user.business.id}`, {data: businessName}).toPromise()
               if (response) {
                 this.user.business.name = name
               }
@@ -213,7 +212,7 @@ export class DetailsClientComponent implements OnInit {
             cssClass: 'alert-success',
             keyboardClose: true,
             mode: 'ios',
-            header: 'Membrecia',
+            header: 'Confirmacion',
             buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
           })
         }

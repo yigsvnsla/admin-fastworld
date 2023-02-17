@@ -115,7 +115,7 @@ export class ModalCrearEncomiendaComponent implements OnInit {
                   cssClass: 'alert-primary',
                   inputs: [{
                     type: 'text',
-                    value: 'https://fastworld.app/ticket/' + id,
+                    value: 'https://cliente.fastworld.app/ticket/' + id,
                     name: 'url'
                   }],
                   buttons: [{
