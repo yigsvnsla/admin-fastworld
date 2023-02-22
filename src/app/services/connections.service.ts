@@ -98,7 +98,6 @@ export class ConectionsService {
     return this.httpClient
       .post<any>(`${this.api}/${path}`, body, this.httpHeaders())
       .pipe(
-        retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }
@@ -107,7 +106,6 @@ export class ConectionsService {
     return this.httpClient
       .delete<any>(`${this.api}/${path}`, this.httpHeaders())
       .pipe(
-        retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }
@@ -116,7 +114,6 @@ export class ConectionsService {
     return this.httpClient
       .put<any>(`${this.api}/${path}`, body, this.httpHeaders())
       .pipe(
-        retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }
@@ -130,7 +127,6 @@ export class ConectionsService {
       .post<SingUpResponseI>(`${this.api}/auth/${scope}/signup`, formBody)
       .pipe(
         debounceTime(500),
-        retry(2),
         catchError((err) => this.errorHandler(err))
       );
   }
@@ -140,7 +136,6 @@ export class ConectionsService {
       .post<SigInResponseI>(`${this.api}/auth/admin/signin`, credentials)
       .pipe(
         debounceTime(500),
-        retry(2),
         tap(async res => {
           this.cookiesService.set(environment['admin_cookie_tag'], res.jwt);
           (await this.localStorageService.remove(environment['admin_user_tag']));
@@ -168,7 +163,6 @@ export class ConectionsService {
         responseType: 'arraybuffer'
       })
       .pipe(
-        retry(2),
         catchError((err) => this.errorHandler(err))
       )
   }

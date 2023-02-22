@@ -59,5 +59,21 @@
         </ion-button>
       </ion-item-group> -->
   </ion-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="success" (click)="genExcel()">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          <ion-label>EXCEL</ion-label>
+        </ion-button>
+      </ion-col>
+      <!-- <ion-col>
+        <ion-button expand="block" color="danger">
+          <ion-icon name="reader-outline" slot="start"></ion-icon>
+          <ion-label>PDF</ion-label>
+        </ion-button>
+      </ion-col> -->
+    </ion-row>
+  </ion-footer>
 </ion-menu>
 <ion-router-outlet id="menu-historial"></ion-router-outlet>

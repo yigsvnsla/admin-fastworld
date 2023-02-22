@@ -4,6 +4,8 @@ import { Component, OnInit, EventEmitter, } from "@angular/core";
 import { InputChangeEventDetail, IonInput, IonSearchbar, IonSegment, IonSelect, SegmentCustomEvent, SelectCustomEvent } from "@ionic/angular";
 import { endOfDay, endOfMonth, format, startOfDay, startOfMonth, sub } from "date-fns";
 import * as qs from "qs";
+import { ConectionsService } from "src/app/services/connections.service";
+import { ToolsService } from "src/app/services/tools.service";
 
 @Component({
   selector: 'app-menu-filter',
@@ -40,7 +42,7 @@ export class MenuFilterComponent implements OnInit {
       }
     }
 
-  constructor() { }
+  constructor(private http: ConectionsService, private tools: ToolsService) { }
 
   ngOnInit(): void {
 
@@ -123,32 +125,12 @@ export class MenuFilterComponent implements OnInit {
 
 
   public dateRangeChange($event) {
-    /* const or = this.qsObject.filters.$or;
-    const changes = this.dateBuilder()
-    this.qsObject.filters.$or = or.map(e=>{
-      let key = Object.keys(e)[0];
-      let element = {}
-      for (const item of changes) {
-        if(Object.prototype.hasOwnProperty.call(item, key)){
-          element = {[key]: item[key]}
-        }
-      }
-      return this._isEmpty(element) ? e : element
 
-    }) */
-
-
-    if($event.detail.value != 4){
+    if ($event.detail.value != 4) {
       this.emit()
     }
   }
 
-
-  /* onDateChange($event,target){
-    if (target != 'start'){
-      this.inputEnd =
-    }
-  } */
 
 
   private emit(value?) {
@@ -235,7 +217,7 @@ export class MenuFilterComponent implements OnInit {
       ,
       {
         delivered: {
-          $between: value ? value :  this.rangeToDate(this.dateRangeSelect.value)
+          $between: value ? value : this.rangeToDate(this.dateRangeSelect.value)
         }
       }
     ]
@@ -279,6 +261,44 @@ export class MenuFilterComponent implements OnInit {
     }
 
     this.emit(dateHelper(dateStart, dateEnd))
+
+  }
+
+
+
+  async genExcel() {
+    let filters = JSON.parse(JSON.stringify(this.qsObject.filters))
+    delete filters['$or'];
+    let request = {
+      $and: [
+        { $or: this.dateBuilder() },
+        { $or: this.qsObject.filters.$or }
+      ],
+      ...filters
+    }
+    const loading = await this.tools.showLoading('Cargando informacion...')
+    try {
+      let response = await this.http.postStream(`report/query`, { query: request }).toPromise()
+      let name = new Date().toString()
+      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}.xlsx`;
+      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+      if (response) {
+        await this.tools.showAlert({
+          cssClass: 'alert-success',
+          keyboardClose: true,
+          mode: 'ios',
+          header: 'Exito',
+          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
 
   }
 
