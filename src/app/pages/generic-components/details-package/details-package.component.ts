@@ -150,12 +150,12 @@ export class DetailsPackageComponent implements OnInit {
 
     try {
       // console.log(fee)
-      let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
-        money_catch,
-        fee,
-        comment,
-        status
-      }).toPromise()
+      // let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
+      //   money_catch,
+      //   fee,
+      //   comment,
+      //   status
+      // }).toPromise()
 
       // console.log(response.data);
       this.loadPackage()
@@ -166,13 +166,13 @@ export class DetailsPackageComponent implements OnInit {
       //   this.source.deleteItemToSource(_id)
       // }
 
-      console.log('response', response)
+      // console.log('response', response)
     } catch (error) {
       console.log(error)
     } finally {
-      this
-      loading.dismiss()
-      this.modal.dismiss(this._refPackage)
+      loading.dismiss();
+      (await this.modalController.getTop()).dismiss(this._refPackage)
+      // this.modal.dismiss(this._refPackage)
     }
   }
 

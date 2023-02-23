@@ -1,7 +1,7 @@
 import { ModalCrearEncomiendaComponent } from './../../../../generic-components/modal-crear-encomienda/modal-crear-encomienda.component';
 import { ToolsService } from './../../../../../services/tools.service';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild, } from '@angular/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
@@ -19,7 +19,8 @@ export class EncargadosComponent implements OnInit {
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
-
+  public selected = []
+  public SelectionType = SelectionType
   public source: any[] = []
   private itemsChanges$: BehaviorSubject<any>
   private path: string
@@ -59,6 +60,11 @@ export class EncargadosComponent implements OnInit {
     }
     this.loading = false
   }
+
+  onSelect($event) {
+    this.showProfile($event.selected[0])
+  }
+
 
   public get getPagination(): {
     start: number
