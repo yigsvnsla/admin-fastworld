@@ -46,7 +46,7 @@ export class DetailsPackageComponent implements OnInit {
       .pipe(
         delay(1000),
         map(res => res.data),
-        tap((val) => {this._refPackage = val,console.log(val)}),
+        tap((val) => { this._refPackage = val, console.log(val) }),
       )
     this.history = this.conectionsService
       .get<any>(`history/package/${this.id}?populate=*`)
@@ -149,13 +149,12 @@ export class DetailsPackageComponent implements OnInit {
     const { money_catch, comment, fee } = this.dialogForm.value
 
     try {
-      // console.log(fee)
-      // let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
-      //   money_catch,
-      //   fee,
-      //   comment,
-      //   status
-      // }).toPromise()
+      let response = await this.conectionsService.post(`packages/shipping/${_id}`, {
+        money_catch,
+        fee,
+        comment,
+        status
+      }).toPromise()
 
       // console.log(response.data);
       this.loadPackage()
