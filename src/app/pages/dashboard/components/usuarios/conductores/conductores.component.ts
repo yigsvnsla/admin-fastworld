@@ -1,7 +1,7 @@
 import { ModalStepsDriverComponent } from './../../../../generic-components/modal-steps-driver/modal-steps-driver.component';
 import { ToolsService } from 'src/app/services/tools.service';
 import { Component, ElementRef, OnInit, } from '@angular/core';
-import { ColumnMode } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
@@ -18,7 +18,8 @@ export class ConductoresComponents implements OnInit {
 
   readonly rowHeight = 50;
   readonly headerHeight = 50;
-
+  public selected = []
+  public SelectionType = SelectionType
   public source: any[] = []
   private path: string
   private pagination: {
@@ -54,7 +55,10 @@ export class ConductoresComponents implements OnInit {
     }
   }
 
-  //////
+  onSelect($event) {
+    this.showProfile($event.selected[0])
+  }
+
 
   public showProfile(user: any) {
     if (user.attributes.driver == null) {

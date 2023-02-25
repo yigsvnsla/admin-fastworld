@@ -10,8 +10,9 @@
 <ion-content>
     <ngx-datatable
       (select)="onSelect($event)"
-      (scroll)="onScroll($event)"
+      [selected]="selected"
       [selectionType]="SelectionType.single"
+      (scroll)="onScroll($event)"
       [rows]="this.source"
       [columnMode]="ColumnMode.standard"
       [headerHeight]="headerHeight"
@@ -20,7 +21,6 @@
       [scrollbarV]="true"
       [reorderable]="false"
       [swapColumns]="false"
-      [selected]="selected"
       class="dark fullscreen"
       [trackByProp]="'id'">
         <!-- colunm id -->

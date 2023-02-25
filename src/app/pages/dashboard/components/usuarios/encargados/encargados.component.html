@@ -10,7 +10,7 @@
 
 </ion-header>
 <ion-content>
-  <ngx-datatable (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen" >
+  <ngx-datatable (select)="onSelect($event)" [selected]="selected" [selectionType]="SelectionType.single" (scroll)="onScroll($event.offsetY)" [rows]="this.source" [columnMode]="ColumnMode.standard" [headerHeight]="headerHeight" [rowHeight]="rowHeight" [loadingIndicator]="loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false" class="dark fullscreen" >
       <!-- colunm id -->
       <ngx-datatable-column [minWidth]="100" [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="ID" prop="id">
           <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
@@ -37,7 +37,7 @@
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>{{ value }}</ng-template>
       </ngx-datatable-column>
       <!-- column Options -->
-      <ngx-datatable-column headerClass="center" cellClass="center" [resizeable]="false" [draggable]="false" [sortable]="false" [width]="300" name="Opciones" prop="id">
+      <!-- <ngx-datatable-column headerClass="center" cellClass="center" [resizeable]="false" [draggable]="false" [sortable]="false" [width]="300" name="Opciones" prop="id">
           <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <ion-fab-button (click)="showProfile(row.id)" color="tertiary" size="small">
@@ -56,6 +56,6 @@
                   <ion-icon name="close"></ion-icon>
               </ion-fab-button>
           </ng-template>
-      </ngx-datatable-column>
+      </ngx-datatable-column> -->
   </ngx-datatable>
 </ion-content>
