@@ -129,10 +129,24 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   genPath() {
+    if (this.mode == 'all') {
+      this.path = "finances?populate=*&" + stringify({
+        filters: {
+          time: {
+            $between: this.between()
+          }
+        }
+      })
+      return;
+    }
+    let param = this.mode == 'providers' ? 'business' : 'driver';
     this.path = "finances?populate=*&" + stringify({
       filters: {
         time: {
           $between: this.between()
+        },
+        [param]: {
+          id: this.target.id
         }
       }
     })

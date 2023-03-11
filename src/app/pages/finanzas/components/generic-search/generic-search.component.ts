@@ -65,13 +65,13 @@ export class GenericSearchComponent implements OnInit {
     this.popover.dismiss()
     if (this.mode == 'providers') {
       this.value.emit({
-        id: user.attributes.business.data.id,
+        id: user.id,
         name: `${user.attributes.name} ${user.attributes.lastname}`,
         business: user.attributes.business.data.attributes.name,
       })
     } else {
       this.value.emit({
-        id: user.attributes.driver.id,
+        id: user.id,
         name: `${user.attributes.name} ${user.attributes.lastname}`,
       })
     }

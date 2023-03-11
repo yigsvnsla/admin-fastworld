@@ -39,7 +39,7 @@ export class FinanzasPage implements OnInit {
     this.tools.showModal({
       component: PrompUserComponent,
       componentProps: {
-        target
+        mode: target
       }
     }).then(res => {
       if (!res) {

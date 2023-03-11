@@ -11,7 +11,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 })
 export class PrompUserComponent implements OnInit {
 
-  @Input() target: 'providers' | 'drivers' = 'providers'
+  @Input() mode: 'providers' | 'drivers' = 'providers'
 
   sourceUser: Source = new Source(this.http)
 
@@ -38,7 +38,8 @@ export class PrompUserComponent implements OnInit {
   }
 
   getRoute(): string {
-    return `basic/${this.target == 'providers' ? 'client' : 'driver'}?populate=*&`
+    console.log(this.mode)
+    return `basic/${this.mode == 'providers' ? 'client' : 'driver'}?populate=*&`
   }
 
 
@@ -47,18 +48,22 @@ export class PrompUserComponent implements OnInit {
   }
 
   selectUser(user: any) {
-    console.log(user)
-    this.modal.dismiss(
-      {
-        id: user.attributes.business.data.id,
+    if (this.mode == 'providers') {
+      this.modal.dismiss({
+        id: user.id,
         name: `${user.attributes.name} ${user.attributes.lastname}`,
         business: user.attributes.business.data.attributes.name,
-      }
-    )
+      })
+    } else {
+      this.modal.dismiss({
+        id: user.id,
+        name: `${user.attributes.name} ${user.attributes.lastname}`,
+      })
+    }
   }
 
   getTitle(): string {
-    return this.target == 'providers' ? 'Proveedor' : 'Motorizado'
+    return this.mode == 'providers' ? 'Proveedor' : 'Motorizado'
   }
 
 }

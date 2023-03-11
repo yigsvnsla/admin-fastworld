@@ -20,7 +20,7 @@
     name="Fecha"
     headerClass="center"
     cellClass="center"
-    prop="attributes.entrega"
+    prop="attributes.time"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -42,7 +42,7 @@
     name="Proveedor"
     headerClass="center"
     cellClass="center"
-    prop="attributes.proveedor.data.attributes.nombre"
+    prop="attributes.business.data.attributes.name"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -64,7 +64,7 @@
     name="Conductor"
     headerClass="center"
     cellClass="center"
-    prop="attributes.conductor.data.attributes.nombre"
+    prop="attributes.driver.data.attributes.name"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -86,7 +86,7 @@
     name="Cliente"
     headerClass="center"
     cellClass="center"
-    prop="attributes.cliente"
+    prop="attributes.client"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -107,7 +107,7 @@
   name="Direccion"
   headerClass="center"
   cellClass="center"
-  prop="attributes.direccion"
+  prop="attributes.direction"
 >
   <ng-template let-column="column" ngx-datatable-header-template>{{
     column.name
@@ -128,7 +128,7 @@
     name="Ingreso"
     headerClass="center"
     cellClass="center"
-    prop="attributes.ingreso"
+    prop="attributes.income"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -150,7 +150,7 @@
     name="Egreso"
     headerClass="center"
     cellClass="center"
-    prop="attributes.egreso"
+    prop="attributes.discharge"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name
@@ -171,7 +171,7 @@
     name="Flete"
     headerClass="center"
     cellClass="center"
-    prop="attributes.valor"
+    prop="attributes.delivery"
   >
     <ng-template let-column="column" ngx-datatable-header-template>{{
       column.name

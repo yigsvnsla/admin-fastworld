@@ -125,9 +125,7 @@ export class DatatableComponent implements OnInit, OnChanges {
   getFullDate(value: string) {
     let date = new Date(value);
     date.setTime(date.getTime() + date.getTimezoneOffset() * 60000)
-    return format(date, 'PPPP', {
-      locale: es
-    })
+    return format(date, 'yyyy-MM-dd')
   }
 
 }

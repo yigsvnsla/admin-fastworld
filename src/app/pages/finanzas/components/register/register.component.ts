@@ -30,14 +30,14 @@ export class RegisterComponent implements OnInit {
 
   constructor(private modal: ModalController, private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder) {
     this.formRoute = this.builder.group({
-      cliente: [''],
-      proveedor: [0],
-      conductor: [0],
-      ingreso: ['', Validators.required],
-      egreso: ['', Validators.required],
-      valor: ['', Validators.required],
-      direccion: [''],
-      entrega: [format(new Date(), 'yyyy-MM-dd'), Validators.required]
+      business: [0],
+      driver: [0],
+      client: [''],
+      income: ['', Validators.required],
+      discharge: ['', Validators.required],
+      delivery: ['', Validators.required],
+      direction: [''],
+      time: [format(new Date(), 'yyyy-MM-dd'), Validators.required]
     })
   }
 
@@ -46,10 +46,10 @@ export class RegisterComponent implements OnInit {
       try {
         if (this.mode == 'providers') {
           this.user = this.current;
-          this.formRoute.patchValue({ proveedor: this.user.id })
+          this.formRoute.patchValue({ business: this.user.id })
         } else {
           this.driver = this.current;
-          this.formRoute.patchValue({ conductor: this.driver.id })
+          this.formRoute.patchValue({ driver: this.driver.id })
         }
       } catch (error) {
 
@@ -59,17 +59,17 @@ export class RegisterComponent implements OnInit {
 
     if (this.published) {
       const { attributes } = this.published
-      let entrega = attributes.entrega.split("T")[0];
-      let conductor = attributes.conductor?.data?.id || 0
-      let proveedor = attributes.proveedor?.data?.id || 0
+      let time = attributes.time.split("T")[0];
+      let driver = attributes.driver?.data?.id || 0
+      let business = attributes.business?.data?.id || 0
 
-      if (conductor != 0) this.driver = attributes.conductor.data;
-      if (proveedor != 0) this.user = attributes.proveedor.data;
+      if (driver != 0) this.driver = attributes.driver.data;
+      if (business != 0) this.user = attributes.business.data;
       this.formRoute.patchValue({
         ...attributes,
-        conductor,
-        proveedor,
-        entrega
+        driver,
+        business,
+        time
       })
     }
 
@@ -88,22 +88,24 @@ export class RegisterComponent implements OnInit {
     console.log(event)
     if (mode == 'providers') {
       this.user = event;
-      this.formRoute.patchValue({ proveedor: event.id })
+      this.formRoute.patchValue({ business: event.id })
     } else {
       this.driver = event;
-      this.formRoute.patchValue({ conductor: event.id })
+      this.formRoute.patchValue({ driver: event.id })
     }
   }
 
 
   async send() {
     let data = JSON.parse(JSON.stringify(this.formRoute.value));
-    let { proveedor, conductor, entrega } = data
+    let { business, driver, time } = data
 
-    if (proveedor == 0) delete data['proveedor']
-    if (conductor == 0) delete data['conductor']
+    if (business == 0) delete data['business']
+    if (driver == 0) delete data['driver']
 
-    if (this.published) {
+    console.log(data)
+
+    /* if (this.published) {
       let loading = await this.tools.showLoading('Actualizando registro...')
       try {
         let response = await this.http.put(`froutes/${this.published.id}`, { data })
@@ -114,11 +116,11 @@ export class RegisterComponent implements OnInit {
         loading.dismiss()
       }
       return;
-    }
+    } */
 
     let loading = await this.tools.showLoading('Creando registro...')
     try {
-      let response = await this.http.post('froutes', { data })
+      let response = await this.http.post('finances?populate=*', { data }).toPromise()
       this.modal.dismiss(response)
     } catch (error) {
       console.log("Error on post ModalAddComponent", error)
@@ -128,12 +130,9 @@ export class RegisterComponent implements OnInit {
   }
 
   runClear(mode: string) {
-    console.log("here")
-
     if (this.mode) {
       if (this.mode == mode) return;
     }
-
     mode == 'fusers' ? this.user = null : this.driver = null;
     /* if (mode == 'fuser') {
       this.user = null;
