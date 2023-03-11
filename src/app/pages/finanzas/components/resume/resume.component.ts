@@ -21,9 +21,10 @@ export class ResumeComponent implements OnInit, OnChanges {
   @Input() mode: string;
 
   path = "";
+  resume: resumeModel;
 
-
-  constructor(private tools: ToolsService, private http: ConectionsService) { }
+  constructor(private tools: ToolsService, private http: ConectionsService) {
+  }
 
   ngOnChanges(simple: SimpleChanges) {
     this.buildView();
@@ -36,6 +37,7 @@ export class ResumeComponent implements OnInit, OnChanges {
       this.genPath()
       this.datatable.setPath = this.path
       this.datatable.forceUpdate()
+      await this.fetchResume()
     } catch (error) {
 
     } finally {
@@ -45,10 +47,23 @@ export class ResumeComponent implements OnInit, OnChanges {
 
 
   ngOnInit() {
-
+    this.clearResume()
   }
 
-  ionViewWillEnter() {
+  async fetchResume() {
+    if (this.mode == 'all') {
+      this.resume = await this.http.get<resumeModel>(`finances/${this.date}`).toPromise()
+      return;
+    }
+    let filters = stringify({
+      filters: {
+        [this.mode == 'providers' ? 'business' : 'driver']: {
+          id: this.target.id
+        }
+      }
+    })
+    this.resume = await this.http.get<resumeModel>(`finances/${this.date}?${filters}`).toPromise()
+
   }
 
 
@@ -156,6 +171,14 @@ export class ResumeComponent implements OnInit, OnChanges {
     this.showModal({ published: response })
   }
 
+
+  clearResume() {
+    this.resume = {
+      income: 0,
+      discharge: 0,
+      delivery: 0
+    }
+  }
 }
 
 export interface httpSingleResponse {
@@ -167,4 +190,9 @@ export interface userModel {
   id: number,
   name: string,
   business?: string
+}
+export interface resumeModel {
+  income: number,
+  discharge: number,
+  delivery: number
 }
