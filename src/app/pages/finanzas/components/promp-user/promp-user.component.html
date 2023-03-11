@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Busqueda de
+      {{ target == "providers" ? "proveedores" : "motorizados" }}</ion-title
+    >
+    <ion-button (click)="close()" slot="end" fill="clear" color="medium">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar [debounce]="1000" (ionChange)="onSearch($event)">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content [scrollY]="false">
+  <cdk-virtual-scroll-viewport
+    itemSize="56"
+    minBufferPx="900"
+    maxBufferPx="1350"
+    *ngIf="sourceUser.source.length > 0"
+  >
+    <ion-list>
+      <ion-item
+        button
+        (click)="selectUser(user)"
+        *cdkVirtualFor="let user of sourceUser"
+      >
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-label style="white-space: normal">
+          <p>{{ getTitle() | titlecase }}</p>
+          <h2>{{ user.attributes.name | titlecase }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </cdk-virtual-scroll-viewport>
+
+  <!-- <ion-list *ngIf="sourceUser.source.length > 0">
+    <ion-item
+      button
+      (click)="selectUser(user)"
+      *ngFor="let user of sourceUser.source"
+    >
+      <ion-icon slot="start" name="person-outline"></ion-icon>
+      <ion-label style="white-space: normal">
+        <p>{{ getTitle() | titlecase }}</p>
+        <h2>{{ user.attributes.nombre | titlecase }}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list> -->
+</ion-content>
+<ion-footer>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="10">
+      <!-- (click)="showRegister()" -->
+      <ion-button  color="orange" expand="block">
+        <ion-icon name="person-add-outline" slot="start"></ion-icon>
+        <ion-label>Añadir nuevo</ion-label>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

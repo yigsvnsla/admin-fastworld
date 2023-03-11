@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Añadir rutas/cargos</ion-title>
+    <ion-button slot="end" fill="clear" color="medium" (click)="close()">
+      <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-item-divider>
+        <ion-label> Informacion de proveedor y motorizado </ion-label>
+      </ion-item-divider>
+      <ion-col size="6">
+        <generic-search
+          *ngIf="user == null; else inputUser"
+          mode="providers"
+          searchID="search1"
+          (value)="onResult($event, 'providers')"
+        ></generic-search>
+        <ng-template #inputUser>
+          <ion-item button (click)="runClear('providers')">
+            <ion-label position="stacked">Nombre del proveedor</ion-label>
+            <ion-input
+              [value]="user.name | titlecase"
+              readonly=""
+            ></ion-input>
+          </ion-item>
+        </ng-template>
+      </ion-col>
+      <ion-col size="6">
+        <generic-search
+          *ngIf="driver == null; else inputDriver"
+          searchID="search2"
+          mode="drivers"
+          (value)="onResult($event, 'drivers')"
+        ></generic-search>
+        <ng-template #inputDriver>
+          <ion-item button (click)="runClear('drivers')">
+            <ion-label position="stacked">Nombre del motorizado</ion-label>
+            <ion-input
+              [value]="driver.name | titlecase"
+              readonly=""
+            ></ion-input>
+          </ion-item>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row [formGroup]="formRoute">
+      <ion-item-divider>
+        <ion-label> Informacion del flete </ion-label>
+      </ion-item-divider>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="stacked">Valor del flete</ion-label>
+          <ion-input type="number" min="0" formControlName="valor"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="stacked">Ingreso</ion-label>
+          <ion-input
+            type="number"
+            min="0"
+            formControlName="ingreso"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="stacked">Egreso</ion-label>
+          <ion-input type="number" min="0" formControlName="egreso"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Fecha de entrega</ion-label>
+          <ion-input type="date" min="0" formControlName="entrega"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Cliente</ion-label>
+          <ion-input
+            type="text"
+            formControlName="cliente"
+            placeholder="Ingresa nombre del cliente"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Direccion</ion-label>
+          <ion-textarea
+            rows="3"
+            placeholder="Ingrese la direccion"
+            formControlName="direccion"
+          ></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="10">
+      <ion-button
+        [disabled]="this.formRoute.invalid"
+        (click)="send()"
+        expand="block"
+        color="orange"
+      >
+        <ion-label>{{published ? 'Actualizar' : 'Añadir'}}</ion-label>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

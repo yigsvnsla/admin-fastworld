@@ -1,0 +1,14 @@
+.content-custom{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.custom-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+records{
+  flex-grow: 1;
+}
