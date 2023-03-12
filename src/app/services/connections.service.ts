@@ -317,7 +317,7 @@ export class SocketService extends Socket {
 }
 export class Source extends DataSource<any | undefined>{
   public source: any[] = Array.from<any>({ length: 0 });
-  private itemsChanges$: BehaviorSubject<any>
+  private itemsChanges$: BehaviorSubject<any> = new BehaviorSubject([]);
   private destroy$: Subject<boolean> = new Subject();
 
   private path: string
@@ -328,7 +328,7 @@ export class Source extends DataSource<any | undefined>{
     total?: number
   }
 
-  public loading: BehaviorSubject<boolean>
+  public loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
     private _conectionsService: ConectionsService,
@@ -383,7 +383,6 @@ export class Source extends DataSource<any | undefined>{
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
     console.log(data);
-
     this.source.splice(page * pageSize, pageSize, ...data);
     this.itemsChanges$.next(this.source);
     this.loading.next(false)

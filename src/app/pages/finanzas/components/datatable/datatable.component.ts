@@ -1,19 +1,20 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
-import { delay } from 'rxjs/operators';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { ConectionsService } from 'src/app/services/connections.service';
-import { ToolsService } from 'src/app/services/tools.service';
 
 @Component({
-  selector: 'resume-datatable',
-  templateUrl: './view-data-table.component.html',
-  styleUrls: ['./view-data-table.component.scss'],
+  selector: 'records',
+  templateUrl: './datatable.component.html',
+  styleUrls: ['./datatable.component.scss'],
 })
-export class ViewDataTableComponent implements OnInit {
+export class DatatableComponent implements OnInit, OnChanges {
+
   readonly rowHeight = 50;
   readonly headerHeight = 50;
   public source: any[] = []
-  private path: string
+  private path: string = ''
   private pagination: paginationModel = {
     start: 0,
     limit: 25,
@@ -23,13 +24,47 @@ export class ViewDataTableComponent implements OnInit {
   @Input() columns: any
   public loading: boolean = false;
   public ColumnMode = ColumnMode;
-  public SelectionType = SelectionType
+  public SelectionType = SelectionType;
   public get getPagination(): paginationModel { return this.pagination }
   public set setPagination(v: paginationModel) { this.pagination = v; }
 
+  @Input() parentPath: string = ''
+  @Input() egreso: boolean = true;
   @Input() set setPath(v: string) {
     if (v == '' || v == undefined) return;
     this.path = v;
+    this.forceUpdate()
+  }
+
+  @Output() select: EventEmitter<any> = new EventEmitter()
+
+
+
+  constructor(
+    private conectionsService: ConectionsService,
+    private el: ElementRef) {
+  }
+
+  ngOnInit() {
+    this.setPath = this.parentPath
+  }
+
+  onSelect(event: any) {
+    const { id } = event.selected[0];
+    this.select.emit(event.selected[0])
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    /* console.log("Changed parent", this.path)
+    this.pagination = {
+      start: 0,
+      limit: 25,
+      total: 0
+    }
+    this.getInformation(true) */
+  }
+
+  async forceUpdate() {
     this.pagination = {
       start: 0,
       limit: 25,
@@ -38,31 +73,30 @@ export class ViewDataTableComponent implements OnInit {
     this.getInformation(true)
   }
 
-  constructor(
-    private toolsService: ToolsService,
-    private conectionsService: ConectionsService,
-    private el: ElementRef) {
-  }
-
-  ngOnInit() { }
-
   private async getInformation(clear = false) {
     this.loading = true;
     /* let loading = this.toolsService.showLoading() */
-    const { data, meta } = await this.getData(this.path + `&pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
+    const { data, meta } = await this.getData(`pagination[start]=${this.pagination.total}&pagination[limit]=${this.pagination.limit}&sort=id:DESC`)
     this.pagination = meta.pagination
     this.setPagination = {
       start: this.source.length,
       limit: 25,
       total: this.source.length + meta.total
     }
-    if(clear) this.source = data;
+    if (clear) {
+      this.pagination = {
+        start: 0,
+        limit: 25,
+        total: 0
+      }
+      this.source = data;
+    }
     else this.source = [...this.source, ...data];
     /* (await loading).dismiss() */
     console.log(data)
     this.loading = false;
   }
-  private async getData(route) {
+  private async getData(route: any) {
     let path = ''
     if (this.path.includes('?')) {
       path = this.path + `&${route}`
@@ -70,9 +104,7 @@ export class ViewDataTableComponent implements OnInit {
       path = this.path + `?${route}`
     }
     return await this.conectionsService
-      .get<any>(path)
-      .pipe(delay(1000))
-      .toPromise()
+      .get<any>(path).toPromise()
   }
   public onScroll(offsetY: number) {
     // total height of all rows in the viewport
@@ -88,14 +120,18 @@ export class ViewDataTableComponent implements OnInit {
     return
   }
 
-  async forceUpdate(url){
-    this.setPath = url;
+
+  /* Optionals helpres */
+  getFullDate(value: string) {
+    let date = new Date(value);
+    date.setTime(date.getTime() + date.getTimezoneOffset() * 60000)
+    return format(date, 'yyyy-MM-dd')
   }
 
 }
-
 interface paginationModel {
   start: number
   limit: number
-  total?: number
+  total: number
 }
+

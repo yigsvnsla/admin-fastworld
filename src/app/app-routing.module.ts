@@ -16,7 +16,11 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule),
     canActivate:[AutoLoginGuard]
+  },  {
+    path: 'finanzas',
+    loadChildren: () => import('./pages/finanzas/finanzas.module').then( m => m.FinanzasPageModule)
   },
+
 
 ];
 

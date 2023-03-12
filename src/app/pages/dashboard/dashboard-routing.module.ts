@@ -10,7 +10,7 @@ import { DashboardPage } from './dashboard.page';
 import { HistorialComponent } from './components/encomiendas/historial/historial.component';
 import { CrearUsuarioComponent } from './components/usuarios/crear-usuario/crear-usuario.component';
 import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
-import { PagosComponent } from './components/pagos/pagos.component';
+import { FinanzasPage } from '../finanzas/finanzas.page';
 const routes: Routes = [
   {
     path: '',
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'pagos',
-        component: PagosComponent
+        component: FinanzasPage
       },
       {
         path: 'encomiendas',

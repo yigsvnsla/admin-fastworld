@@ -31,13 +31,9 @@ import { DetailsDriverComponent } from '../generic-components/details-driver/det
 import { SeguimientoComponent } from './components/encomiendas/seguimiento/seguimiento.component';
 import { SocketIoModule } from 'ngx-socket-io';
 import { ModalAdminRoleComponent } from '../generic-components/modal-admin-role/modal-admin-role.component';
-import { PagosComponent } from './components/pagos/pagos.component';
-import { ResumenComponent } from './components/pagos/components/resumen/resumen.component';
-import { ModalCheckComponent } from './components/pagos/components/modal-check/modal-check.component';
-import { ModalAgregarComponent } from './components/pagos/components/modal-agregar/modal-agregar.component';
-import { ViewDataTableComponent } from './components/pagos/components/view-data-table/view-data-table.component';
 import { ModalUserHistorial } from "../generic-components/modal-user-historial/modal-user-historial.component";
 import { ModalStepsDriverComponent } from '../generic-components/modal-steps-driver/modal-steps-driver.component';
+import { FinanzasPageModule } from '../finanzas/finanzas.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -51,8 +47,8 @@ import { ModalStepsDriverComponent } from '../generic-components/modal-steps-dri
     HttpClientModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
-    SocketIoModule
-
+    SocketIoModule,
+    FinanzasPageModule
   ],
   declarations: [
     DashboardPage,
@@ -75,11 +71,6 @@ import { ModalStepsDriverComponent } from '../generic-components/modal-steps-dri
     SeguimientoComponent,
     ModalAdminRoleComponent,
     EncargadosComponent,
-    PagosComponent,
-    ResumenComponent,
-    ModalCheckComponent,
-    ModalAgregarComponent,
-    ViewDataTableComponent,
     ModalUserHistorial,
     ModalStepsClientComponent,
     ModalStepsDriverComponent,

@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="mode != 'all'">
+      <ion-button (click)="toggleView('all')">
+        <ion-icon name="home-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="mode == 'all' else alsoTitle"> Histórico de operaciones </ion-title>
+    <ng-template #alsoTitle>
+      <ion-title> {{user? user?.name : 'ERROR'}} </ion-title>
+    </ng-template>
+    <ion-buttons slot="end">
+      <ion-item>
+        <ion-label position="stacked">Fecha de busqueda</ion-label>
+        <ion-input type="date" [value]="date" (ionChange)="onChangeDate($event)"></ion-input>
+      </ion-item>
+      <ion-button (click)="toggleView('providers')" fill="outline" color="orange">
+        <ion-icon name="person-add" slot="start"></ion-icon>
+        <ion-label>Proveedor</ion-label>
+      </ion-button>
+      <ion-button (click)="toggleView('drivers')" fill="outline" color="orange">
+        <ion-icon name="bicycle" slot="start"></ion-icon>
+        <ion-label>Conductor</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<!-- <ng-container [ngSwitch]="mode">
+  <ng-container *ngSwitchCase="'providers'">
+    providers work
+  </ng-container>
+  <ng-container *ngSwitchCase="'drivers'">
+    drivers work
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <finance-resume [date]="date"></finance-resume>
+  </ng-container>
+</ng-container> -->
+<ion-content>
+  <finance-resume [date]="date" [mode]="mode" [target]="user"></finance-resume>
+</ion-content>

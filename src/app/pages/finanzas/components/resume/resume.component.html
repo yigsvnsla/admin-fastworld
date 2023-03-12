@@ -1,0 +1,181 @@
+<div class="content-custom">
+  <records #datatable [parentPath]="path" (select)="onRowSelect($event)"> </records>
+</div>
+<ng-container [ngSwitch]="mode">
+  <ng-container *ngSwitchCase="'providers'">
+    <ion-footer>
+      <ion-card>
+        <ion-card-header>
+          <ion-toolbar>
+            <ion-row>
+              <ion-col>
+                <ion-title>
+                  <ion-label>
+                    <p>{{getDay() | titlecase}}</p>
+                    <ion-row>
+                      <ion-col size="6">
+                        <h2>Fletes: <ion-text color="danger">{{resume.delivery | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="6">
+                        <h2>Ingreso: <ion-text color="success">{{resume.income | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="6">
+                        <h2>Egreso: <ion-text color="danger">{{resume.discharge | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="6">
+                        <h1>
+                          Total:
+                          <ion-text color="orange">{{resume.delivery + resume.discharge | currency}}</ion-text>
+                        </h1>
+                      </ion-col>
+                      <ion-col size="6">
+                        <h1 *ngIf="getSaldo() < 0; else deuda">
+                          Devolucion:
+                          <ion-text color="danger">{{getSaldo() | currency}}</ion-text>
+                        </h1>
+                        <ng-template #deuda>
+                          <h1>
+                            Deuda:
+                            <ion-text color="success">{{getSaldo() | currency}}</ion-text>
+                          </h1>
+                        </ng-template>
+                      </ion-col>
+                    </ion-row>
+                  </ion-label>
+                </ion-title>
+              </ion-col>
+              <ion-col size="3" class="custom-flex">
+                <ion-button color="orange" (click)="showModal()">
+                  <ion-icon name="add-outline" slot="start"></ion-icon>
+                  <ion-label>Añadir</ion-label>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-toolbar>
+        </ion-card-header>
+      </ion-card>
+    </ion-footer>
+  </ng-container>
+  <ng-container *ngSwitchCase="'drivers'">
+    <ion-footer>
+      <ion-card>
+        <ion-card-header>
+          <ion-toolbar>
+            <ion-row>
+              <ion-col>
+                <ion-title>
+                  <ion-label>
+                    <p>{{getDay() | titlecase}}</p>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h2>
+                          Ingreso:
+                          <ion-text color="success">{{resume.income | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Fletes:
+                          <ion-text color="success">{{resume.delivery | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h2>
+                          Egreso:
+                          <ion-text color="danger">{{-resume.discharge | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Flete Fastworld:
+                          <ion-text color="danger">{{-(resume.delivery * 0.25) | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h2>
+                          Total:
+                          <ion-text color="orange">{{resume.income - resume.discharge |
+                            currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Fletes Motorizado:
+                          <ion-text color="orange">{{(resume.delivery * 0.75) | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Total motorizado:
+                          <ion-text color="orange">{{getSueldo() | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-label>
+                </ion-title>
+              </ion-col>
+              <ion-col size="3" class="custom-flex">
+                <ion-button color="orange" (click)="showModal()">
+                  <ion-icon name="add-outline" slot="start"></ion-icon>
+                  <ion-label>Añadir</ion-label>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-toolbar>
+        </ion-card-header>
+      </ion-card>
+    </ion-footer>
+  </ng-container>
+  <ng-container *ngSwitchDefault="">
+    <ion-footer>
+      <ion-card>
+        <ion-card-header>
+          <ion-toolbar>
+            <ion-row>
+              <ion-col>
+                <ion-title>
+                  <ion-label>
+                    <p>{{getDay() | titlecase}}</p>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h1>Ingresos: <ion-text color="success">{{resume.income | currency}}</ion-text>
+                        </h1>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h1>
+                          Egreso: <ion-text color="danger">{{resume.discharge| currency}}</ion-text>
+                        </h1>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h1>
+                          Fletes: <ion-text color="success">{{resume.delivery| currency}}</ion-text>
+                        </h1>
+                      </ion-col>
+                    </ion-row>
+                  </ion-label>
+                </ion-title>
+              </ion-col>
+              <ion-col size="3" class="custom-flex">
+                <ion-button (click)="showModal()" color="orange">
+                  <ion-icon name="add-outline" slot="start"></ion-icon>
+                  <ion-label>Añadir</ion-label>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-toolbar>
+        </ion-card-header>
+      </ion-card>
+    </ion-footer>
+  </ng-container>
+</ng-container>

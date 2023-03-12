@@ -47,13 +47,13 @@ export class DashboardPage implements OnInit {
   if (admin.role == 'administrador'){
     this.encomiendaRoutes = [
       {
-        title: 'Checkout',
+        title: 'Finanzas',
         url: 'pagos',
         options: [
           {
-            title: 'Pagos',
+            title: 'Resumen',
             url: '',
-            icon: 'person'
+            icon: 'person',
           }
         ]
       },
@@ -154,4 +154,5 @@ interface routerMenu{
   url: string,
   icon?: string,
   options?: routerMenu[]
+  standalone?: boolean
 }

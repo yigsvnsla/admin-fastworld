@@ -1,0 +1,188 @@
+<ngx-datatable
+  #table
+  class="dark"
+  (scroll)="this.onScroll($event.offsetY)"
+  [rows]="this.source"
+  [columnMode]="this.ColumnMode.force"
+  [rowHeight]="this.rowHeight"
+  [loadingIndicator]="this.loading"
+  [scrollbarV]="true"
+  [reorderable]="false"
+  [swapColumns]="false"
+  [selectionType]="SelectionType.single"
+  (select)="onSelect($event)"
+>
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Fecha"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.time"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      >{{ getFullDate(value) | titlecase }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Proveedor"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.business.data.attributes.name"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      >{{ value | titlecase }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Conductor"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.driver.data.attributes.name"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      >{{ value | titlecase }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Cliente"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.client"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      >{{ value | titlecase }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column
+  [canAutoResize]="true"
+  [resizeable]="false"
+  [draggable]="false"
+  [sortable]="false"
+  name="Direccion"
+  headerClass="center"
+  cellClass="center"
+  prop="attributes.direction"
+>
+  <ng-template let-column="column" ngx-datatable-header-template>{{
+    column.name
+  }}</ng-template>
+  <ng-template
+    let-row="row"
+    let-value="value"
+    ngx-datatable-cell-template
+    let-rowIndex="rowIndex"
+    >{{ value | titlecase }}
+  </ng-template>
+</ngx-datatable-column>
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Ingreso"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.income"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      ><ion-text color="success">{{ value | currency }}</ion-text>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column
+  *ngIf="egreso"
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Egreso"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.discharge"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      ><ion-text color="danger">{{ value | currency }}</ion-text>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column
+    [canAutoResize]="true"
+    [resizeable]="false"
+    [draggable]="false"
+    [sortable]="false"
+    name="Flete"
+    headerClass="center"
+    cellClass="center"
+    prop="attributes.delivery"
+  >
+    <ng-template let-column="column" ngx-datatable-header-template>{{
+      column.name
+    }}</ng-template>
+    <ng-template
+      let-row="row"
+      let-value="value"
+      ngx-datatable-cell-template
+      let-rowIndex="rowIndex"
+      ><ion-text color="danger">{{ value | currency }}</ion-text>
+    </ng-template>
+  </ngx-datatable-column>
+
+</ngx-datatable>

@@ -1,6 +1,6 @@
 <ion-split-pane style="--side-width: 100px" contentId="menu-panel" when="lg">
   <ion-menu contentId="menu-panel" menuId="menu-panel" side="start" type="overlay">
-    <ion-header >
+    <ion-header>
       <ion-toolbar color="ligth" class="ion-text-center">
         <ion-img class="ion-padding" [src]="'../../../assets/svg/banner.svg'"></ion-img>
       </ion-toolbar>
@@ -17,8 +17,10 @@
           <ion-item-divider>
             <ion-label>{{item.title}}</ion-label>
           </ion-item-divider>
-          <ion-menu-toggle *ngFor="let _item of item.options; let i = index" auto-hide="false" >
-            <ion-item [lines]="i == item.options.length - 1 ?'full':''" detail="true" [routerLink]="[ '/dashboard/' + item.url + '/' + _item.url ]" routerDirection="root" routerLinkActive='active-link' [routerLinkActiveOptions]="{exact: true}">
+          <ion-menu-toggle *ngFor="let _item of item.options; let i = index" auto-hide="false">
+            <ion-item [lines]="i == item.options.length - 1 ?'full':''" detail="true"
+              [routerLink]="[ '/dashboard/' + item.url + '/' + _item.url ]" routerDirection="root"
+              routerLinkActive='active-link' [routerLinkActiveOptions]="{exact: true}">
               <ion-label>{{ (_item.title | titlecase) }}</ion-label>
               <ion-icon slot="start" [name]="_item.icon"></ion-icon>
             </ion-item>
