@@ -179,6 +179,19 @@ export class ResumeComponent implements OnInit, OnChanges {
       delivery: 0
     }
   }
+
+  getSueldo(): number {
+    let deducible = this.resume.delivery * 0.25;
+    let pendiente = this.resume.income - this.resume.discharge
+    if (pendiente < 0) return (this.resume.delivery - deducible) + pendiente
+    return (this.resume.delivery - deducible)
+  }
+
+  getSaldo(): number {
+    let egreso = this.resume.delivery + this.resume.discharge;
+    //if (this.resume.ingreso >= egreso) return egreso - this.resume.ingreso
+    return egreso - this.resume.income
+  }
 }
 
 export interface httpSingleResponse {
