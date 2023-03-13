@@ -55,16 +55,20 @@ export class RegisterComponent implements OnInit {
 
       }
     }
-    console.log(this.current)
-
     if (this.published) {
       const { attributes } = this.published
       let time = attributes.time.split("T")[0];
       let driver = attributes.driver?.data?.id || 0
       let business = attributes.business?.data?.id || 0
 
-      if (driver != 0) this.driver = attributes.driver.data;
-      if (business != 0) this.user = attributes.business.data;
+      if (driver != 0) this.driver = {
+        id: attributes.driver.data.id,
+        name: attributes.driver.data.attributes.name
+      };
+      if (business != 0) this.user = {
+        id: attributes.business.data.id,
+        name: attributes.business.data.attributes.name,
+      };
       this.formRoute.patchValue({
         ...attributes,
         driver,
@@ -85,7 +89,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onResult(event: any, mode: string) {
-    console.log(event)
     if (mode == 'providers') {
       this.user = event;
       this.formRoute.patchValue({ business: event.id })
@@ -105,10 +108,10 @@ export class RegisterComponent implements OnInit {
 
     console.log(data)
 
-    /* if (this.published) {
+    if (this.published) {
       let loading = await this.tools.showLoading('Actualizando registro...')
       try {
-        let response = await this.http.put(`froutes/${this.published.id}`, { data })
+        let response = await this.http.put(`finances/${this.published.id}`, { data }).toPromise()
         this.modal.dismiss(response)
       } catch (error) {
         console.log("Error on post ModalAddComponent", error)
@@ -116,7 +119,7 @@ export class RegisterComponent implements OnInit {
         loading.dismiss()
       }
       return;
-    } */
+    }
 
     let loading = await this.tools.showLoading('Creando registro...')
     try {

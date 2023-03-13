@@ -80,9 +80,8 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   showModal(props = {}) {
-    let buildedProps = {}
     if (this.mode != 'all') {
-      buildedProps = {
+      props = {
         current: this.target,
         mode: this.mode,
         ...props
@@ -91,7 +90,7 @@ export class ResumeComponent implements OnInit, OnChanges {
 
     this.tools.showModal({
       component: RegisterComponent,
-      componentProps: buildedProps
+      componentProps: props
     }).then(res => {
       if (res) {
         this.buildView()
@@ -102,13 +101,23 @@ export class ResumeComponent implements OnInit, OnChanges {
 
 
 
-  async download() {
-    /* const loading = await this.tools.showLoading('Descargando informacion...')
+  public async download() {
+    const loading = await this.tools.showLoading('Descargando informacion...')
     try {
-      let response = await this.http.postStream(`froutes/report`, {
-        target: 'general',
+
+      let query: any = {
+        mode: this.mode,
         day: this.getDayISO()
-      })
+      }
+
+      if (this.mode != 'all') {
+        query = {
+          ...query,
+          current: this.target.id
+        }
+      }
+
+      let response = await this.http.postStream(`finances/report`, query).toPromise()
       let name = `finanzas_${this.getDayISO()}_general`
       let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       var a = document.createElement("a"), url = URL.createObjectURL(file);
@@ -128,7 +137,7 @@ export class ResumeComponent implements OnInit, OnChanges {
       console.error(error);
     } finally {
       loading.dismiss()
-    } */
+    }
   }
 
   between() {

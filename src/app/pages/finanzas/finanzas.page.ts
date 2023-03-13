@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { format } from 'date-fns';
 import { ToolsService } from 'src/app/services/tools.service';
 import { PrompUserComponent } from './components/promp-user/promp-user.component';
-import { userModel } from './components/resume/resume.component';
+import { ResumeComponent, userModel } from './components/resume/resume.component';
 
 @Component({
   selector: 'app-finanzas',
@@ -10,6 +10,8 @@ import { userModel } from './components/resume/resume.component';
   styleUrls: ['./finanzas.page.scss'],
 })
 export class FinanzasPage implements OnInit {
+
+  @ViewChild("resume") resume: ResumeComponent
 
   date = format(new Date(), 'yyyy-MM-dd')
   mode: 'all' | 'providers' | 'drivers' = 'all'
@@ -48,6 +50,11 @@ export class FinanzasPage implements OnInit {
       this.mode = target;
       this.user = res;
     })
+  }
+
+
+  onDownload() {
+    this.resume.download()
   }
 
 }
