@@ -30,6 +30,7 @@ export class ModalStepsClientComponent implements OnInit {
         logoImg: ['', [Validators.required,]],
         ubication: ['', [Validators.required,]],
         documentImg: ['', [Validators.required,]],
+        home:['',[Validators.required]]
       })
     });
   }

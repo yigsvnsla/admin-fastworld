@@ -48,7 +48,7 @@ export class DetailsClientComponent implements OnInit {
     }
     this.instanceForm(this.user)
     this.user$ = new BehaviorSubject<(any | undefined)>(this.user);
-    // console.log(this.user);
+    console.log(this.user);
   }
 
   ngOnInit(): void {
