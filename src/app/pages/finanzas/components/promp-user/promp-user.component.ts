@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { stringify } from 'qs';
+import { ViewRegisterComponent } from 'src/app/pages/generic-components/view-register/view-register.component';
 import { ConectionsService, Source } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 
@@ -64,6 +65,18 @@ export class PrompUserComponent implements OnInit {
 
   getTitle(): string {
     return this.mode == 'providers' ? 'Proveedor' : 'Motorizado'
+  }
+
+  showRegister() {
+    let role = this.mode == 'providers' ? 'client' : 'driver'
+
+    this.tools.showModal({
+      component: ViewRegisterComponent,
+      componentProps: {
+        role,
+        skipAlert: true
+      }
+    })
   }
 
 }

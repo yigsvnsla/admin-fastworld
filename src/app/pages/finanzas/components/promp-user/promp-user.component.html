@@ -29,7 +29,7 @@
         <ion-icon slot="start" name="person-outline"></ion-icon>
         <ion-label style="white-space: normal">
           <p>{{ getTitle() | titlecase }}</p>
-          <h2>{{ user.attributes.name | titlecase }}</h2>
+          <h2>{{ user.attributes.name | titlecase }} {{ user.attributes.lastname | titlecase }}</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -52,8 +52,7 @@
 <ion-footer>
   <ion-row class="ion-justify-content-center">
     <ion-col size="10">
-      <!-- (click)="showRegister()" -->
-      <ion-button  color="orange" expand="block">
+      <ion-button (click)="showRegister()" color="orange" expand="block">
         <ion-icon name="person-add-outline" slot="start"></ion-icon>
         <ion-label>Añadir nuevo</ion-label>
       </ion-button>

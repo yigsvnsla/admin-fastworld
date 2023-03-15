@@ -94,7 +94,7 @@ export class ModalStepsClientComponent implements OnInit {
       .post(`user/business/${this.id}`, form)
       .subscribe(async  res => {
         load.dismiss();
-        (await this.modalController.getTop()).dismiss()
+        this.modalController.dismiss(res)
       })
   }
 

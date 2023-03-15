@@ -86,9 +86,11 @@ export class ConectionsService {
   }
 
   // Methods
-  public get<t>(path: string) {
-    return this.httpClient
+  public get<t>(path: string, skip: boolean = false) {
+    let request = this.httpClient
       .get<t>(`${this.api}/${path}`, this.httpHeaders())
+
+    return skip ? request : request
       .pipe(
         catchError((err) => this.errorHandler(err))
       );
@@ -338,7 +340,7 @@ export class Source extends DataSource<any | undefined>{
   }
 
   private async getData(path: string) {
-    let pagination =  path.includes('?') ? `&pagination[page]=${this.getPagination.page}` : `?pagination[page]=${this.getPagination.page}`
+    let pagination = path.includes('?') ? `&pagination[page]=${this.getPagination.page}` : `?pagination[page]=${this.getPagination.page}`
     return await this._conectionsService
       .get<any>(path + pagination)
       .toPromise()

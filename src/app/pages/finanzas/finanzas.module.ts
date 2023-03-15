@@ -26,6 +26,13 @@ import { GenericSearchComponent } from './components/generic-search/generic-sear
     NgxDatatableModule,
     ReactiveFormsModule
   ],
-  declarations: [FinanzasPage, DatatableComponent, ViewerComponent, ResumeComponent, PrompUserComponent, RegisterComponent, GenericSearchComponent]
+  declarations: [
+    FinanzasPage,
+    DatatableComponent,
+    ViewerComponent,
+    ResumeComponent,
+    PrompUserComponent,
+    RegisterComponent,
+    GenericSearchComponent]
 })
 export class FinanzasPageModule { }
