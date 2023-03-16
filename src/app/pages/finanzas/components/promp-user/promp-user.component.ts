@@ -76,6 +76,12 @@ export class PrompUserComponent implements OnInit {
         role,
         skipAlert: true
       }
+    }).then(res => {
+      if (res) {
+        if (res.finished) {
+          this.modal.dismiss(res.user)
+        }
+      }
     })
   }
 

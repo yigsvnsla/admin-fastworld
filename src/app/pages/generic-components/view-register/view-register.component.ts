@@ -133,7 +133,7 @@ export class ViewRegisterComponent implements OnInit {
           {
             text: 'Cancelar',
             handler: () => {
-              this.close({ finish: false })
+              this.close({ finished: false })
             }
           },
           {
@@ -169,7 +169,14 @@ export class ViewRegisterComponent implements OnInit {
               id: response.data.id,
             }
           }).then(res => {
-            this.modal.dismiss(res)
+            this.modal.dismiss({
+              finished: true,
+              user: {
+                id: res.id,
+                name: `${res.name} ${res.lastname}`,
+                business: res.business.name,
+              }
+            })
           })
           break;
         case 'driver':
@@ -183,7 +190,14 @@ export class ViewRegisterComponent implements OnInit {
               id: response.data.id,
             }
           }).then(res => {
-            this.modal.dismiss(res)
+            const { data } = response
+            this.modal.dismiss({
+              finished: true,
+              user: {
+                id: data.id,
+                name: `${data.attributes.name} ${data.attributes.lastname}`
+              }
+            })
           })
           break;
         default:
