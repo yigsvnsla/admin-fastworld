@@ -144,7 +144,7 @@ export class DetailsClientComponent implements OnInit {
       cssClass: 'alert-success',
       keyboardClose: true,
       mode: 'ios',
-      header: 'Membrecia',
+      header: 'Confirmar edición',
       buttons: ['Cancelar', { text: 'Aceptar', handler: () => send() }]
     })
 

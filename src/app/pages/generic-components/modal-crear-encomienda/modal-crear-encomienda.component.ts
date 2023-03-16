@@ -235,21 +235,21 @@ export class ModalCrearEncomiendaComponent implements OnInit {
       keyboardClose: true,
       buttons: [
         {
-          text: '30 minutos',
-          icon: 'timer',
-          data: 30,
-          role: 'selected',
-        },
-        {
-          text: '45 minutos',
-          icon: 'timer',
-          data: 45,
-          role: 'selected'
-        },
-        {
           text: '60 minutos',
           icon: 'timer',
           data: 60,
+          role: 'selected',
+        },
+        {
+          text: '90 minutos',
+          icon: 'timer',
+          data: 90,
+          role: 'selected'
+        },
+        {
+          text: '120 minutos',
+          icon: 'timer',
+          data: 120,
           role: 'selected'
         },
         {
