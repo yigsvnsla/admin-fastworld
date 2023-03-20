@@ -36,6 +36,7 @@ export class PrompUserComponent implements OnInit {
       },
       sort: 'name:ASC'
     })
+    console.log(value)
   }
 
   getRoute(): string {

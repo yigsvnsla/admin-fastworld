@@ -384,7 +384,9 @@ export class Source extends DataSource<any | undefined>{
     const { data, meta } = await this.getData(this.path)
     const { page, pageSize, pageCount, total } = meta.pagination
     this.pagination = meta.pagination
-    console.log(data);
+    if (page <= 1) {
+      this.source = Array.from<any>({ length: 0 });
+    }
     this.source.splice(page * pageSize, pageSize, ...data);
     this.itemsChanges$.next(this.source);
     this.loading.next(false)
