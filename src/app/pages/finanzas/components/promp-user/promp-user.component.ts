@@ -20,6 +20,10 @@ export class PrompUserComponent implements OnInit {
   constructor(private modal: ModalController, private http: ConectionsService, private tools: ToolsService) { }
 
   ngOnInit() {
+    this.defaultFetch()
+  }
+
+  defaultFetch() {
     this.sourceUser.setPath = `${this.getRoute()}` + stringify({
       sort: 'name:ASC'
     })
@@ -28,11 +32,31 @@ export class PrompUserComponent implements OnInit {
 
   onSearch(event: any) {
     const { value } = event.detail
+    if (value == '' || value == null || value.trim() == '') {
+      this.defaultFetch();
+      return;
+    }
     this.sourceUser.setPath = `${this.getRoute()}` + stringify({
       filters: {
-        name: {
-          $containsi: value
-        }
+        $or: [
+          {
+            name: {
+              $containsi: event.detail.value
+            }
+          },
+          {
+            lastname: {
+              $containsi: event.detail.value
+            }
+          },
+          {
+            [this.mode == 'providers' ? 'business' : 'driver']: {
+              name: {
+                $containsi: event.detail.value
+              }
+            }
+          }
+        ]
       },
       sort: 'name:ASC'
     })

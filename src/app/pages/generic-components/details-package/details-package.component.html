@@ -12,100 +12,109 @@
   <ng-container *ngIf="(this.package | async) as item; else loadingPackage">
     <ion-grid fixed>
 
-      <ion-row >
+      <ion-row>
         <ion-col style="justify-content: center;display: flex;">
-            <ion-chip (click)="sharePackage(item.id)" color="warning" mode="ios" outline="true">
-              <ion-icon name="share"></ion-icon>
-              <ion-label>Ticket</ion-label>
-            </ion-chip>
+          <ion-chip (click)="sharePackage(item.id)" color="warning" mode="ios" outline="true">
+            <ion-icon name="share"></ion-icon>
+            <ion-label>Ticket</ion-label>
+          </ion-chip>
         </ion-col>
         <ion-col style="justify-content: center;display: flex;">
-            <ion-chip (click)="this.onTransferPackage(item.id)" color="orange" mode="ios" outline="true">
-              <ion-icon name="repeat"></ion-icon>
-              <ion-label>Traspasar</ion-label>
-            </ion-chip>
+          <ion-chip (click)="this.onTransferPackage(item.id)" color="orange" mode="ios" outline="true">
+            <ion-icon name="repeat"></ion-icon>
+            <ion-label>Traspasar</ion-label>
+          </ion-chip>
         </ion-col>
         <ion-col style="justify-content: center;display: flex;">
-            <ion-chip id="btn-status-delivered-message-modal" color="success" mode="ios" outline="true">
-              <ion-icon name="checkmark"></ion-icon>
-              <ion-label>Entregar</ion-label>
-            </ion-chip>
-            <ion-modal  class="modal-dialogs" id="{{'status-delivered-message-modal'}}" #modal trigger="{{'btn-status-delivered-message-modal'}}">
-              <ng-template>
-                <div class="wrapper">
-                  <ion-header>
-                    <ion-toolbar color="success">
-                      <ion-title>Entregar</ion-title>
-                    </ion-toolbar>
-                  </ion-header>
-                  <ion-item-group [formGroup]="this.dialogForm">
-                    <ion-item-divider style="margin-right: 16px;">
-                      <ion-label>Ingresar descripción y valor recibidos</ion-label>
-                    </ion-item-divider>
-                    <ion-item>
-                      <ion-label position="stacked">Valor Contra-Entrega</ion-label>
-                      <ion-input id="money_catch" (ionChange)="ionChangesInputCurrencyMoneyCatch($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch" placeholder="$0.00"></ion-input>
-                    </ion-item>
-                    <ion-item *ngIf="item.attributes.shipping_status =='invalido' ">
-                      <ion-label position="stacked">Valor de Ruta</ion-label>
-                      <ion-input id="fee" (ionChange)="ionChangesInputCurrencyFee($event)" (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="fee" placeholder="$0.00"></ion-input>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label position="stacked">Descripción </ion-label>
-                      <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
-                    </ion-item>
-                  </ion-item-group>
+          <ion-chip id="btn-status-delivered-message-modal" color="success" mode="ios" outline="true">
+            <ion-icon name="checkmark"></ion-icon>
+            <ion-label>Entregar</ion-label>
+          </ion-chip>
+          <ion-modal class="modal-dialogs" id="{{'status-delivered-message-modal'}}" #modal
+            trigger="{{'btn-status-delivered-message-modal'}}">
+            <ng-template>
+              <div class="wrapper">
+                <ion-header>
+                  <ion-toolbar color="success">
+                    <ion-title>Entregar</ion-title>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-item-group [formGroup]="this.dialogForm">
+                  <ion-item-divider style="margin-right: 16px;">
+                    <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                  </ion-item-divider>
+                  <ion-item>
+                    <ion-label position="stacked">Valor Contra-Entrega</ion-label>
+                    <ion-input id="money_catch" (ionChange)="ionChangesInputCurrencyMoneyCatch($event)"
+                      (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch"
+                      placeholder="$0.00"></ion-input>
+                  </ion-item>
+                  <ion-item *ngIf="item.attributes.shipping_status =='invalido' ">
+                    <ion-label position="stacked">Valor de Ruta</ion-label>
+                    <ion-input id="fee" (ionChange)="ionChangesInputCurrencyFee($event)" (keydown.space)="false"
+                      (keydown.enter)="false" type="tel" formControlName="fee" placeholder="$0.00"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label position="stacked">Descripción </ion-label>
+                    <ion-textarea formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
+                  </ion-item>
+                </ion-item-group>
 
-                  <ion-footer>
-                    <ion-toolbar class="ion-text-center">
-                      <ion-button [disabled]="this.dialogForm.invalid" color="success" (click)="this.updateStatusPackage(item.id, 'entregado')" fill="solid" shape="round">
-                        <ion-label>Entregar</ion-label>
-                      </ion-button>
-                    </ion-toolbar>
-                  </ion-footer>
-                </div>
-              </ng-template>
-            </ion-modal>
+                <ion-footer>
+                  <ion-toolbar class="ion-text-center">
+                    <ion-button [disabled]="this.dialogForm.invalid" color="success"
+                      (click)="this.updateStatusPackage(item.id, 'entregado')" fill="solid" shape="round">
+                      <ion-label>Entregar</ion-label>
+                    </ion-button>
+                  </ion-toolbar>
+                </ion-footer>
+              </div>
+            </ng-template>
+          </ion-modal>
         </ion-col>
 
         <ion-col style="justify-content: center;display: flex;">
-            <ion-chip id="btn-status-decline-message-modal" color="danger" mode="ios" outline="true">
-              <ion-icon name="close"></ion-icon>
-              <ion-label>Reportar</ion-label>
-            </ion-chip>
-            <ion-modal class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal'}}">
-              <ng-template>
-                <div class="wrapper">
-                  <ion-header>
-                    <ion-toolbar color="danger">
-                      <ion-title>Reportar</ion-title>
-                    </ion-toolbar>
-                  </ion-header>
-                  <ion-item-group [formGroup]="this.dialogForm">
-                    <ion-item-divider style="margin-right: 16px;">
-                      <ion-label>Ingresar descripción y valor recibidos</ion-label>
-                    </ion-item-divider>
-                    <ion-item>
-                      <ion-label position="stacked">Descripción </ion-label>
-                      <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''" formControlName="comment" type="text" placeholder="Detalles"></ion-textarea>
-                    </ion-item>
-                  </ion-item-group>
-                  <ion-footer>
-                    <ion-toolbar class="ion-text-center">
-                      <ion-button [disabled]="this.dialogForm.invalid" color="danger" (click)="this.updateStatusPackage(item.id, 'rechazado'); " fill="solid" shape="round">
-                        <ion-label>Reportar</ion-label>
-                      </ion-button>
-                    </ion-toolbar>
-                  </ion-footer>
-                </div>
-              </ng-template>
-            </ion-modal>
+          <ion-chip id="btn-status-decline-message-modal" color="danger" mode="ios" outline="true">
+            <ion-icon name="close"></ion-icon>
+            <ion-label>Reportar</ion-label>
+          </ion-chip>
+          <ion-modal class="modal-dialogs" id="example-modal" #modal trigger="{{'btn-status-decline-message-modal'}}">
+            <ng-template>
+              <div class="wrapper">
+                <ion-header>
+                  <ion-toolbar color="danger">
+                    <ion-title>Reportar</ion-title>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-item-group [formGroup]="this.dialogForm">
+                  <ion-item-divider style="margin-right: 16px;">
+                    <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                  </ion-item-divider>
+                  <ion-item>
+                    <ion-label position="stacked">Descripción </ion-label>
+                    <ion-textarea #declineTextarea (ionFocus)="declineTextarea.value = ''" formControlName="comment"
+                      type="text" placeholder="Detalles"></ion-textarea>
+                  </ion-item>
+                </ion-item-group>
+                <ion-footer>
+                  <ion-toolbar class="ion-text-center">
+                    <ion-button [disabled]="this.dialogForm.invalid" color="danger"
+                      (click)="this.updateStatusPackage(item.id, 'rechazado'); " fill="solid" shape="round">
+                      <ion-label>Reportar</ion-label>
+                    </ion-button>
+                  </ion-toolbar>
+                </ion-footer>
+              </div>
+            </ng-template>
+          </ion-modal>
         </ion-col>
 
         <ion-col style="justify-content: center;display: flex;">
           <ng-container *ngIf="(item.attributes?.receiver);else notMap">
-            <a  style="text-decoration: none;" [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction?.position.lat + ',' + item.attributes.receiver.direction.position?.lng " target="_blank" rel="noreferrer external">
-              <ion-chip  color="tertiary" mode="ios" outline="true">
+            <a style="text-decoration: none;"
+              [href]="'https://www.google.com/maps/dir/' + item.attributes.location.position.lat + ',' + item.attributes.location.position.lng + '/' + item.attributes.receiver.direction?.position.lat + ',' + item.attributes.receiver.direction.position?.lng "
+              target="_blank" rel="noreferrer external">
+              <ion-chip color="tertiary" mode="ios" outline="true">
                 <ion-icon name="map"></ion-icon>
                 <ion-label>Ruta</ion-label>
               </ion-chip>
@@ -123,7 +132,8 @@
 
       <ion-row>
         <ion-col class="ion-text-center" size="12">
-            <h1> Encomienda <ion-text color="orange">#{{item.id}}</ion-text></h1>
+          <h1> Encomienda <ion-text color="orange">#{{item.id}}</ion-text>
+          </h1>
         </ion-col>
       </ion-row>
 
@@ -206,7 +216,7 @@
                 <ion-card-subtitle style="display: flex; align-items: center;">
                   <ion-icon style="margin: 8px" name="map"></ion-icon>
                   <ion-text color="orange">Información</ion-text>
-                  <ion-text  color="dark">
+                  <ion-text color="dark">
                     <h4 style="margin-left: 8px;">{{item.attributes.distance}}/Km</h4>
                   </ion-text>
                 </ion-card-subtitle>
@@ -216,7 +226,7 @@
                 <ion-item>
                   <ion-label>
                     <p>Manzana/villa/ casa | apartamento</p>
-                    <h2>sin especificar</h2>
+                    <h2>{{item.attributes.sender.data.attributes.business.data.attributes.home || 'Sin especificar'}}</h2>
                   </ion-label>
                 </ion-item>
               </ion-card>
@@ -231,8 +241,8 @@
                     </ion-card-subtitle>
 
                     <ion-item button detail-icon="map"
-                    [href]="'https://maps.google.com/?q=' +  item.attributes.location.position.lat + ',' +  item.attributes.location.position.lng"
-                    target="_blank" rel="noreferrer external">
+                      [href]="'https://maps.google.com/?q=' +  item.attributes.location.position.lat + ',' +  item.attributes.location.position.lng"
+                      target="_blank" rel="noreferrer external">
                       <ion-label class="ion-text-wrap">
                         <p style="display: flex; align-items: center;">
                           <ion-icon style="margin: 8px" name="grid"></ion-icon>
@@ -436,7 +446,8 @@
                             <ion-text color="dark">Fecha: </ion-text>{{history.time | date:'d/M/yy h:mm a'}}
                           <p>
                           <p>
-                            <ion-text color="dark">Estado: </ion-text><ion-text color="success">Pendiente</ion-text>
+                            <ion-text color="dark">Estado: </ion-text>
+                            <ion-text color="success">Pendiente</ion-text>
                           </p>
                           <p>
                           <p>
