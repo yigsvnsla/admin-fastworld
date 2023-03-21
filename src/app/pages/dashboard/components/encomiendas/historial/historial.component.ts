@@ -132,6 +132,7 @@ export class HistorialComponent implements OnInit {
   public getFilter($event: string) {
     // console.log($event);
     this.query = $event;
+
     this.getInformation(true)
   }
 

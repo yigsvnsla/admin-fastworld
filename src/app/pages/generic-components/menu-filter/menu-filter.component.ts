@@ -53,10 +53,10 @@ export class MenuFilterComponent implements OnInit {
       .subscribe(($event: CustomEvent<SegmentCustomEvent>) => {
 
         if ($event.detail['value'] == '') {
-          delete this.qsObject.filters.shipping_status
+          // delete this.qsObject.filters.shipping_status
           // this.emit()
 
-          return
+          // return
         }
 
         this.qsObject.filters.shipping_status.$containsi = $event.detail['value']

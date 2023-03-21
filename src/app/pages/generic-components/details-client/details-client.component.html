@@ -198,7 +198,7 @@
         </ion-col>
       </ion-row>
       <ion-card>
-        <ion-item>
+        <ion-item button (click)="onEditHome()">
           <ion-label>
             <p>Manzana/villa/ casa | apartamento</p>
             <h2>{{user?.business?.home || "Sin especificar"}}</h2>

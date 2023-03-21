@@ -51,6 +51,17 @@ export class DetailsClientComponent implements OnInit {
     console.log(this.user);
   }
 
+  public async lodad() {
+    try {
+      this.user = await this.conectionService.get(`user/basic/${this.id}?populate=*`).pipe(delay(500)).toPromise()
+    } catch (error) {
+      this.modalController.dismiss()
+    }
+    this.instanceForm(this.user)
+    this.user$ = new BehaviorSubject<(any | undefined)>(this.user);
+    console.log(this.user);
+  }
+
   ngOnInit(): void {
 
 
@@ -127,6 +138,40 @@ export class DetailsClientComponent implements OnInit {
     }
   }
 
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public async onEditHome() {
+    const send = async (value) => {
+      const loading = await this.toolsService.showLoading('Actualizando informacion...');
+      try {
+        const response = await this.conectionService.put(`businesses/${this.user?.business?.id}`, { data: { home: value } }).toPromise();
+        this.user.business.home = response.data.attributes.home;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        loading.dismiss();
+      }
+    };
+    await this.toolsService.showAlert({
+      cssClass: 'alert-success',
+      keyboardClose: true,
+      mode: 'ios',
+      header: 'Confirmar edición',
+      inputs: [
+        {
+          label: 'Direccion/manzana/villa',
+          type: 'text',
+          id: 'home',
+          name: 'home',
+          value: this.user?.business?.home
+        }
+      ],
+      buttons: ['Cancelar', { text: 'Aceptar', handler: (x) => send(x.home) }]
+    });
+
+  }
+
   public async showAlertConfirmUpdateBasic() {
     const send = async () => {
       const loading = await this.toolsService.showLoading('Actualizando informacion...')
@@ -198,7 +243,7 @@ export class DetailsClientComponent implements OnInit {
             const loading = await this.toolsService.showLoading('Actualizando informacion...')
             try {
               const businessName = { name: name }
-              const response = await this.conectionService.put(`businesses/${this.user.business.id}`, {data: businessName}).toPromise()
+              const response = await this.conectionService.put(`businesses/${this.user.business.id}`, { data: businessName }).toPromise()
               if (response) {
                 this.user.business.name = name
               }
