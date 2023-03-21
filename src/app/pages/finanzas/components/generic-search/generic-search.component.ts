@@ -54,9 +54,25 @@ export class GenericSearchComponent implements OnInit {
     this.popover.present()
     this.sourceUser.setPath = `${this.getRoute()}?populate=*&` + stringify({
       filters: {
-        name: {
-          $containsi: event.detail.value
-        }
+        $or: [
+          {
+            name: {
+              $containsi: event.detail.value
+            }
+          },
+          {
+            lastname: {
+              $containsi: event.detail.value
+            }
+          },
+          {
+            [this.mode == 'providers' ? 'business' : 'driver']: {
+              name: {
+                $containsi: event.detail.value
+              }
+            }
+          }
+        ]
       }
     })
   }
