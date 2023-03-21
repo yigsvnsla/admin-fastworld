@@ -139,6 +139,8 @@ export class ConectionsService {
       .pipe(
         debounceTime(500),
         tap(async res => {
+          console.log(res);
+
           this.cookiesService.set(environment['admin_cookie_tag'], res.jwt);
           (await this.localStorageService.remove(environment['admin_user_tag']));
           (await this.localStorageService.set(environment['admin_user_tag'], res.user));

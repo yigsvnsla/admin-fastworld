@@ -39,6 +39,8 @@ export class AutoLoginGuard implements CanActivate {
           }
           else {
             const foundUser = ( await this.conectionsService.get('admin/user/me').toPromise() as any)
+            console.log(foundUser);
+
             if ( foundUser.hasOwnProperty('admin') && foundUser.admin ){
               await this.localStorageService.remove(environment.admin_user_tag)
               await this.localStorageService.set(environment.admin_user_tag, foundUser);
