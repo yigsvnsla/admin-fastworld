@@ -93,7 +93,6 @@ export class DatatableComponent implements OnInit, OnChanges {
     }
     else this.source = [...this.source, ...data];
     /* (await loading).dismiss() */
-    console.log(data)
     this.loading = false;
   }
   private async getData(route: any) {

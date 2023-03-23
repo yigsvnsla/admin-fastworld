@@ -21,6 +21,7 @@ export class PrompUserComponent implements OnInit {
 
   ngOnInit() {
     this.defaultFetch()
+
   }
 
   defaultFetch() {
@@ -65,7 +66,6 @@ export class PrompUserComponent implements OnInit {
   }
 
   getRoute(): string {
-    console.log(this.mode)
     return `basic/${this.mode == 'providers' ? 'client' : 'driver'}?populate=*&`
   }
 
