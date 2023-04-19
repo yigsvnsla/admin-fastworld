@@ -21,6 +21,7 @@ export class PrompUserComponent implements OnInit {
 
   ngOnInit() {
     this.defaultFetch()
+
   }
 
   defaultFetch() {
@@ -36,34 +37,35 @@ export class PrompUserComponent implements OnInit {
       this.defaultFetch();
       return;
     }
+    let options: any = [
+      {
+        name: {
+          $containsi: event.detail.value
+        }
+      },
+      {
+        lastname: {
+          $containsi: event.detail.value
+        }
+      },
+
+    ]
+    if (this.mode == 'providers') options.push({
+      business: {
+        name: {
+          $containsi: event.detail.value
+        }
+      }
+    })
     this.sourceUser.setPath = `${this.getRoute()}` + stringify({
       filters: {
-        $or: [
-          {
-            name: {
-              $containsi: event.detail.value
-            }
-          },
-          {
-            lastname: {
-              $containsi: event.detail.value
-            }
-          },
-          {
-            [this.mode == 'providers' ? 'business' : 'driver']: {
-              name: {
-                $containsi: event.detail.value
-              }
-            }
-          }
-        ]
+        $or: options
       },
       sort: 'name:ASC'
     })
   }
 
   getRoute(): string {
-    console.log(this.mode)
     return `basic/${this.mode == 'providers' ? 'client' : 'driver'}?populate=*&`
   }
 

@@ -52,27 +52,29 @@ export class GenericSearchComponent implements OnInit {
       return;
     }
     this.popover.present()
+    let options: any = [
+      {
+        name: {
+          $containsi: event.detail.value
+        }
+      },
+      {
+        lastname: {
+          $containsi: event.detail.value
+        }
+      },
+
+    ]
+    if (this.mode == 'providers') options.push({
+      business: {
+        name: {
+          $containsi: event.detail.value
+        }
+      }
+    })
     this.sourceUser.setPath = `${this.getRoute()}?populate=*&` + stringify({
       filters: {
-        $or: [
-          {
-            name: {
-              $containsi: event.detail.value
-            }
-          },
-          {
-            lastname: {
-              $containsi: event.detail.value
-            }
-          },
-          {
-            [this.mode == 'providers' ? 'business' : 'driver']: {
-              name: {
-                $containsi: event.detail.value
-              }
-            }
-          }
-        ]
+        $or: options
       }
     })
   }

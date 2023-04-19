@@ -321,8 +321,11 @@ export class SocketService extends Socket {
 }
 export class Source extends DataSource<any | undefined>{
   public source: any[] = Array.from<any>({ length: 0 });
-  private itemsChanges$: BehaviorSubject<any> = new BehaviorSubject([]);
+  public itemsChanges$: BehaviorSubject<any> = new BehaviorSubject([]);
   private destroy$: Subject<boolean> = new Subject();
+
+
+  public
 
   private path: string
   private pagination: {
@@ -366,9 +369,7 @@ export class Source extends DataSource<any | undefined>{
 
   public set setPath(v: string) {
     this.path = v;
-    this.itemsChanges$ = new BehaviorSubject<(string | undefined)[]>(this.source);
     this.setPagination = { page: 1 }
-    this.loading = new BehaviorSubject<boolean>(false)
     this.getInformation()
   }
 
@@ -384,13 +385,10 @@ export class Source extends DataSource<any | undefined>{
   private async getInformation() {
     this.loading.next(true)
     const { data, meta } = await this.getData(this.path)
-    const { page, pageSize, pageCount, total } = meta.pagination
+    let { page, pageSize } = meta.pagination
     this.pagination = meta.pagination
-    if (page <= 1) {
-      this.source = Array.from<any>({ length: 0 });
-    }
-    this.source.splice(page * pageSize, pageSize, ...data);
-    this.itemsChanges$.next(this.source);
+    this.source.splice(page * pageSize, pageSize, ...data)
+    this.itemsChanges$.next(data);
     this.loading.next(false)
   }
 
