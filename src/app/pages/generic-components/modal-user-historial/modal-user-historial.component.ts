@@ -8,6 +8,7 @@ import { DetailsClientComponent } from '../details-client/details-client.compone
 import { DetailsDriverComponent } from '../details-driver/details-driver.component';
 import { DetailsPackageComponent } from '../details-package/details-package.component';
 import { stringify } from 'qs'
+import { ViewDownloadComponent } from '../view-download/view-download.component';
 
 @Component({
   selector: 'modal-user-historial',
@@ -51,7 +52,7 @@ export class ModalUserHistorial implements OnInit {
     private toolsService: ToolsService,
     private conectionsService: ConectionsService,
     private el: ElementRef,
-    private ModalController:ModalController
+    private ModalController: ModalController
   ) {
     this.setPagination = {
       start: 0,
@@ -163,7 +164,7 @@ export class ModalUserHistorial implements OnInit {
   //   })
   // }
 
-  public async onExit(){
+  public async onExit() {
     this.ModalController.dismiss()
   }
 
@@ -190,5 +191,15 @@ export class ModalUserHistorial implements OnInit {
 
   public onDeletePackage(_id: number) {
 
+  }
+
+  download() {
+    this.toolsService.showModal({
+      component: ViewDownloadComponent,
+      componentProps:{
+        user: this.id,
+      },
+      cssClass:'modal-dialogs'
+    })
   }
 }
