@@ -81,3 +81,4 @@ import { ViewDownloadComponent } from '../generic-components/view-download/view-
   ]
 })
 export class DashboardPageModule {}
+

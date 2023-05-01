@@ -98,4 +98,6 @@ export class ViewDownloadComponent implements OnInit {
       loading.dismiss()
     }
   }
+
+
 }

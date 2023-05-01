@@ -223,4 +223,30 @@ export class DetailsPackageComponent implements OnInit {
     (await this.modalController.getTop()).dismiss(this._refPackage)
   }
 
+    async getPDF(id) {
+    const loading = await this.toolsService.showLoading('Cargando informacion...')
+    try {
+      let response = await this.conectionsService.postStream(`print/package/${id}`, {}).toPromise()
+      let name = new Date().toString()
+      let file = new Blob([response], { type: 'application/pdf' })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}.pdf`;
+      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+      if (response) {
+        await this.toolsService.showAlert({
+          cssClass: 'alert-success',
+          keyboardClose: true,
+          mode: 'ios',
+          header: 'Exito',
+          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
+  }
+
 }

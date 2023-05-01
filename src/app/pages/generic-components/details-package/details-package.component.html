@@ -20,6 +20,12 @@
           </ion-chip>
         </ion-col>
         <ion-col style="justify-content: center;display: flex;">
+          <ion-chip (click)="getPDF(item.id)" color="danger" mode="ios" outline="true" [disabled]="item.attributes?.shipping_status != 'entregado'">
+            <ion-icon name="print-outline"></ion-icon>
+            <ion-label>Imprimir</ion-label>
+          </ion-chip>
+        </ion-col>
+        <ion-col style="justify-content: center;display: flex;">
           <ion-chip (click)="this.onTransferPackage(item.id)" color="orange" mode="ios" outline="true">
             <ion-icon name="repeat"></ion-icon>
             <ion-label>Traspasar</ion-label>
