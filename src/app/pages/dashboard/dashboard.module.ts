@@ -35,6 +35,7 @@ import { ModalUserHistorial } from "../generic-components/modal-user-historial/m
 import { ModalStepsDriverComponent } from '../generic-components/modal-steps-driver/modal-steps-driver.component';
 import { FinanzasPageModule } from '../finanzas/finanzas.module';
 import { ViewRegisterComponent } from '../generic-components/view-register/view-register.component';
+import { ViewDownloadComponent } from '../generic-components/view-download/view-download.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -75,7 +76,9 @@ import { ViewRegisterComponent } from '../generic-components/view-register/view-
     ModalUserHistorial,
     ModalStepsClientComponent,
     ModalStepsDriverComponent,
-    ViewRegisterComponent
+    ViewRegisterComponent,
+    ViewDownloadComponent
   ]
 })
 export class DashboardPageModule {}
+

@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-title>Descargar archivo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Opciones</ion-label>
+        <ion-select interface="popover" #datePreferences placeholder="Seleccionar" (ionChange)="selectChange($event)">
+          <ion-select-option value="5">Todo</ion-select-option>
+          <ion-select-option value="1">Hoy</ion-select-option>
+          <ion-select-option value="2">Esta semana</ion-select-option>
+          <ion-select-option value="3">Del mes actual</ion-select-option>
+          <ion-select-option value="4">Personalizado</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="datePreferences.value == 4">
+    <ion-col>
+      <ion-item button id="item-date-start">
+        <ion-label position="stacked">Fecha de inicio</ion-label>
+        <ion-input type="date" formControlName="start"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item button id="item-date-end">
+        <ion-label position="stacked">Fecha de final</ion-label>
+        <ion-input type="date" formControlName="end"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</div>
+<ion-footer>
+
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="10">
+      <ion-button color="success" expand="block" (click)="onSubmit()">
+        <ion-label>Descargar Excel</ion-label>
+        <ion-icon name="download-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <!-- <ion-col size="5">
+      <ion-button color="success" expand="block">
+        <ion-label>Descargar PDF</ion-label>
+        <ion-icon name="download-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-col> -->
+  </ion-row>
+</ion-footer>
