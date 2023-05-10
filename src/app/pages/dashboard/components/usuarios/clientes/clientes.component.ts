@@ -206,8 +206,6 @@ export class ClientesComponents implements OnInit {
         }
       })
     }
-
-
   }
 
   public async showCreateEncomienda(_id: number) {

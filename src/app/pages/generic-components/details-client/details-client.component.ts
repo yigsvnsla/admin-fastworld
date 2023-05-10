@@ -13,6 +13,7 @@ import { ConectionsService } from 'src/app/services/connections.service';
 import { format, isValidPhoneNumber } from 'libphonenumber-js';
 import { ModalMembershipComponent } from '../modal-membership/modal-membersip.component';
 import { ModalCrearEncomiendaComponent } from '../modal-crear-encomienda/modal-crear-encomienda.component';
+import { ModalStepsClientComponent } from '../modal-steps-client/modal-steps-client.component';
 
 @Component({
   selector: 'app-details-user',
@@ -66,6 +67,26 @@ export class DetailsClientComponent implements OnInit {
 
 
   }
+
+  public openMap() {
+    const user = this.user$.value;
+
+    console.log(this.user$.value);
+
+    this.toolsService.showModal({
+      component: ModalStepsClientComponent,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: user.id,
+        user
+      }
+    })
+
+  }
+
 
   private instanceForm(data: any) {
     console.log(data);

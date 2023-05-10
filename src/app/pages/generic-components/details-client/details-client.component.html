@@ -29,6 +29,7 @@
               <ion-label>Desbloquear</ion-label>
             </ion-chip>
           </ng-container>
+
           <ng-container *ngIf="this.user.status != 'reportado'">
             <ion-chip color="danger" mode="ios" outline="true">
               <ion-icon name="close"></ion-icon>
@@ -115,6 +116,11 @@
               <ion-card>
                 <ion-card-header style="padding-bottom: 0;">
                   <ion-toolbar>
+                    <ion-buttons slot="end">
+                      <ion-button (click)="openMap()">
+                        <ion-icon slot="icon-only" name="pencil"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
                     <ion-card-subtitle>Administracion</ion-card-subtitle>
                     <ion-card-title>
                       <ion-text color="orange"> {{ 'Resumen de saldos' }}</ion-text>
