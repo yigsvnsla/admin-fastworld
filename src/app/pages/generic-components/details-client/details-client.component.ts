@@ -14,6 +14,7 @@ import { format, isValidPhoneNumber } from 'libphonenumber-js';
 import { ModalMembershipComponent } from '../modal-membership/modal-membersip.component';
 import { ModalCrearEncomiendaComponent } from '../modal-crear-encomienda/modal-crear-encomienda.component';
 import { ModalStepsClientComponent } from '../modal-steps-client/modal-steps-client.component';
+import { ModalMapComponent } from '../modal-map/modal-map.component';
 
 @Component({
   selector: 'app-details-user',
@@ -68,13 +69,13 @@ export class DetailsClientComponent implements OnInit {
 
   }
 
-  public openMap() {
+  public async openMap() {
     const user = this.user$.value;
 
     console.log(this.user$.value);
 
-    this.toolsService.showModal({
-      component: ModalStepsClientComponent,
+    const ubication = await this.toolsService.showModal({
+      component: ModalMapComponent,
       cssClass: ['modal-fullscreen'],
       keyboardClose: true,
       mode: 'ios',
@@ -83,7 +84,9 @@ export class DetailsClientComponent implements OnInit {
         id: user.id,
         user
       }
-    })
+    });
+    this.conectionService.put(`businesses/${user.id}?populate=*`, { data: ubication }).subscribe();
+    console.log(ubication);
 
   }
 
