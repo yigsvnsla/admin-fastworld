@@ -72,8 +72,6 @@ export class DetailsClientComponent implements OnInit {
   public async openMap() {
     const user = this.user$.value;
 
-    console.log(this.user$.value);
-
     const ubication = await this.toolsService.showModal({
       component: ModalMapComponent,
       cssClass: ['modal-fullscreen'],
@@ -85,8 +83,11 @@ export class DetailsClientComponent implements OnInit {
         user
       }
     });
-    this.conectionService.put(`businesses/${user.id}?populate=*`, { data: ubication }).subscribe();
-    console.log(ubication);
+    let response = await this.conectionService.put(`businesses/${this.user?.business?.id}?populate=*`, {
+      data: {
+        direction: ubication
+      }
+    }).toPromise()
 
   }
 
@@ -343,9 +344,7 @@ export class DetailsClientComponent implements OnInit {
     try {
       /* let response = await this.conectionService.get<any>(`user/basic/${this.id}?populate=*`).toPromise()
       console.log(response) */
-      const { pending, charges } = this.user.payments
-      this.balance = parseFloat(pending + -charges.total);
-      console.log(this.balance)
+      this.balance = this.user.balance
     } catch (error) {
       console.log(error)
     }
