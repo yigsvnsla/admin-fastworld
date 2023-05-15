@@ -237,19 +237,19 @@ export class ModalCrearEncomiendaComponent implements OnInit {
         {
           text: '30 - 60 minutos',
           icon: 'timer',
-          data: 30,
+          data: 60,
           role: 'selected',
         },
         {
           text: '60 - 90 minutos',
           icon: 'timer',
-          data: 60,
+          data: 90,
           role: 'selected'
         },
         {
           text: '90 - 120 minutos',
           icon: 'timer',
-          data: 90,
+          data: 120,
           role: 'selected'
         },
         {
