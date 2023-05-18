@@ -2,10 +2,26 @@ import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewC
 import { endOfDay, format, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { stringify } from 'qs';
+import { ViewDownloadComponent } from 'src/app/pages/generic-components/view-download/view-download.component';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { DatatableComponent } from '../datatable/datatable.component';
 import { RegisterComponent } from '../register/register.component';
+
+const MimeTypes = [
+  {
+    name: 'excel',
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    extension: '.xlsx',
+    route: 'finances/excel'
+  },
+  {
+    name: 'pdf',
+    type: 'application/pdf',
+    extension: '.pdf',
+    route: 'finances/pdf'
+  },
+]
 
 @Component({
   selector: 'finance-resume',
@@ -102,37 +118,57 @@ export class ResumeComponent implements OnInit, OnChanges {
 
 
   public async download() {
+    let builded = await this.tools.showModal({
+      component: ViewDownloadComponent,
+      cssClass: 'modal-dialogs',
+      componentProps: {
+        mode: 'builder',
+      }
+    })
+    if (builded) {
+      const { end, start, print, mode, target } = builded;
+      let args = new Date(start).getFullYear() == 2020;
+      if (start == end || args) {
+        this.buildRequest(start, mode, target, print)
+      } else {
+        this.buildRequest([start, end], mode, target, print)
+      }
+    }
+  }
+
+
+  async buildRequest(day, mode, target, print) {
+
+    const downloader = async (data, name) => {
+      let mimeType = MimeTypes.find(e => e.name == print)
+      let response = await this.http.postStream(mimeType.route, data).toPromise()
+      let file = new Blob([response], { type: mimeType.type })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}${mimeType.extension}`;
+      if (response) {
+        a.click()
+      }
+    }
     const loading = await this.tools.showLoading('Descargando informacion...')
     try {
-
       let query: any = {
-        mode: this.mode,
-        day: this.getDayISO()
+        mode: mode,
+        day: day
       }
-
-      if (this.mode != 'all') {
+      if (mode != 'all') {
         query = {
           ...query,
-          current: this.target.id
+          current: target
         }
       }
 
-      let response = await this.http.postStream(`finances/report`, query).toPromise()
-      let name = `finanzas_${this.getDayISO()}_general`
-      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      var a = document.createElement("a"), url = URL.createObjectURL(file);
-      a.href = url;
-      a.download = `${name}.xlsx`;
-      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
-        await this.tools.showAlert({
-          cssClass: 'alert-success',
-          keyboardClose: true,
-          mode: 'ios',
-          header: 'Exito',
-          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
-        })
-      }
+      await downloader(query, `${mode}_${format(new Date(), 'yyyy-MM-dd')}`)
+      this.tools.showToast({
+        message: 'Descarga completada!',
+        color: 'success'
+      })
+
     } catch (error) {
       console.error(error);
     } finally {

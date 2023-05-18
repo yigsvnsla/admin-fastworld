@@ -193,13 +193,52 @@ export class ModalUserHistorial implements OnInit {
 
   }
 
-  download() {
-    this.toolsService.showModal({
+  async download() {
+    let builded = await this.toolsService.showModal({
       component: ViewDownloadComponent,
-      componentProps:{
-        user: this.id,
-      },
-      cssClass:'modal-dialogs'
+      cssClass: 'modal-dialogs',
+      componentProps: {
+        infoUser: {
+          id: this.id,
+          role: 'providers'
+        },
+        pdf: false
+      }
     })
+    if (builded) {
+      const { start } = builded;
+      let arg = new Date(start)
+      if (arg.getFullYear() == 2020) {
+        await this.getExport(this.id, { all: true })
+      } else {
+        await this.getExport(this.id, builded)
+      }
+
+    }
+  }
+  async getExport(id: any, data: any) {
+    const loading = await this.toolsService.showLoading('Cargando informacion...')
+    try {
+      let response = await this.conectionsService.postStream(`report/${id}`, data).toPromise()
+      let name = new Date().toString()
+      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}.xlsx`;
+      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+      if (response) {
+        await this.toolsService.showAlert({
+          cssClass: 'alert-success',
+          keyboardClose: true,
+          mode: 'ios',
+          header: 'Exito',
+          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
   }
 }

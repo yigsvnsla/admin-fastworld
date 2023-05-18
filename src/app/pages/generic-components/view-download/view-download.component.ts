@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { IonSelect, ModalController } from '@ionic/angular';
 import { endOfDay, format, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -12,24 +12,29 @@ import { ToolsService } from 'src/app/services/tools.service';
 })
 export class ViewDownloadComponent implements OnInit {
 
-  @Input() user: number
+  @Input() infoUser?: { id: string, role: string };
+  @Input() pdf: boolean = true
+  @Input() excel: boolean = true
 
   public reportForm: FormGroup
-
+  user: any
 
   constructor(
     private formBuilder: FormBuilder,
-    private toolsService: ToolsService,
-    private http: ConectionsService,
     private modal: ModalController) { }
 
   ngOnInit() {
-    this.reportForm = this.formBuilder.nonNullable.group({
-      start: ['', Validators.required],
-      end: ['', Validators.required],
-      type: [, [Validators.required]],
-      all: [false]
+    this.reportForm = this.formBuilder.group({
+      start: [, Validators.required],
+      end: [, Validators.required],
+      target: [0, Validators.required],
+      mode: ['providers', Validators.required],
     })
+
+    if (this.infoUser) {
+      this.reportForm.get('target').patchValue(this.infoUser.id)
+      this.reportForm.get('mode').patchValue(this.infoUser.role)
+    }
 
   }
 
@@ -41,6 +46,10 @@ export class ViewDownloadComponent implements OnInit {
     let dateStart: Date;
     let dateEnd: Date;
     switch (value) {
+      case '0':
+        dateStart = startOfMonth(new Date('2020-01-02'))
+        dateEnd = endOfDay(new Date())
+        break;
       case '1':
         dateStart = startOfDay(new Date())
         dateEnd = endOfDay(new Date())
@@ -53,11 +62,6 @@ export class ViewDownloadComponent implements OnInit {
         dateStart = startOfMonth(new Date())
         dateEnd = endOfDay(new Date())
         break;
-      case '5':
-        dateStart = startOfMonth(new Date())
-        dateEnd = endOfDay(new Date())
-        this.reportForm.get('all').patchValue(true)
-        break;
       default:
         break;
 
@@ -66,38 +70,30 @@ export class ViewDownloadComponent implements OnInit {
     this.reportForm.get('end').patchValue(format(dateEnd, 'yyyy-MM-dd'))
   }
 
-  async onSubmit() {
-    const { type } = this.reportForm.value
-    await this.getExport(this.user, type, this.reportForm.value)
-    this.reportForm.get('all').patchValue(false)
-
+  async download(print: 'pdf' | 'excel') {
+    this.close({
+      ...this.reportForm.value,
+      print,
+    })
   }
 
-  async getExport(id: any, type: string, data: any) {
-    const loading = await this.toolsService.showLoading('Cargando informacion...')
-    try {
-      let response = await this.http.postStream(`report/${id}`, data).toPromise()
-      let name = new Date().toString()
-      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      var a = document.createElement("a"), url = URL.createObjectURL(file);
-      a.href = url;
-      a.download = `${name}.xlsx`;
-      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
-        await this.toolsService.showAlert({
-          cssClass: 'alert-success',
-          keyboardClose: true,
-          mode: 'ios',
-          header: 'Exito',
-          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
-        })
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      loading.dismiss()
+
+
+  onResult(event: any) {
+    this.user = event;
+    this.reportForm.patchValue({ target: event.id })
+  }
+
+  runClear(event?: any) {
+    this.user = null
+    this.reportForm.patchValue({ target: null })
+    if (event) {
+      const { value } = event.detail;
+      if (value == 'all') this.reportForm.patchValue({ target: 0 })
     }
+
   }
-
-
+  close(data?) {
+    this.modal.dismiss(data)
+  }
 }

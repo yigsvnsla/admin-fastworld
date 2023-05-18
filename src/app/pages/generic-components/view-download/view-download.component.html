@@ -2,19 +2,48 @@
   <ion-toolbar color="orange">
     <ion-title>Descargar archivo</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="close()">
         <ion-icon name="close" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<div>
+<div [formGroup]="reportForm">
+  <ion-row *ngIf="!infoUser">
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Tipo de usuario</ion-label>
+        <ion-select formControlName="mode" #option value="providers" interface="popover" placeholder="Seleccionar"
+          (ionChange)="runClear($event)">
+          <ion-select-option value="providers">
+            Proveedor
+          </ion-select-option>
+          <ion-select-option value="drivers">
+            Motorizado
+          </ion-select-option>
+          <ion-select-option value="all">
+            Todo
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col *ngIf="option.value != 'all'">
+      <generic-search *ngIf="user == null; else inputUser" [mode]="option.value" searchID="search1"
+        (value)="onResult($event)"></generic-search>
+      <ng-template #inputUser>
+        <ion-item button (click)="runClear()">
+          <ion-label position="stacked">Nombre del proveedor</ion-label>
+          <ion-input [value]="user.name | titlecase" readonly=""></ion-input>
+        </ion-item>
+      </ng-template>
+    </ion-col>
+  </ion-row>
   <ion-row>
     <ion-col>
       <ion-item>
-        <ion-label position="stacked">Opciones</ion-label>
+        <ion-label position="stacked">Fechas</ion-label>
         <ion-select interface="popover" #datePreferences placeholder="Seleccionar" (ionChange)="selectChange($event)">
-          <ion-select-option value="5">Todo</ion-select-option>
+          <ion-select-option value="0">Todo</ion-select-option>
           <ion-select-option value="1">Hoy</ion-select-option>
           <ion-select-option value="2">Esta semana</ion-select-option>
           <ion-select-option value="3">Del mes actual</ion-select-option>
@@ -39,19 +68,18 @@
   </ion-row>
 </div>
 <ion-footer>
-
   <ion-row class="ion-justify-content-center">
-    <ion-col size="10">
-      <ion-button color="success" expand="block" (click)="onSubmit()">
+    <ion-col *ngIf="excel">
+      <ion-button [disabled]=" reportForm.invalid" color="success" expand="block" (click)="download('excel')">
         <ion-label>Descargar Excel</ion-label>
         <ion-icon name="download-outline" slot="end"></ion-icon>
       </ion-button>
     </ion-col>
-    <!-- <ion-col size="5">
-      <ion-button color="success" expand="block">
+    <ion-col *ngIf="pdf">
+      <ion-button [disabled]="reportForm.invalid" color="orange" expand="block" (click)="download('pdf')">
         <ion-label>Descargar PDF</ion-label>
         <ion-icon name="download-outline" slot="end"></ion-icon>
       </ion-button>
-    </ion-col> -->
+    </ion-col>
   </ion-row>
 </ion-footer>

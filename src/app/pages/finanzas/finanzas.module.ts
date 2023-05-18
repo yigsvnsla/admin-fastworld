@@ -33,6 +33,9 @@ import { GenericSearchComponent } from './components/generic-search/generic-sear
     ResumeComponent,
     PrompUserComponent,
     RegisterComponent,
-    GenericSearchComponent]
+    GenericSearchComponent],
+    exports:[
+      GenericSearchComponent
+    ]
 })
 export class FinanzasPageModule { }
