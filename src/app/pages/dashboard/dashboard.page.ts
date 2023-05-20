@@ -51,7 +51,7 @@ export class DashboardPage implements OnInit {
         url: 'pagos',
         options: [
           {
-            title: 'Resumen',
+            title: 'Finanzas',
             url: '',
             icon: 'person',
           }

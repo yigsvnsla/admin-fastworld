@@ -67,8 +67,12 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   async fetchResume() {
+    let start = new Date(this.date)
+    start.setTime(start.getTime() + start.getTimezoneOffset() * 60000)
+    start = startOfDay(start)
+    let end = endOfDay(start)
     if (this.mode == 'all') {
-      this.resume = await this.http.get<resumeModel>(`finances/${this.date}`).toPromise()
+      this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}`).toPromise()
       return;
     }
     let filters = stringify({
@@ -78,7 +82,7 @@ export class ResumeComponent implements OnInit, OnChanges {
         }
       }
     })
-    this.resume = await this.http.get<resumeModel>(`finances/${this.date}?${filters}`).toPromise()
+    this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}`).toPromise()
 
   }
 
@@ -127,12 +131,7 @@ export class ResumeComponent implements OnInit, OnChanges {
     })
     if (builded) {
       const { end, start, print, mode, target } = builded;
-      let args = new Date(start).getFullYear() == 2020;
-      if (start == end || args) {
-        this.buildRequest(start, mode, target, print)
-      } else {
-        this.buildRequest([start, end], mode, target, print)
-      }
+      this.buildRequest([start, end], mode, target, print)
     }
   }
 
@@ -178,13 +177,13 @@ export class ResumeComponent implements OnInit, OnChanges {
 
   between() {
     let startDate = new Date(this.date)
-    let endDate = new Date(this.date)
+
     startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60000)
-    endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60000)
+    /* endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60000) */
+    let endDate = endOfDay(startDate);
     startDate = startOfDay(startDate);
-    endDate = endOfDay(endDate);
-    startDate.setTime(startDate.getTime() - startDate.getTimezoneOffset() * 60000)
-    endDate.setTime(endDate.getTime() - endDate.getTimezoneOffset() * 60000)
+    /* startDate.setTime(startDate.getTime() - startDate.getTimezoneOffset() * 60000)
+    endDate.setTime(endDate.getTime() - endDate.getTimezoneOffset() * 60000) */
     return [startDate.toISOString(), endDate.toISOString()]
   }
 
@@ -236,6 +235,12 @@ export class ResumeComponent implements OnInit, OnChanges {
     let egreso = this.resume.delivery + this.resume.discharge;
     //if (this.resume.ingreso >= egreso) return egreso - this.resume.ingreso
     return egreso - this.resume.income
+  }
+
+  getUTCDate(date: string) {
+    let start = new Date(date);
+    start.setTime(start.getTime() + start.getTimezoneOffset() * 60000);
+    return startOfDay(start).toISOString()
   }
 }
 

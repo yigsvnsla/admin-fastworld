@@ -71,8 +71,13 @@ export class ViewDownloadComponent implements OnInit {
   }
 
   async download(print: 'pdf' | 'excel') {
+    let builded = this.reportForm.value
+    let start = this.getISODate(builded.start).toISOString()
+    let end = endOfDay(this.getISODate(builded.end)).toISOString()
     this.close({
-      ...this.reportForm.value,
+      ...builded,
+      start,
+      end,
       print,
     })
   }
@@ -95,5 +100,11 @@ export class ViewDownloadComponent implements OnInit {
   }
   close(data?) {
     this.modal.dismiss(data)
+  }
+
+  getISODate(date: string): Date {
+    let start = new Date(date)
+    start.setTime(start.getTime() + start.getTimezoneOffset() * 60000)
+    return startOfDay(start)
   }
 }

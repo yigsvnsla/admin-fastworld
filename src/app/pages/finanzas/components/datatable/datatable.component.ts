@@ -123,7 +123,7 @@ export class DatatableComponent implements OnInit, OnChanges {
   /* Optionals helpres */
   getFullDate(value: string) {
     let date = new Date(value);
-    date.setTime(date.getTime() + date.getTimezoneOffset() * 60000)
+    /* date.setTime(date.getTime() - date.getTimezoneOffset() * 60000) */
     return format(date, 'yyyy-MM-dd')
   }
 
