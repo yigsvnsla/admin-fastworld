@@ -134,8 +134,8 @@
                         <ion-item *ngIf="balance > 0; else saldoElse">
                           <ion-icon color="success" name="cash" slot="start"></ion-icon>
                           <ion-label>
-                            <p>Saldo</p>
-                            <ion-text color="danger">{{ balance | currency }}</ion-text>
+                            <p>Saldo a favor</p>
+                            <ion-text color="sucess"><b>{{ balance | currency }}</b></ion-text>
                           </ion-label>
                         </ion-item>
                         <ng-template #saldoElse>
@@ -143,7 +143,7 @@
                             <ion-icon color="danger" name="cash" slot="start"></ion-icon>
                             <ion-label>
                               <p>Deuda</p>
-                              <ion-text color="danger">{{ balance | currency }}</ion-text>
+                              <ion-text color="danger"><b>{{ balance | currency }}</b></ion-text>
                             </ion-label>
                           </ion-item>
                         </ng-template>

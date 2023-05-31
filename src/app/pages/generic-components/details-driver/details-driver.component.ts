@@ -19,6 +19,7 @@ export class DetailsDriverComponent implements OnInit {
   public user$: BehaviorSubject<any>;
   public formBasic: FormGroup;
   public formDriver: FormGroup
+  public balance;
 
   constructor(
     private modalController: ModalController,
@@ -37,6 +38,7 @@ export class DetailsDriverComponent implements OnInit {
     const user = await this.conectionService.get<any>(`user/basic/${this.id}?populate=*`).pipe(delay(500)).toPromise()
     this.user$.next(user);
     this.instanceForm(this.user$.value)
+    this.balance = user.balance
   }
 
   public async showAlertConfirmUpdateBasic() {
