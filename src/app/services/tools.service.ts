@@ -10,14 +10,14 @@ export class ToolsService {
     private toastController: ToastController,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private menuController:MenuController,
-    private alertController:AlertController,
+    private menuController: MenuController,
+    private alertController: AlertController,
     private actionSheetController: ActionSheetController,
-    private picker:PickerController,
+    private picker: PickerController,
     private popover: PopoverController
   ) { }
 
-  async showPopover(options:PopoverOptions){
+  async showPopover(options: PopoverOptions) {
     const pop = await this.popover.create(options)
     pop.present()
 
@@ -27,7 +27,7 @@ export class ToolsService {
     })
   }
 
-  async  showPicker(options: PickerOptions){
+  async showPicker(options: PickerOptions) {
     const picker = await this.picker.create(options)
     picker.present()
     return new Promise<HTMLIonPickerElement>((resolve, reject) => {
@@ -35,25 +35,25 @@ export class ToolsService {
     })
   }
 
-  async showActionSheet(options:ActionSheetOptions){
+  async showActionSheet(options: ActionSheetOptions) {
 
     const actionSheet = await this.actionSheetController.create(options)
     await actionSheet.present();
 
-    return new Promise<HTMLIonActionSheetElement>(async(value)=>{
+    return new Promise<HTMLIonActionSheetElement>(async (value) => {
       return value(actionSheet)
     })
   }
 
-  async showAlert(alertOptions:AlertOptions){
+  async showAlert(alertOptions: AlertOptions) {
     let alert = await this.alertController.create(alertOptions)
-      alert.present()
-    return new Promise<HTMLIonAlertElement>(async (value)=>{
+    alert.present()
+    return new Promise<HTMLIonAlertElement>(async (value) => {
       value(alert)
     })
   }
 
-  async showToast(config:any) : Promise<HTMLIonToastElement> {
+  async showToast(config: any): Promise<HTMLIonToastElement> {
     let toast = await this.toastController.create({
       ...config,
       duration: 1000
@@ -64,7 +64,7 @@ export class ToolsService {
     })
   }
 
-  async showLoading(message: string="Loading") {
+  async showLoading(message: string = "Loading") {
     let loading = await this.loadingController.create({
       message: message,
     });
@@ -85,35 +85,48 @@ export class ToolsService {
     })
   }
 
-  compareObjets(objet_base:object, objet_compare:object){
+  compareObjets(objet_base: object, objet_compare: object) {
     for (let [key, val] of Object.entries(objet_base)) {
       // si esta propiedad existe
-      if(objet_compare.hasOwnProperty(key)){
+      if (objet_compare.hasOwnProperty(key)) {
         // si el valor de la llave en el objeto comparador es diferente
         if (objet_compare[key] !== val) {
           // si el valor de la llave es de tipo objeto,
           // aplicar recursividad a la funcion, asi hacemos un sondeo profundo a las propiedades
-          if (typeof objet_compare[key] == 'object'){
-            return this.compareObjets(objet_compare[key],val)
+          if (typeof objet_compare[key] == 'object') {
+            return this.compareObjets(objet_compare[key], val)
           }
           console.error(`Propiedad ${key}: El valor ${objet_compare[key]} no es equivalente a ${val}`);
           return false;
         }
       }
       // si esta propiedad no existe
-      else{
-        console.error(key,`propiedad no existe en el objeto comparador`);
+      else {
+        console.error(key, `propiedad no existe en el objeto comparador`);
         return false;
       }
     }
     return true
   }
 
-  async menuControl():Promise<MenuController>{
+  async menuControl(): Promise<MenuController> {
     return this.menuController;
   }
 
-  typeOf(value:any,base:string){
+  typeOf(value: any, base: string) {
     return typeof value == base ? true : false
+  }
+
+  /**
+   * This funtion is transform the given date to new date with operation on OffsetTimeZone
+   * @param date Date to satinize with OffsetTimeZone
+   * @param sum Is a switch to add o remove OffsetTimeZone in the date
+   */
+  satinizeDate(date: Date, sum: boolean = false) {
+    let d = new Date(date)
+    let offSet = d.getTimezoneOffset() * 60000;
+    let time = d.getTime();
+    d.setTime(sum ? time + offSet : time - offSet)
+    return d;
   }
 }

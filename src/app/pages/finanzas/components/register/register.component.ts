@@ -29,8 +29,6 @@ export class RegisterComponent implements OnInit {
   formRoute!: FormGroup
 
   constructor(private modal: ModalController, private http: ConectionsService, private tools: ToolsService, private builder: FormBuilder) {
-    let day = new Date()
-    day.setTime(day.getTime() + day.getTimezoneOffset() * 60000);
     this.formRoute = this.builder.group({
       business: [0],
       driver: [0],
@@ -39,7 +37,7 @@ export class RegisterComponent implements OnInit {
       discharge: ['', Validators.required],
       delivery: ['', Validators.required],
       direction: [''],
-      time: [format(day, 'yyyy-MM-dd'), Validators.required]
+      time: [format(new Date(), 'yyyy-MM-dd'), Validators.required]
     })
   }
 
@@ -105,7 +103,6 @@ export class RegisterComponent implements OnInit {
     let data = JSON.parse(JSON.stringify(this.formRoute.value));
     let { business, driver, time } = data
     let day = new Date(time)
-    day.setTime(day.getTime() + day.getTimezoneOffset() * 60000);
 
     if (business == 0) delete data['business']
     if (driver == 0) delete data['driver']

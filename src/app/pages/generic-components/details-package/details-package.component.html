@@ -42,23 +42,30 @@
               <div class="wrapper">
                 <ion-header>
                   <ion-toolbar color="success">
-                    <ion-title>Entregar</ion-title>
+                    <ion-title>Entrega</ion-title>
                   </ion-toolbar>
                 </ion-header>
                 <ion-item-group [formGroup]="this.dialogForm">
                   <ion-item-divider style="margin-right: 16px;">
-                    <ion-label>Ingresar descripción y valor recibidos</ion-label>
+                    <ion-label>¿Desea añadir gastos?</ion-label>
+                    <ion-toggle #gastos slot="end" (ionChange)="onChangeSelect($event)"></ion-toggle>
                   </ion-item-divider>
                   <ion-item>
                     <ion-label position="stacked">Valor Contra-Entrega</ion-label>
-                    <ion-input id="money_catch" (ionChange)="ionChangesInputCurrencyMoneyCatch($event)"
+                    <ion-input id="money_catch" (ionChange)="ionChangesInputCurrency($event, 'money_catch')"
                       (keydown.space)="false" (keydown.enter)="false" type="tel" formControlName="money_catch"
                       placeholder="$0.00"></ion-input>
                   </ion-item>
                   <ion-item *ngIf="item.attributes.shipping_status =='invalido' ">
                     <ion-label position="stacked">Valor de Ruta</ion-label>
-                    <ion-input id="fee" (ionChange)="ionChangesInputCurrencyFee($event)" (keydown.space)="false"
+                    <ion-input id="fee" (ionChange)="ionChangesInputCurrency($event,'fee')" (keydown.space)="false"
                       (keydown.enter)="false" type="tel" formControlName="fee" placeholder="$0.00"></ion-input>
+                  </ion-item>
+                  <ion-item *ngIf="gastos.checked">
+                    <ion-label position="stacked">Gastos</ion-label>
+                    <ion-input (ionChange)="ionChangesInputCurrency($event, 'discharge')" (keydown.space)="false"
+                      (keydown.enter)="false" type="tel" placeholder="$0.00" formControlName="discharge">
+                    </ion-input>
                   </ion-item>
                   <ion-item>
                     <ion-label position="stacked">(persona que entrega / descripción)</ion-label>

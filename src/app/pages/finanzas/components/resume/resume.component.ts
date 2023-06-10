@@ -68,9 +68,9 @@ export class ResumeComponent implements OnInit, OnChanges {
 
   async fetchResume() {
     let start = new Date(this.date)
-    start.setTime(start.getTime() + start.getTimezoneOffset() * 60000)
-    start = startOfDay(start)
-    let end = endOfDay(start)
+    let end = endOfDay(this.tools.satinizeDate(start, true))
+    end = this.tools.satinizeDate(end);
+
     if (this.mode == 'all') {
       this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}`).toPromise()
       return;
@@ -176,14 +176,9 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   between() {
-    let startDate = new Date(this.date)
-
-    startDate.setTime(startDate.getTime() + startDate.getTimezoneOffset() * 60000)
-    /* endDate.setTime(endDate.getTime() + endDate.getTimezoneOffset() * 60000) */
-    let endDate = endOfDay(startDate);
-    startDate = startOfDay(startDate);
-    /* startDate.setTime(startDate.getTime() - startDate.getTimezoneOffset() * 60000)
-    endDate.setTime(endDate.getTime() - endDate.getTimezoneOffset() * 60000) */
+    let startDate = new Date(this.date);
+    let endDate = endOfDay(this.tools.satinizeDate(startDate, true));
+    endDate = this.tools.satinizeDate(endDate)
     return [startDate.toISOString(), endDate.toISOString()]
   }
 
@@ -235,12 +230,6 @@ export class ResumeComponent implements OnInit, OnChanges {
     let egreso = this.resume.delivery + this.resume.discharge;
     //if (this.resume.ingreso >= egreso) return egreso - this.resume.ingreso
     return egreso - this.resume.income
-  }
-
-  getUTCDate(date: string) {
-    let start = new Date(date);
-    start.setTime(start.getTime() + start.getTimezoneOffset() * 60000);
-    return startOfDay(start).toISOString()
   }
 }
 

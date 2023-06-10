@@ -1,6 +1,7 @@
 
 import { Input, Output, ViewChild } from "@angular/core";
 import { Component, OnInit, EventEmitter, } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { InputChangeEventDetail, IonInput, IonSearchbar, IonSegment, IonSelect, SegmentCustomEvent, SelectCustomEvent } from "@ionic/angular";
 import { endOfDay, endOfMonth, format, startOfDay, startOfMonth, sub } from "date-fns";
 import * as qs from "qs";
@@ -15,14 +16,18 @@ import { ToolsService } from "src/app/services/tools.service";
 export class MenuFilterComponent implements OnInit {
 
   @Input() path: string = '';
-  @Input() public inputSearch: IonInput;
+  @Input() public inputSearch: IonSearchbar;
   @Input() public segmentStatus: IonSegment;
   @Output() public urlGen: EventEmitter<string> = new EventEmitter();
   @ViewChild('dateRangeSelect') public dateRangeSelect: IonSelect
   @ViewChild('findSelect') public findSelect: IonSelect
 
+  /* @ViewChild('viewStart') viewStart: IonInput
+  @ViewChild('viewEnd') viewEnd: IonInput
+ */
   inputStart = format(new Date(), 'yyyy-MM-dd')
   inputEnd = format(new Date(), 'yyyy-MM-dd')
+
 
   public qsObject: {
     filters: {
@@ -82,29 +87,23 @@ export class MenuFilterComponent implements OnInit {
         },
         {
           sender: {
-            basic: {
+            name: {
+              $containsi: $event.detail.value
+            }
+          }
+        },
+        {
+          sender: {
+            lastname: {
+              $containsi: $event.detail.value
+            }
+          }
+        },
+        {
+          sender: {
+            business: {
               name: {
                 $containsi: $event.detail.value
-              }
-            }
-          }
-        },
-        {
-          sender: {
-            basic: {
-              lastname: {
-                $containsi: $event.detail.value
-              }
-            }
-          }
-        },
-        {
-          sender: {
-            basic: {
-              business: {
-                name: {
-                  $containsi: $event.detail.value
-                }
               }
             }
           }
@@ -191,6 +190,8 @@ export class MenuFilterComponent implements OnInit {
         return dateHelper(startOfMonth(new Date()), endOfMonth(new Date()), true)
       case 3:
         return dateHelper(sub(new Date(), { months: 3 }), endOfMonth(new Date()), true)
+      case 4:
+        return dateHelper(new Date(this.inputStart), new Date(this.inputEnd))
       default: {
         console.error('rangeToDate --> el valor');
         break;
@@ -268,6 +269,7 @@ export class MenuFilterComponent implements OnInit {
 
   async genExcel() {
     let filters = JSON.parse(JSON.stringify(this.qsObject.filters))
+    console.log(filters)
     delete filters['$or'];
     let request = {
       $and: [
@@ -285,15 +287,11 @@ export class MenuFilterComponent implements OnInit {
       a.href = url;
       a.download = `${name}.xlsx`;
       // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
-        await this.tools.showAlert({
-          cssClass: 'alert-success',
-          keyboardClose: true,
-          mode: 'ios',
-          header: 'Exito',
-          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
-        })
-      }
+      a.click()
+      this.tools.showToast({
+        message: 'Descarga completada!',
+        color: 'success'
+      })
     } catch (error) {
       console.error(error);
     } finally {

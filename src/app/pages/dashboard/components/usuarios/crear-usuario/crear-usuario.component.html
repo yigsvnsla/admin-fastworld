@@ -18,7 +18,7 @@
       <ion-item-group #formRegisterRef [formGroup]="this.formRegister">
         <ion-item>
           <ion-label>Tipo de Usuario</ion-label>
-          <ion-select #rolSelect interface="popover" [value]="this.scope" placeholder="Seleccionar">
+          <ion-select #rolSelect [value]="this.scope" placeholder="Seleccionar" interface="popover">
             <ion-select-option  *ngFor="let rol of this.listTypeUser" [value]="rol.url">{{rol.title | titlecase}}
             </ion-select-option>
           </ion-select>

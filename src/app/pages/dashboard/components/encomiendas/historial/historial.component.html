@@ -2,11 +2,7 @@
   <ion-toolbar>
     <app-btn-menu slot="start"></app-btn-menu>
     <ion-item class="ion-text-start" slot="end">
-      <ion-icon color="orange" slot="start" name="search"></ion-icon>
-      <ion-input [debounce]="1400" #searchInput placeholder="Buscar" ></ion-input>
-      <ion-button  [hidden]="searchInput.value == '' " (click)="searchInput.value = ''" expand="block" fill="clear" shape="round">
-        <ion-icon color="orange" slot="icon-only" name="close"></ion-icon>
-      </ion-button>
+      <ion-searchbar [debounce]="600" #searchInput placeholder="Buscar" ></ion-searchbar>
     </ion-item>
     <ion-buttons slot="end">
       <ion-menu-button menu="menu-historial"></ion-menu-button>
@@ -29,10 +25,7 @@
     </ion-segment-button>
   </ion-segment>
 </ion-header>
-
 <app-menu-filter (urlGen)="getFilter($event)" [inputSearch]="searchInput" [segmentStatus]="segmentStatus" [path]="this.path"></app-menu-filter>
-
-
 
 <ion-content>
   <ngx-datatable
