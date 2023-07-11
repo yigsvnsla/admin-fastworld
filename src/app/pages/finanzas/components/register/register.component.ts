@@ -102,7 +102,12 @@ export class RegisterComponent implements OnInit {
   async send() {
     let data = JSON.parse(JSON.stringify(this.formRoute.value));
     let { business, driver, time } = data
-    let day = new Date(time)
+    let day = this.tools.satinizeDate(new Date(time), true)
+
+    if (day.getDay() == (new Date()).getDay()) {
+      let offset = (new Date()).getTime() - day.getTime();
+      day.setTime(day.getTime() + offset)
+    }
 
     if (business == 0) delete data['business']
     if (driver == 0) delete data['driver']

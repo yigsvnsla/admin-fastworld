@@ -180,18 +180,21 @@ export class MenuFilterComponent implements OnInit {
 
     // console.table(dateHelper(sub(new Date(Date.now()), { days: 7 }), new Date(Date.now())))
 
+    let start = startOfDay(new Date())
+    let end = endOfDay(start)
 
     switch (range) {
       case 0:
-        return dateHelper();
+        return [start.toISOString(), end.toISOString()]
       case 1:
-        return dateHelper(sub(new Date(Date.now()), { days: 7 }))
+        return [sub(start, { days: 7 }).toISOString(), end.toISOString()]
       case 2:
-        return dateHelper(startOfMonth(new Date()), endOfMonth(new Date()), true)
+        return [startOfMonth(start).toISOString(), endOfMonth(end).toISOString()]
+      //return dateHelper(startOfMonth(new Date()), endOfMonth(new Date()), true)
       case 3:
-        return dateHelper(sub(new Date(), { months: 3 }), endOfMonth(new Date()), true)
-      case 4:
-        return dateHelper(new Date(this.inputStart), new Date(this.inputEnd))
+        return [sub(start, { months: 3 }).toISOString(), endOfMonth(end).toISOString()]
+      //return dateHelper(sub(new Date(), { months: 3 }), endOfMonth(new Date()), true)
+
       default: {
         console.error('rangeToDate --> el valor');
         break;
@@ -205,11 +208,6 @@ export class MenuFilterComponent implements OnInit {
 
   dateBuilder(value?): any {
     return [
-      {
-        updatedAt: {
-          $between: value ? value : this.rangeToDate(this.dateRangeSelect.value)
-        }
-      },
       {
         createdAt: {
           $between: value ? value : this.rangeToDate(this.dateRangeSelect.value)
@@ -253,15 +251,21 @@ export class MenuFilterComponent implements OnInit {
         _dateEnd.toISOString()
       ]
     }
-    let dateStart = new Date(this.inputStart)
-    let dateEnd = new Date(this.inputEnd)
+    let dateStart = this.tools.satinizeDate(new Date(this.inputStart), true)
+    let dateEnd = this.tools.satinizeDate(new Date(this.inputEnd), true)
+
+    if (dateEnd == dateStart) {
+      this.emit([dateStart.toISOString(), endOfDay(dateEnd).toISOString()])
+      return
+    }
 
     if (dateEnd < dateStart) {
       console.error('Fecha final menor que la de inicio')
       return;
     }
 
-    this.emit(dateHelper(dateStart, dateEnd))
+    //this.emit(dateHelper(dateStart, dateEnd))
+    this.emit([dateStart.toISOString(), endOfDay(dateEnd).toISOString()])
 
   }
 
@@ -273,7 +277,7 @@ export class MenuFilterComponent implements OnInit {
     delete filters['$or'];
     let request = {
       $and: [
-        { $or: this.dateBuilder() },
+        this.dateBuilder()[2],
         { $or: this.qsObject.filters.$or }
       ],
       ...filters

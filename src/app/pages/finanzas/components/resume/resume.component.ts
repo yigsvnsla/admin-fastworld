@@ -67,10 +67,8 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   async fetchResume() {
-    let start = new Date(this.date)
-    let end = endOfDay(this.tools.satinizeDate(start, true))
-    end = this.tools.satinizeDate(end);
-
+    let start = this.tools.satinizeDate(new Date(this.date), true)
+    let end = endOfDay(start)
     if (this.mode == 'all') {
       this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}`).toPromise()
       return;
@@ -82,7 +80,7 @@ export class ResumeComponent implements OnInit, OnChanges {
         }
       }
     })
-    this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}`).toPromise()
+    this.resume = await this.http.get<resumeModel>(`finances/${start.toISOString()}/${end.toISOString()}?${filters}`).toPromise()
 
   }
 
@@ -176,9 +174,9 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   between() {
-    let startDate = new Date(this.date);
-    let endDate = endOfDay(this.tools.satinizeDate(startDate, true));
-    endDate = this.tools.satinizeDate(endDate)
+    let startDate = this.tools.satinizeDate(new Date(this.date), true)
+    let endDate = endOfDay(startDate);
+    /* endDate = this.tools.satinizeDate(endDate) */
     return [startDate.toISOString(), endDate.toISOString()]
   }
 

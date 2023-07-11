@@ -26,9 +26,17 @@
   [path]="this.path"></app-menu-filter>
 
 <ion-content>
-  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event)" [rows]="this.source"
-    [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight"
-    [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
+  <ngx-datatable
+    class="dark fullscreen"
+    (scroll)="this.onScroll($event.offsetY)"
+    [rows]="this.source"
+    [columnMode]="this.ColumnMode.standard"
+    [headerHeight]="this.headerHeight"
+    [rowHeight]="this.rowHeight"
+    [loadingIndicator]="this.loading"
+    [scrollbarV]="true"
+    [reorderable]="false"
+    [swapColumns]="false">
     <!-- column id -->
     <ngx-datatable-column [minWidth]="50" [width]="80" [canAutoResize]="true" [resizeable]="false" [draggable]="false"
       [sortable]="false" name="Ticket" prop="id">
