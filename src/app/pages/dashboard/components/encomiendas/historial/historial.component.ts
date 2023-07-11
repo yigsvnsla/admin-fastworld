@@ -6,6 +6,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { DetailsPackageComponent } from 'src/app/pages/generic-components/details-package/details-package.component';
 import { DetailsClientComponent } from 'src/app/pages/generic-components/details-client/details-client.component';
 import { DetailsDriverComponent } from 'src/app/pages/generic-components/details-driver/details-driver.component';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-historial',
@@ -167,8 +168,8 @@ export class HistorialComponent implements OnInit {
       .toPromise()
   }
 
-  public onScroll({offsetY, offsetX}) {
-    if(offsetX >= 0) return;
+  public onScroll({ offsetY, offsetX }) {
+    if (offsetX >= 0) return;
 
     // total height of all rows in the viewport
     const viewHeight = this.el.nativeElement.getBoundingClientRect().height - this.headerHeight;
@@ -232,17 +233,9 @@ export class HistorialComponent implements OnInit {
       }
     })
   }
-
-  public onTransferPackage(_id: number) {
-
-  }
-
-  public onDonwloadInfoPackage(_id: number) {
-
-  }
-
-  public onDeletePackage(_id: number) {
-
+  translateDate(text) {
+    let date = new Date(text);
+    return format(date, 'dd/MM/yyyy - KK:mm')
   }
 }
 

@@ -2,43 +2,33 @@
   <ion-toolbar>
     <app-btn-menu slot="start"></app-btn-menu>
     <ion-item class="ion-text-start" slot="end">
-      <ion-searchbar [debounce]="600" #searchInput placeholder="Buscar" ></ion-searchbar>
+      <ion-searchbar [debounce]="600" #searchInput placeholder="Buscar"></ion-searchbar>
     </ion-item>
     <ion-buttons slot="end">
       <ion-menu-button menu="menu-historial"></ion-menu-button>
     </ion-buttons>
     <ion-title>Historial Encomiendas</ion-title>
   </ion-toolbar>
-  <ion-segment #segmentStatus scrollable [value]="''" >
-    <ion-segment-button
-      style="
+  <ion-segment #segmentStatus scrollable [value]="''">
+    <ion-segment-button style="
         --indicator-color: var(--ion-color-{{segment.color}});
         --color-checked: var(--ion-color-{{segment.color}});
         --color-focused: var(--ion-color-{{segment.color}});
-        --color-hover: var(--ion-color-{{segment.color}});"
-      [value]="segment.value"
-      *ngFor="let segment of segments; let i = index"
-    >
+        --color-hover: var(--ion-color-{{segment.color}});" [value]="segment.value"
+      *ngFor="let segment of segments; let i = index">
       <ion-chip [color]="segment.color" mode="ios" outline="true">
         <ion-label>{{segment.name}}</ion-label>
       </ion-chip>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
-<app-menu-filter (urlGen)="getFilter($event)" [inputSearch]="searchInput" [segmentStatus]="segmentStatus" [path]="this.path"></app-menu-filter>
+<app-menu-filter (urlGen)="getFilter($event)" [inputSearch]="searchInput" [segmentStatus]="segmentStatus"
+  [path]="this.path"></app-menu-filter>
 
 <ion-content>
-  <ngx-datatable
-    class="dark fullscreen"
-    (scroll)="this.onScroll($event)"
-    [rows]="this.source"
-    [columnMode]="this.ColumnMode.standard"
-    [headerHeight]="this.headerHeight"
-    [rowHeight]="this.rowHeight"
-    [loadingIndicator]="this.loading"
-    [scrollbarV]="true"
-    [reorderable]="false"
-    [swapColumns]="false">
+  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event)" [rows]="this.source"
+    [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight"
+    [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
     <!-- column id -->
     <ngx-datatable-column [minWidth]="50" [width]="80" [canAutoResize]="true" [resizeable]="false" [draggable]="false"
       [sortable]="false" name="Ticket" prop="id">
@@ -51,20 +41,21 @@
       headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ng-container [ngSwitch]="value">
-              <h6 style="margin: 0; font-weight: bold;">
-                  <ion-text *ngSwitchCase="'invalido'" color="warning">{{ 'sin confirmar' | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'pendiente'" color="dark">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ 'reportado' | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
-              </h6>
-          </ng-container>
+        <ng-container [ngSwitch]="value">
+          <h6 style="margin: 0; font-weight: bold;">
+            <ion-text *ngSwitchCase="'invalido'" color="warning">{{ 'sin confirmar' | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'pendiente'" color="dark">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ 'reportado' | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
+          </h6>
+        </ng-container>
       </ng-template>
     </ngx-datatable-column>
     <!-- column sender -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Remitente" prop="attributes.sender.data.attributes.business.data.attributes">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+      name="Remitente" prop="attributes.sender.data.attributes.business.data.attributes">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
         <ion-label [id]="'sender'+'-'+rowIndex" style="cursor: pointer;">{{(value.name | titlecase)}}</ion-label>
@@ -194,8 +185,8 @@
     <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
       name="Fecha de Creación" prop="attributes.createdAt">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">{{(value |
-        date:'short')}}</ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
+        let-rowIndex="rowIndex">{{translateDate(value)}}</ng-template>
     </ngx-datatable-column>
     <!-- Options -->
     <ngx-datatable-column headerClass="center" cellClass="center" [width]="225" [canAutoResize]="true"
@@ -205,7 +196,7 @@
         <ion-fab-button (click)="this.onSearchPackage(value)" color="orange" size="small">
           <ion-icon name="search"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button (click)="this.onTransferPackage(value)" color="primary" size="small">
+       <!--  <ion-fab-button (click)="this.onTransferPackage(value)" color="primary" size="small">
           <ion-icon name="repeat"></ion-icon>
         </ion-fab-button>
         <ion-fab-button (click)="this.onDonwloadInfoPackage(value)" color="success" size="small">
@@ -213,7 +204,7 @@
         </ion-fab-button>
         <ion-fab-button (click)="this.onDeletePackage(value)" color="danger" size="small">
           <ion-icon name="close"></ion-icon>
-        </ion-fab-button>
+        </ion-fab-button> -->
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>

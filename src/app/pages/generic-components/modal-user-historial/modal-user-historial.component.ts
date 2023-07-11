@@ -9,6 +9,24 @@ import { DetailsDriverComponent } from '../details-driver/details-driver.compone
 import { DetailsPackageComponent } from '../details-package/details-package.component';
 import { stringify } from 'qs'
 import { ViewDownloadComponent } from '../view-download/view-download.component';
+import { format } from 'date-fns';
+
+const MimeTypes = [
+  {
+    name: 'excel',
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    extension: '.xlsx',
+    finances: 'finances/excel',
+    packages: ''
+  },
+  {
+    name: 'pdf',
+    type: 'application/pdf',
+    extension: '.pdf',
+    finances: 'finances/pdf',
+    packages: ''
+  },
+]
 
 @Component({
   selector: 'modal-user-historial',
@@ -19,7 +37,7 @@ import { ViewDownloadComponent } from '../view-download/view-download.component'
 export class ModalUserHistorial implements OnInit {
 
   @Input() public id: number
-  @Input() public prefix: string
+  @Input() public prefix: 'driver' | 'client'
   readonly rowHeight = 50;
   readonly headerHeight = 50;
   public source: any[] = []
@@ -63,14 +81,12 @@ export class ModalUserHistorial implements OnInit {
   }
 
   buildUser() {
+    let idObj = { id: this.id }
+    let filters = this.prefix == 'client' ? { sender: idObj } : { driver: idObj }
     return stringify({
       sort: 'id:DESC',
       populate: '*',
-      filters: {
-        sender: {
-          id: this.id
-        }
-      }
+      filters: filters
     })
   }
 
@@ -92,11 +108,11 @@ export class ModalUserHistorial implements OnInit {
 
   public ngOnInit(): void {
 
-    // console.log($event);
     this.setPagination = {
       start: 0,
       limit: 25
     }
+    console.log(this.buildUser())
     this.setPath = `packages?${this.buildUser()}`
     this.getInformation()
   }
@@ -151,19 +167,6 @@ export class ModalUserHistorial implements OnInit {
     })
   }
 
-  // public showProfileClient(_id:number){
-  //   this.toolsService.showModal({
-  //     component:DetailsClientComponent,
-  //     cssClass:['modal-fullscreen'],
-  //     keyboardClose:true,
-  //     mode:'ios',
-  //     backdropDismiss:false,
-  //     componentProps:{
-  //       id:_id
-  //     }
-  //   })
-  // }
-
   public async onExit() {
     this.ModalController.dismiss()
   }
@@ -181,64 +184,68 @@ export class ModalUserHistorial implements OnInit {
     })
   }
 
-  public onTransferPackage(_id: number) {
-
-  }
-
-  public onDonwloadInfoPackage(_id: number) {
-
-  }
-
-  public onDeletePackage(_id: number) {
-
-  }
-
   async download() {
-    let builded = await this.toolsService.showModal({
+    const builded = await this.toolsService.showModal({
       component: ViewDownloadComponent,
       cssClass: 'modal-dialogs',
       componentProps: {
         infoUser: {
           id: this.id,
-          role: 'providers'
+          role: this.prefix == 'client' ? 'providers' : 'drivers'
         },
-        pdf: false
+        pdf: true
       }
     })
-    if (builded) {
-      const { start } = builded;
-      let arg = new Date(start)
-      if (arg.getFullYear() == 2020) {
-        await this.getExport(this.id, { all: true })
-      } else {
-        await this.getExport(this.id, builded)
-      }
 
-    }
-  }
-  async getExport(id: any, data: any) {
-    const loading = await this.toolsService.showLoading('Cargando informacion...')
+
+    let loading = await this.toolsService.showLoading("Generando archivo...")
     try {
-      let response = await this.conectionsService.postStream(`report/${id}`, data).toPromise()
-      let name = new Date().toString()
-      let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      var a = document.createElement("a"), url = URL.createObjectURL(file);
-      a.href = url;
-      a.download = `${name}.xlsx`;
-      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-      if (response) {
-        await this.toolsService.showAlert({
-          cssClass: 'alert-success',
-          keyboardClose: true,
-          mode: 'ios',
-          header: 'Exito',
-          buttons: [{ text: 'Aceptar', handler: () => a.click() }]
-        })
-      }
+      const { end, start, print, target, mode } = builded;
+      let all = new Date(start).getFullYear() == 2020;
+      let route = `report/${print}/${target}`;
+      await this.downloader({
+        data: {
+          start: start,
+          end: end,
+          type: print,
+          target: "packages",
+          all,
+          mode
+        },
+        route,
+        name: `Listado rutas - ${format(new Date(), 'dd-MM-yyyy')}`
+      }, print)
+      return
     } catch (error) {
-      console.error(error);
+      console.log("Error intentando descargar archivo")
+      this.toolsService.showToast({
+        message: '¡Error al descargar!',
+        color: 'danger'
+      })
     } finally {
       loading.dismiss()
     }
   }
+
+  async downloader({ data, name, route }, mime: string) {
+    let mimeType = MimeTypes.find(e => e.name == mime)
+    let response = await this.conectionsService.postStream(route, data).toPromise()
+    let file = new Blob([response], { type: mimeType.type })
+    var a = document.createElement("a"), url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = `${name}${mimeType.extension}`;
+    if (response) {
+      a.click()
+    }
+    this.toolsService.showToast({
+      message: 'Descarga completada!',
+      color: 'success'
+    })
+  }
+
+  translateDate(text){
+    let date = new Date(text);
+    return format(date, 'dd/MM/yyyy - KK:mm')
+  }
+
 }

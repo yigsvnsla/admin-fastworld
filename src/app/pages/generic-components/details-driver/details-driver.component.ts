@@ -6,6 +6,7 @@ import { delay } from 'rxjs/operators';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { format, isValidPhoneNumber } from 'libphonenumber-js';
+import { ModalUserHistorial } from '../modal-user-historial/modal-user-historial.component';
 @Component({
   selector: 'app-details-driver',
   templateUrl: './details-driver.component.html',
@@ -159,6 +160,20 @@ export class DetailsDriverComponent implements OnInit {
       }]
     })
 
+  }
+
+  public async onShowHistory() {
+    this.toolsService.showModal({
+      component: ModalUserHistorial,
+      cssClass: ['modal-fullscreen'],
+      keyboardClose: true,
+      mode: 'ios',
+      backdropDismiss: false,
+      componentProps: {
+        id: this.id,
+        prefix: 'driver'
+      }
+    })
   }
 
 }

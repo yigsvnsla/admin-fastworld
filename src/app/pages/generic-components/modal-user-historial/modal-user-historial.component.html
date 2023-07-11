@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar>
     <!-- <app-btn-menu slot="start"></app-btn-menu> -->
@@ -23,75 +22,46 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- <app-menu-filter (urlGen)="test($event)" [inputSearch]="searchInput"  path="das"></app-menu-filter> -->
-
 <ion-content>
-  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event.offsetY)" [rows]="this.source" [columnMode]="this.ColumnMode.standard" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight" [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
+  <ngx-datatable class="dark fullscreen" (scroll)="this.onScroll($event.offsetY)" [rows]="this.source"
+    [columnMode]="this.ColumnMode.force" [headerHeight]="this.headerHeight" [rowHeight]="this.rowHeight"
+    [loadingIndicator]="this.loading" [scrollbarV]="true" [reorderable]="false" [swapColumns]="false">
     <!-- column id -->
-    <ngx-datatable-column [minWidth]="50" [width]="80"  [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Ticket" prop="id">
+    <ngx-datatable-column [minWidth]="50" [width]="80" [canAutoResize]="true" [resizeable]="false" [draggable]="false"
+      [sortable]="false" name="Ticket" prop="id">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
-      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{value}}</ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
+        let-rowIndex="rowIndex">{{value}}</ng-template>
     </ngx-datatable-column>
     <!-- column state -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"  headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+      headerClass="center" cellClass="center" name="Estado" prop="attributes.shipping_status">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ng-container [ngSwitch]="value">
-              <h6 style="margin: 0; font-weight: bold;">
-                  <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ value | uppercase}}</ion-text>
-                  <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
-              </h6>
-          </ng-container>
+        <ng-container [ngSwitch]="value">
+          <h6 style="margin: 0; font-weight: bold;">
+            <ion-text *ngSwitchCase="'invalido'" color="danger">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'pendiente'" color="ligth">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'recibido'" color="primary">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'entregado'" color="success">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'rechazado'" color="danger">{{ value | uppercase}}</ion-text>
+            <ion-text *ngSwitchCase="'aceptado'" color="success">{{ value | uppercase}}</ion-text>
+          </h6>
+        </ng-container>
       </ng-template>
     </ngx-datatable-column>
     <!-- column sender -->
-    <!-- <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Remitente" prop="attributes.sender.data.attributes.business">
-      <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">
-        <ion-label [id]="'sender'+'-'+rowIndex" style="cursor: pointer;">{{(value.name | titlecase)}}</ion-label>
-        <ion-popover [showBackdrop]="true" [trigger]="'sender'+'-'+rowIndex" side="left" alignment="center"  reference="event"  triggerAction="click" style="--offset-y: -65px">
-          <ng-template>
-            <ion-content>
-              <ion-card>
-                <ion-card-header class="ion-no-padding">
-                  <ion-item>
-                    <ion-label position="stacked" style="display: flex; align-items: center;">
-                      <ion-icon name="person"></ion-icon>
-                      <ion-text color="orange">Cliente: {{value.id}}</ion-text>
-                    </ion-label>
-                    <h4>{{(value.name | titlecase)}}</h4>
-                  </ion-item>
-                </ion-card-header>
-                <ion-card-header class="ion-no-padding">
-                <ion-card-subtitle  style="display: flex; align-items: center; justify-content: center;">
-                  <ion-fab-button (click)="this.showProfileClient(row.attributes.sender.data.id)" color="orange" size="small">
-                    <ion-icon name="search"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button href="tel:{{row.attributes.sender.data.attributes.phone}}" size="small">
-                    <ion-icon name="call"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + row.attributes.sender.data.attributes.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
-                    <ion-icon name="logo-whatsapp"></ion-icon>
-                  </ion-fab-button>
-                </ion-card-subtitle>
-              </ion-card-header>
-              </ion-card>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ng-template>
-    </ngx-datatable-column> -->
+
     <!-- column driver -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Conductor" prop="attributes.driver.data.attributes">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+      name="Conductor" prop="attributes.driver.data.attributes">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">
-        <ion-label *ngIf="value" [id]="'driver'+'-'+rowIndex" style="cursor: pointer;">{{ ( value.name | titlecase ) }} {{ ( value.lastname | titlecase ) }}</ion-label>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+        <ion-label *ngIf="value" [id]="'driver'+'-'+rowIndex" style="cursor: pointer;">{{ ( value.name | titlecase ) }}
+          {{ ( value.lastname | titlecase ) }}</ion-label>
         <ion-label *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ion-label>
-        <ion-popover [showBackdrop]="true" [trigger]="'driver'+'-'+rowIndex" side="left" alignment="center" reference="event" triggerAction="click" style="--offset-y: -65px">
+        <ion-popover [showBackdrop]="true" [trigger]="'driver'+'-'+rowIndex" side="left" alignment="center"
+          reference="event" triggerAction="click" style="--offset-y: -65px">
           <ng-template>
             <ion-content>
               <ion-card>
@@ -105,18 +75,20 @@
                   </ion-item>
                 </ion-card-header>
                 <ion-card-header class="ion-no-padding">
-                <ion-card-subtitle  style="display: flex; align-items: center; justify-content: center;">
-                  <ion-fab-button (click)="this.showProfileDriver(row.attributes.driver.data.id)" color="orange" size="small">
-                    <ion-icon name="search"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button href="tel:{{value.phone}}" size="small">
-                    <ion-icon name="call"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + value.phone.replace('+','')"  target="_blank" rel="noopener noreferrer" color="success" size="small">
-                    <ion-icon name="logo-whatsapp"></ion-icon>
-                  </ion-fab-button>
-                </ion-card-subtitle>
-              </ion-card-header>
+                  <ion-card-subtitle style="display: flex; align-items: center; justify-content: center;">
+                    <ion-fab-button (click)="this.showProfileDriver(row.attributes.driver.data.id)" color="orange"
+                      size="small">
+                      <ion-icon name="search"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button href="tel:{{value.phone}}" size="small">
+                      <ion-icon name="call"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + value.phone.replace('+','')"
+                      target="_blank" rel="noopener noreferrer" color="success" size="small">
+                      <ion-icon name="logo-whatsapp"></ion-icon>
+                    </ion-fab-button>
+                  </ion-card-subtitle>
+                </ion-card-header>
               </ion-card>
             </ion-content>
           </ng-template>
@@ -124,12 +96,15 @@
       </ng-template>
     </ngx-datatable-column>
     <!-- column receiver -->
-    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Destinatario" prop="attributes.receiver">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+      name="Destinatario" prop="attributes.receiver">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
-      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">
-        <ion-label *ngIf="value" [id]="'receiver'+'-'+rowIndex" style="cursor: pointer;">{{ ( value.name | titlecase ) }}</ion-label>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+        <ion-label *ngIf="value" [id]="'receiver'+'-'+rowIndex" style="cursor: pointer;">{{ ( value.name | titlecase )
+          }}</ion-label>
         <ion-label *ngIf="!value"><ion-text color="dark">Sin Asignar</ion-text></ion-label>
-        <ion-popover [showBackdrop]="true" [trigger]="'receiver'+'-'+rowIndex" side="left" reference="event" triggerAction="click" style="--offset-y: -65px" alignment="center" >
+        <ion-popover [showBackdrop]="true" [trigger]="'receiver'+'-'+rowIndex" side="left" reference="event"
+          triggerAction="click" style="--offset-y: -65px" alignment="center">
           <ng-template>
             <ion-content>
               <ion-card>
@@ -143,15 +118,16 @@
                   </ion-item>
                 </ion-card-header>
                 <ion-card-header class="ion-no-padding">
-                <ion-card-subtitle  style="display: flex; align-items: center; justify-content: center;">
-                  <ion-fab-button href="tel:{{value.phone}}" size="small">
-                    <ion-icon name="call"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + value.phone.replace('+','')" target="_blank" rel="noopener noreferrer" color="success" size="small">
-                    <ion-icon name="logo-whatsapp"></ion-icon>
-                  </ion-fab-button>
-                </ion-card-subtitle>
-              </ion-card-header>
+                  <ion-card-subtitle style="display: flex; align-items: center; justify-content: center;">
+                    <ion-fab-button href="tel:{{value.phone}}" size="small">
+                      <ion-icon name="call"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button [href]="'https://api.whatsapp.com/send?phone=' + value.phone.replace('+','')"
+                      target="_blank" rel="noopener noreferrer" color="success" size="small">
+                      <ion-icon name="logo-whatsapp"></ion-icon>
+                    </ion-fab-button>
+                  </ion-card-subtitle>
+                </ion-card-header>
               </ion-card>
             </ion-content>
           </ng-template>
@@ -159,27 +135,21 @@
       </ng-template>
     </ngx-datatable-column>
     <!-- column createAt -->
-    <ngx-datatable-column  [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false" name="Fecha de Creación" prop="attributes.createdAt">
+    <ngx-datatable-column [canAutoResize]="true" [resizeable]="false" [draggable]="false" [sortable]="false"
+      name="Fecha de Creación" prop="attributes.createdAt">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }}</ng-template>
-      <ng-template let-row="row" let-value="value"  ngx-datatable-cell-template let-rowIndex="rowIndex">{{(value | date:'short')}}</ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
+        let-rowIndex="rowIndex">{{translateDate(value)}}</ng-template>
     </ngx-datatable-column>
     <!-- Options -->
-    <ngx-datatable-column
-    headerClass="center"
-    cellClass="center"
-    [width]="225"
-    [canAutoResize]="true"
-    [resizeable]="false"
-    [draggable]="false"
-    [sortable]="false"
-    name="Opciones"
-    prop="id">
+    <ngx-datatable-column headerClass="center" cellClass="center" [width]="225" [canAutoResize]="true"
+      [resizeable]="false" [draggable]="false" [sortable]="false" name="Opciones" prop="id">
       <ng-template let-column="column" ngx-datatable-header-template>{{ column.name }} </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-fab-button (click)="this.onSearchPackage(value)" color="orange"  size="small">
+        <ion-fab-button (click)="this.onSearchPackage(value)" color="orange" size="small">
           <ion-icon name="search"></ion-icon>
         </ion-fab-button>
-          <!--
+        <!--
           <ion-fab-button (click)="this.onTransferPackage(value)" color="primary"  size="small">
             <ion-icon name="repeat"></ion-icon>
           </ion-fab-button>
