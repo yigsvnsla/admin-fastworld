@@ -152,9 +152,11 @@ export class ModalCrearEncomiendaComponent implements OnInit {
       mode: 'ios',
       header: 'Crear Encomienda',
       subHeader: '¿Desea enviar esta encomienda?',
-      buttons: ['Cancelar', { text: 'Aceptar', handler: () => {
-        send()
-      } }]
+      buttons: ['Cancelar', {
+        text: 'Aceptar', handler: () => {
+          send()
+        }
+      }]
     })
 
   }
@@ -320,11 +322,21 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     if (distance.text.includes('km')) {
       km = Number(distance.text.replace(/km/, '').replace(/,/, '.').trim());
     }
-    let multiplicador = Math.ceil(km / 6);
+    let multiplicador = Math.ceil(km / 5);
     let base = 2; //recordar crear algoritmo de sucursales
     let start = 0.50;
+
+    if (multiplicador > 2 && multiplicador < 6) {
+      multiplicador = 3
+    } else if (multiplicador == 6) {
+      multiplicador = 4
+    } else if (multiplicador > 6) {
+      multiplicador = 5
+    }
+
     let tarifa = (multiplicador * start) + base;
-    if (tarifa > 3.5) tarifa = 3.5
+
+    //if (tarifa > 3.5) tarifa = 3.5
     if (this._user?.business?.membreship != null) {
       tarifa = 2.5
     }
