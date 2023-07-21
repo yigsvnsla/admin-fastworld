@@ -149,37 +149,6 @@ export class MenuFilterComponent implements OnInit {
 
   private rangeToDate(range: number) {
 
-
-    const dateHelper = (_dateStart: Date = new Date(), _dateEnd: Date = new Date(), month: boolean = false) => {
-
-      if (month) {
-        _dateEnd.setTime(_dateEnd.getTime() - _dateEnd.getTimezoneOffset() * 60000)
-
-
-      } else {
-        _dateEnd.setTime(_dateEnd.getTime() + _dateEnd.getTimezoneOffset() * 60000)
-
-
-      }
-      _dateStart.setTime(_dateStart.getTime() + _dateStart.getTimezoneOffset() * 60000)
-
-
-      _dateStart = startOfDay(_dateStart);
-      _dateEnd = endOfDay(_dateEnd);
-
-      _dateStart.setTime(_dateStart.getTime() - _dateStart.getTimezoneOffset() * 60000)
-      _dateEnd.setTime(_dateEnd.getTime() - _dateEnd.getTimezoneOffset() * 60000)
-
-
-      return [
-        _dateStart.toISOString(),
-        _dateEnd.toISOString()
-      ]
-    }
-
-
-    // console.table(dateHelper(sub(new Date(Date.now()), { days: 7 }), new Date(Date.now())))
-
     let start = startOfDay(new Date())
     let end = endOfDay(start)
 
@@ -194,7 +163,8 @@ export class MenuFilterComponent implements OnInit {
       case 3:
         return [sub(start, { months: 3 }).toISOString(), endOfMonth(end).toISOString()]
       //return dateHelper(sub(new Date(), { months: 3 }), endOfMonth(new Date()), true)
-
+      case 4:
+        return this.getCustomDate()
       default: {
         console.error('rangeToDate --> el valor');
         break;
@@ -203,7 +173,7 @@ export class MenuFilterComponent implements OnInit {
   }
 
   /**
-   * Hander}
+   * Handler}
    */
 
   dateBuilder(value?): any {
@@ -225,32 +195,13 @@ export class MenuFilterComponent implements OnInit {
 
   onSearchDate() {
 
-    const dateHelper = (_dateStart: Date = new Date(), _dateEnd: Date = new Date(), month: boolean = false) => {
+    let date = this.getCustomDate()
 
-      if (month) {
-        _dateEnd.setTime(_dateEnd.getTime() - _dateEnd.getTimezoneOffset() * 60000)
+    this.emit(date)
 
+  }
 
-      } else {
-        _dateEnd.setTime(_dateEnd.getTime() + _dateEnd.getTimezoneOffset() * 60000)
-
-
-      }
-      _dateStart.setTime(_dateStart.getTime() + _dateStart.getTimezoneOffset() * 60000)
-
-
-      _dateStart = startOfDay(_dateStart);
-      _dateEnd = endOfDay(_dateEnd);
-
-      _dateStart.setTime(_dateStart.getTime() - _dateStart.getTimezoneOffset() * 60000)
-      _dateEnd.setTime(_dateEnd.getTime() - _dateEnd.getTimezoneOffset() * 60000)
-
-
-      return [
-        _dateStart.toISOString(),
-        _dateEnd.toISOString()
-      ]
-    }
+  getCustomDate() {
     let dateStart = this.tools.satinizeDate(new Date(this.inputStart), true)
     let dateEnd = this.tools.satinizeDate(new Date(this.inputEnd), true)
 
@@ -263,21 +214,18 @@ export class MenuFilterComponent implements OnInit {
       console.error('Fecha final menor que la de inicio')
       return;
     }
-
-    //this.emit(dateHelper(dateStart, dateEnd))
-    this.emit([dateStart.toISOString(), endOfDay(dateEnd).toISOString()])
-
+    return [dateStart.toISOString(), endOfDay(dateEnd).toISOString()]
   }
 
 
 
   async genExcel() {
     let filters = JSON.parse(JSON.stringify(this.qsObject.filters))
-    console.log(filters)
     delete filters['$or'];
+    console.log(this.dateBuilder())
     let request = {
       $and: [
-        this.dateBuilder()[2],
+        { $or: this.dateBuilder(), },
         { $or: this.qsObject.filters.$or }
       ],
       ...filters
@@ -285,7 +233,7 @@ export class MenuFilterComponent implements OnInit {
     const loading = await this.tools.showLoading('Cargando informacion...')
     try {
       let response = await this.http.postStream(`report/query`, { query: request }).toPromise()
-      let name = new Date().toString()
+      let name = `Listado rutas - ${format(new Date(), 'dd-MM-yyyy')}`
       let file = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       var a = document.createElement("a"), url = URL.createObjectURL(file);
       a.href = url;
@@ -304,6 +252,38 @@ export class MenuFilterComponent implements OnInit {
 
   }
 
+  async genPDF() {
+    let filters = JSON.parse(JSON.stringify(this.qsObject.filters))
+    delete filters['$or'];
+    console.log(this.dateBuilder())
+    let request = {
+      $and: [
+        { $or: this.dateBuilder(), },
+        { $or: this.qsObject.filters.$or }
+      ],
+      ...filters
+    }
+    const loading = await this.tools.showLoading('Cargando informacion...')
+    try {
+      let response = await this.http.postStream(`report/query/pdf`, { query: request }).toPromise()
+      let name = `Listado rutas - ${format(new Date(), 'dd-MM-yyyy')}`
+      let file = new Blob([response], { type: 'application/pdf' })
+      var a = document.createElement("a"), url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = `${name}.pdf`;
+      // const response = await this.connectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
+      a.click()
+      this.tools.showToast({
+        message: 'Descarga completada!',
+        color: 'success'
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
+
+  }
 }
 
 
