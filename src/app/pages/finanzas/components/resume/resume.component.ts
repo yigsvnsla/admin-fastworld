@@ -231,6 +231,10 @@ export class ResumeComponent implements OnInit, OnChanges {
     //if (this.resume.ingreso >= egreso) return egreso - this.resume.ingreso
     return egreso - this.resume.income
   }
+
+  getGastos() {
+    return -(this.resume.driver);
+  }
 }
 
 export interface httpSingleResponse {

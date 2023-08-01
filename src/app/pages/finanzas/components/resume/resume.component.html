@@ -100,6 +100,13 @@
                           <ion-text color="danger">{{-(resume.delivery * 0.25) | currency}}</ion-text>
                         </h2>
                       </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Gastos Motorizado:
+                          <ion-text color="danger">{{(getGastos() |
+                            currency)}}</ion-text>
+                        </h2>
+                      </ion-col>
                     </ion-row>
                     <ion-row>
                       <ion-col size="4">
@@ -149,18 +156,43 @@
                     <p>{{getDay() | titlecase}}</p>
                     <ion-row>
                       <ion-col size="4">
-                        <h1>Ingresos: <ion-text color="success">{{resume.income | currency}}</ion-text>
-                        </h1>
+                        <h2>Ingresos: <ion-text color="success">{{resume.income | currency}}</ion-text>
+                        </h2>
                       </ion-col>
                       <ion-col size="4">
-                        <h1>
-                          Egreso: <ion-text color="danger">{{resume.discharge| currency}}</ion-text>
-                        </h1>
-                      </ion-col>
-                      <ion-col size="4">
-                        <h1>
+                        <h2>
                           Fletes: <ion-text color="success">{{resume.delivery| currency}}</ion-text>
-                        </h1>
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h2>
+                          Egreso: <ion-text color="danger">{{resume.discharge| currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <!--  <ion-col size="4">
+                        <h2>
+                          Gastos Motorizado:
+                          <ion-text color="danger">{{(getGastos() |
+                            currency)}}</ion-text>
+                        </h2>
+                      </ion-col> -->
+
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="4">
+                        <h2>
+                          Saldo:
+                          <ion-text color="orange">{{resume.income - resume.discharge |
+                            currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="4">
+                        <h2>
+                          Total: <ion-text color="danger">{{resume.income - (resume.discharge +
+                            resume.delivery)| currency}}</ion-text>
+                        </h2>
                       </ion-col>
                     </ion-row>
                   </ion-label>
