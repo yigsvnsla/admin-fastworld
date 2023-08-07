@@ -14,10 +14,6 @@
                     <p>{{getDay() | titlecase}}</p>
                     <ion-row>
                       <ion-col size="6">
-                        <h2>Fletes: <ion-text color="danger">{{resume.delivery | currency}}</ion-text>
-                        </h2>
-                      </ion-col>
-                      <ion-col size="6">
                         <h2>Ingreso: <ion-text color="success">{{resume.income | currency}}</ion-text>
                         </h2>
                       </ion-col>
@@ -25,6 +21,10 @@
                     <ion-row>
                       <ion-col size="6">
                         <h2>Egreso: <ion-text color="danger">{{resume.discharge | currency}}</ion-text>
+                        </h2>
+                      </ion-col>
+                      <ion-col size="6">
+                        <h2>Fletes: <ion-text color="orange">{{resume.delivery | currency}}</ion-text>
                         </h2>
                       </ion-col>
                     </ion-row>
@@ -37,12 +37,12 @@
                       </ion-col>
                       <ion-col size="6">
                         <h1 *ngIf="getSaldo() < 0; else deuda">
-                          Devolucion:
+                          Saldo:
                           <ion-text color="danger">{{getSaldo() | currency}}</ion-text>
                         </h1>
                         <ng-template #deuda>
                           <h1>
-                            Deuda:
+                            Saldo:
                             <ion-text color="success">{{getSaldo() | currency}}</ion-text>
                           </h1>
                         </ng-template>
@@ -83,7 +83,7 @@
                       <ion-col size="4">
                         <h2>
                           Fletes:
-                          <ion-text color="success">{{resume.delivery | currency}}</ion-text>
+                          <ion-text color="orange">{{resume.delivery | currency}}</ion-text>
                         </h2>
                       </ion-col>
                     </ion-row>
@@ -161,7 +161,7 @@
                       </ion-col>
                       <ion-col size="4">
                         <h2>
-                          Fletes: <ion-text color="success">{{resume.delivery| currency}}</ion-text>
+                          Fletes: <ion-text color="orange">{{resume.delivery| currency}}</ion-text>
                         </h2>
                       </ion-col>
                     </ion-row>

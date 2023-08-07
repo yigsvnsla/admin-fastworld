@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { format } from 'date-fns';
+import { add, format, startOfDay } from 'date-fns';
 import { ConectionsService } from 'src/app/services/connections.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { httpSingleResponse, userModel } from '../resume/resume.component';
@@ -57,7 +57,8 @@ export class RegisterComponent implements OnInit {
     }
     if (this.published) {
       const { attributes } = this.published
-      let time = attributes.time.split("T")[0];
+      const satinizedDate = this.tools.satinizeDate(new Date(attributes.time));
+      let time = format(satinizedDate, 'yyyy-MM-dd');
       let driver = attributes.driver?.data?.id || 0
       let business = attributes.business?.data?.id || 0
 
@@ -79,9 +80,6 @@ export class RegisterComponent implements OnInit {
 
   }
 
-  ionViewDidEnter() {
-    console.log("menu enter")
-  }
 
 
   close() {
@@ -103,18 +101,17 @@ export class RegisterComponent implements OnInit {
     let data = JSON.parse(JSON.stringify(this.formRoute.value));
     let { business, driver, time } = data
     let day = this.tools.satinizeDate(new Date(time), true)
+    let diff = this.setDiff(day);
 
-    if (day.getDay() == (new Date()).getDay()) {
-      let offset = (new Date()).getTime() - day.getTime();
-      day.setTime(day.getTime() + offset)
-    }
+
+
 
     if (business == 0) delete data['business']
     if (driver == 0) delete data['driver']
-    data['time'] = day.toISOString()
+    data['time'] = diff.toISOString()
 
     if (this.published) {
-      let loading = await this.tools.showLoading('Actualizando registro...')
+      let loading = await this.tools.showLoading('Actualizando registro...');
       try {
         let response = await this.http.put(`finances/${this.published.id}`, { data }).toPromise()
         this.modal.dismiss(response)
@@ -151,4 +148,15 @@ export class RegisterComponent implements OnInit {
 
 
 
+
+  /**
+   * Date helpers
+   */
+
+  setDiff(date: Date) {
+    let now = new Date().getTime();
+    let start = startOfDay(now).getTime();
+    let diff = now - start;
+    return add(date, { seconds: diff / 1000 })
+  }
 }
