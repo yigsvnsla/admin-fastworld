@@ -33,9 +33,9 @@ export class RegisterComponent implements OnInit {
       business: [0],
       driver: [0],
       client: [''],
-      income: ['', Validators.required],
-      discharge: ['', Validators.required],
-      delivery: ['', Validators.required],
+      income: [0, Validators.required],
+      discharge: [0, Validators.required],
+      delivery: [0, Validators.required],
       direction: [''],
       time: [format(new Date(), 'yyyy-MM-dd'), Validators.required]
     })
@@ -103,8 +103,7 @@ export class RegisterComponent implements OnInit {
     let day = this.tools.satinizeDate(new Date(time), true)
     let diff = this.setDiff(day);
 
-
-
+    data['delivery'] = this.checkBusiness(data)
 
     if (business == 0) delete data['business']
     if (driver == 0) delete data['driver']
@@ -146,7 +145,13 @@ export class RegisterComponent implements OnInit {
     } */
   }
 
+  checkBusiness({ business, delivery }) {
+    if (business != 458 && business != 522) return delivery;
 
+    if (delivery > 0) return -delivery
+
+    return delivery
+  }
 
 
   /**

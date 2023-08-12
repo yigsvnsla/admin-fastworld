@@ -222,8 +222,8 @@ export class ResumeComponent implements OnInit, OnChanges {
     let deducible = this.resume.delivery * 0.25;
     let pendiente = this.resume.income - this.resume.discharge;
     let addons = this.resume.driver;
-    if (pendiente < 0) return (this.resume.delivery - (deducible + addons)) + pendiente
-    return (this.resume.delivery - (deducible + addons))
+    if (pendiente < 0) return (this.resume.delivery - deducible) + pendiente + addons
+    return (this.resume.delivery - deducible) + addons
   }
 
   getSaldo(): number {
@@ -233,7 +233,7 @@ export class ResumeComponent implements OnInit, OnChanges {
   }
 
   getGastos() {
-    return -(this.resume.driver);
+    return this.resume.driver;
   }
 }
 
