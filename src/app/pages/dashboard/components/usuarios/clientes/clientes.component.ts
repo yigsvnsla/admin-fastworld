@@ -55,7 +55,7 @@ export class ClientesComponents implements OnInit {
     }]
 
 
-    this.setPath = 'basic/client?populate=*'
+    this.setPath = 'basic/client?populate=*&sort=name:asc'
     this.setPagination = {
       start: 0,
       limit: 25,
@@ -93,7 +93,7 @@ export class ClientesComponents implements OnInit {
   }
 
   public onSearchChange($event) {
-    this.path = `basic/client?populate=*&${qs.stringify({
+    this.path = `basic/client?populate=*&sort=name:asc&${qs.stringify({
       filters: {
         $or: [
           {

@@ -164,4 +164,17 @@ export class RegisterComponent implements OnInit {
     let diff = now - start;
     return add(date, { seconds: diff / 1000 })
   }
+
+  checkData() {
+    let checker = this.published.attributes.package.data
+
+    if (checker == null) return "Movimiento sin vinculacion"
+
+    const { id } = this.published.attributes.package.data
+
+    return `Movimiento de encomienda #${id}`
+
+  }
+
+
 }

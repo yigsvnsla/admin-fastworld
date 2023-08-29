@@ -20,7 +20,8 @@
           </ion-chip>
         </ion-col>
         <ion-col style="justify-content: center;display: flex;">
-          <ion-chip (click)="getPDF(item.id)" color="danger" mode="ios" outline="true" [disabled]="item.attributes?.shipping_status != 'entregado'">
+          <ion-chip (click)="getPDF(item.id)" color="danger" mode="ios" outline="true"
+            [disabled]="item.attributes?.shipping_status != 'entregado'">
             <ion-icon name="print-outline"></ion-icon>
             <ion-label>Imprimir</ion-label>
           </ion-chip>
@@ -227,10 +228,14 @@
             <ion-card-header>
               <ion-card-subtitle>
                 <ion-card-subtitle style="display: flex; align-items: center;">
-                  <ion-icon style="margin: 8px" name="map"></ion-icon>
-                  <ion-text color="orange">Información</ion-text>
                   <ion-text color="dark">
-                    <h4 style="margin-left: 8px;">{{item.attributes.distance}}/Km</h4>
+                    <h4 style="margin-left: 8px;">Informacion: {{item.attributes.distance}}Km -
+                      <ion-text color="success">
+                        <b>
+                          {{item.attributes.fee != null ? (item.attributes.fee | currency) : 'Esperando Confirmación'}}
+                        </b>
+                      </ion-text>
+                    </h4>
                   </ion-text>
                 </ion-card-subtitle>
               </ion-card-subtitle>
@@ -239,7 +244,8 @@
                 <ion-item>
                   <ion-label>
                     <p>Manzana/villa/ casa | apartamento</p>
-                    <h2>{{item.attributes.sender.data.attributes.business.data.attributes.home || 'Sin especificar'}}</h2>
+                    <h2>{{item.attributes.sender.data.attributes.business.data.attributes.home || 'Sin especificar'}}
+                    </h2>
                   </ion-label>
                 </ion-item>
               </ion-card>
@@ -322,7 +328,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row>
+      <!-- <ion-row>
         <ion-col size="12">
           <ion-card>
             <ion-card-header>
@@ -386,7 +392,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
 
       <ion-row>
         <ion-col size="12">

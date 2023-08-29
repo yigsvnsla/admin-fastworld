@@ -1,6 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Añadir rutas/cargos</ion-title>
+
+    <ion-title *ngIf="published == null; else headerCurrent">Añadir rutas/cargos</ion-title>
+    <ng-template #headerCurrent>
+      <!-- <ion-button slot="start" id="menu-options" slot="end" fill="clear" color="medium">
+        <ion-icon name="list-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="menu-options" triggerAction="click" side="bottom" alignment="end">
+        <ng-template>
+          <ion-list>
+            <ion-item button>
+              <ion-icon name="share-social-outline" slot="start"></ion-icon>
+              <ion-label>Vincular encomienda</ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-template>
+      </ion-popover> -->
+      <ion-title>{{checkData()}}</ion-title>
+    </ng-template>
     <ion-button slot="end" fill="clear" color="medium" (click)="close()">
       <ion-icon name="close-outline" slot="icon-only"></ion-icon>
     </ion-button>
@@ -13,36 +30,22 @@
         <ion-label> Informacion de proveedor y motorizado </ion-label>
       </ion-item-divider>
       <ion-col size="6">
-        <generic-search
-          *ngIf="user == null; else inputUser"
-          mode="providers"
-          searchID="search1"
-          (value)="onResult($event, 'providers')"
-        ></generic-search>
+        <generic-search *ngIf="user == null; else inputUser" mode="providers" searchID="search1"
+          (value)="onResult($event, 'providers')"></generic-search>
         <ng-template #inputUser>
           <ion-item button (click)="runClear('providers')">
             <ion-label position="stacked">Nombre del proveedor</ion-label>
-            <ion-input
-              [value]="user.name | titlecase"
-              readonly=""
-            ></ion-input>
+            <ion-input [value]="user.name | titlecase" readonly=""></ion-input>
           </ion-item>
         </ng-template>
       </ion-col>
       <ion-col size="6">
-        <generic-search
-          *ngIf="driver == null; else inputDriver"
-          searchID="search2"
-          mode="drivers"
-          (value)="onResult($event, 'drivers')"
-        ></generic-search>
+        <generic-search *ngIf="driver == null; else inputDriver" searchID="search2" mode="drivers"
+          (value)="onResult($event, 'drivers')"></generic-search>
         <ng-template #inputDriver>
           <ion-item button (click)="runClear('drivers')">
             <ion-label position="stacked">Nombre del motorizado</ion-label>
-            <ion-input
-              [value]="driver.name | titlecase"
-              readonly=""
-            ></ion-input>
+            <ion-input [value]="driver.name | titlecase" readonly=""></ion-input>
           </ion-item>
         </ng-template>
       </ion-col>
@@ -60,11 +63,7 @@
       <ion-col size="4">
         <ion-item>
           <ion-label position="stacked">Ingreso</ion-label>
-          <ion-input
-            type="number"
-            min="0"
-            formControlName="income"
-          ></ion-input>
+          <ion-input type="number" min="0" formControlName="income"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="4">
@@ -82,21 +81,13 @@
       <ion-col size="12">
         <ion-item>
           <ion-label position="stacked">Cliente</ion-label>
-          <ion-input
-            type="text"
-            formControlName="client"
-            placeholder="Ingresa nombre del cliente"
-          ></ion-input>
+          <ion-input type="text" formControlName="client" placeholder="Ingresa nombre del cliente"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item>
           <ion-label position="stacked">Direccion</ion-label>
-          <ion-textarea
-            rows="3"
-            placeholder="Ingrese la direccion"
-            formControlName="direction"
-          ></ion-textarea>
+          <ion-textarea rows="3" placeholder="Ingrese la direccion" formControlName="direction"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -105,12 +96,7 @@
 <ion-footer>
   <ion-row class="ion-justify-content-center">
     <ion-col size="10">
-      <ion-button
-        [disabled]="this.formRoute.invalid"
-        (click)="send()"
-        expand="block"
-        color="orange"
-      >
+      <ion-button [disabled]="this.formRoute.invalid" (click)="send()" expand="block" color="orange">
         <ion-label>{{published ? 'Actualizar' : 'Añadir'}}</ion-label>
       </ion-button>
     </ion-col>

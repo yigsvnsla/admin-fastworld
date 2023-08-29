@@ -47,7 +47,7 @@ export class ConductoresComponents implements OnInit {
     private toolsService: ToolsService
   ) {
     this.loading = false
-    this.setPath = 'basic/driver?populate=*'
+    this.setPath = 'basic/driver?populate=*&sort=name:asc'
     this.setPagination = {
       start: 0,
       limit: 25,
@@ -110,7 +110,7 @@ export class ConductoresComponents implements OnInit {
   }
 
   public onSearchChange($event) {
-    this.path = `basic/driver?populate=*&${qs.stringify({
+    this.path = `basic/driver?populate=*&sort=name:asc&${qs.stringify({
       filters: {
         $or: [
           {
