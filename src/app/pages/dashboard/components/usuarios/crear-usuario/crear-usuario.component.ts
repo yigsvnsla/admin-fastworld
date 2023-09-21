@@ -136,10 +136,7 @@ export class CrearUsuarioComponent implements OnInit {
           header: 'Usuario Registrado',
           buttons: ['ok']
         })
-        console.log(response);
-
         this.loading = false
-        console.log(this.rolSelect.value)
         if(this.rolSelect.value == 'admin') this.showAdminRole(response)
         this.instanceForm()
       }, (error) => {

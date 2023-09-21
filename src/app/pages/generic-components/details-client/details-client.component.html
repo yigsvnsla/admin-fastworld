@@ -55,6 +55,21 @@
             <ion-label>Historial</ion-label>
           </ion-chip>
         </ion-col>
+        <ion-col *ngIf="user.business.afilliate == null || user.business.afilliate == false; else unafilliate"
+          style="justify-content: center;display: flex;">
+          <ion-chip (click)="setAfiliate(true)" color="dark" mode="ios" outline="true">
+            <ion-icon name="people-circle-outline"></ion-icon>
+            <ion-label>Afiliar</ion-label>
+          </ion-chip>
+        </ion-col>
+        <ng-template #unafilliate>
+          <ion-col *ngIf="user.business.afilliate != null" style="justify-content: center;display: flex;">
+            <ion-chip (click)="setAfiliate(false)" color="dark" mode="ios" outline="true">
+              <ion-icon name="people-circle-outline"></ion-icon>
+              <ion-label>Desafiliar</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ng-template>
       </ion-row>
 
       <ion-row>

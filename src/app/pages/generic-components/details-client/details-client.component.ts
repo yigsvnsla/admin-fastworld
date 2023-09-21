@@ -348,4 +348,25 @@ export class DetailsClientComponent implements OnInit {
       console.log(error)
     }
   }
+
+  async setAfiliate(action: boolean) {
+    const loading = await this.toolsService.showLoading('Actualizando informacion...')
+    try {
+
+      const response = await this.conectionService.put(`businesses/${this.user.business.id}`, {
+        data: {
+          afilliate: action
+        }
+      }).toPromise()
+
+      this.toolsService.showToast({
+        message: 'Usuario actualizado',
+        color: 'success'
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.dismiss()
+    }
+  }
 }
