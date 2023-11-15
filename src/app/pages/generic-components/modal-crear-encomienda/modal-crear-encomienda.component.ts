@@ -32,6 +32,8 @@ export class ModalCrearEncomiendaComponent implements OnInit {
   public categories: string[]
   public startListUbication: any[] = [];
 
+  formSender: FormGroup;
+
 
   private get dateMinTimeOutPrograming(): string {
     let offset = new Date().getTimezoneOffset() * 60
@@ -96,9 +98,9 @@ export class ModalCrearEncomiendaComponent implements OnInit {
     const send = async () => {
       const loading = await this.toolsService.showLoading('Actualizando informacion...')
       try {
-        // const { id } = await this.localStorageService.get(environment.user_tag)
+        const sender = this.formSender.value
         const _package = [{ receiver: this.receiverForm != null ? { ...this.receiverForm.value } : null, ...this.encomiendaForm.value }]
-        const response = await this.conectionsService.post(`packages/client`, { client: this.userID, packages: _package }).toPromise();
+        const response = await this.conectionsService.post(`packages/client`, { client: this.userID, packages: _package, sender }).toPromise();
         if (response) {
           const _id = response.data[0].id
           if (destiny == 'ticket') {
@@ -165,37 +167,6 @@ export class ModalCrearEncomiendaComponent implements OnInit {
 
   public deleteItem(item) { }
 
-  // public async post() {
-  //   console.log(this.userID)
-  //     const send = async () => {
-  //         const loading = await this.toolsService.showLoading('Actualizando informacion...')
-  //         try {
-  //             const response = await this.conectionsService.post(`packages/client`, { client: this.userID, packages: this.productList$.value }).toPromise();
-  //             if (response) {
-  //                 await this.toolsService.showAlert({
-  //                     cssClass: 'alert-success',
-  //                     keyboardClose: true,
-  //                     mode: 'ios',
-  //                     header: 'Exito',
-  //                     buttons: [{ text: 'Aceptar' }]
-  //                 })
-  //             }
-  //         } catch (error) {
-  //             console.error(error);
-  //         } finally {
-  //             loading.dismiss()
-  //         }
-  //     }
-
-  //     await this.toolsService.showAlert({
-  //         cssClass: 'alert-success',
-  //         keyboardClose: true,
-  //         mode: 'ios',
-  //         header: 'Membrecia',
-  //         buttons: ['Cancelar', { text: 'Aceptar', handler: () => send()}]
-  //     })
-  // }
-
   public onChangeSegmentLocation($event: Event) {
     const { detail } = $event as SegmentCustomEvent
     if (detail.value == 'mapa') this.setReceiver();
@@ -203,29 +174,37 @@ export class ModalCrearEncomiendaComponent implements OnInit {
   }
 
   public async onOpenModalMapStart() {
-    const modal = await this.toolsService
-      .showModal({
-        component: ModalMapComponent,
-        backdropDismiss: false,
-        keyboardClose: true,
-        cssClass: 'modal-fullscreen'
-      })
-    if (modal) { this.encomiendaForm.get(['route', 'start']).setValue(modal) }
+    await this.toolsService.showModal({
+      component: ModalMapComponent,
+      backdropDismiss: false,
+      keyboardClose: true,
+      cssClass: 'modal-fullscreen',
+    }).then(res => {
+      if (res == null) return
+      const { placeId, ...val } = res;
+      const fromData = this.encomiendaForm.get(['route', 'start']).value;
+      if (res)
+        this.encomiendaForm
+          .get(['route', 'start'])
+          .setValue({ ...fromData, ...val });
+    })
   }
 
   public async onOpenModalMapEnd() {
-    const modal = await this.toolsService
-      .showModal({
-        component: ModalMapComponent,
-        backdropDismiss: false,
-        keyboardClose: true,
-        cssClass: 'modal-fullscreen'
-      })
-    if (modal) {
-      this.encomiendaForm.get(['route', 'end']).setValue(modal);
-      // this.setEndUbication = modal
-
-    }
+    await this.toolsService.showModal({
+      component: ModalMapComponent,
+      backdropDismiss: false,
+      keyboardClose: true,
+      cssClass: 'modal-fullscreen',
+    }).then(res => {
+      if (res == null) return
+      const fromData = this.encomiendaForm.get(['route', 'end']).value;
+      const { placeId, ...val } = res;
+      if (res)
+        this.encomiendaForm
+          .get(['route', 'end'])
+          .setValue({ ...fromData, ...val });
+    })
   }
 
   public async setTimeOutToday() {
@@ -389,6 +368,29 @@ export class ModalCrearEncomiendaComponent implements OnInit {
             })
         }
       })
+    this.formSender = this.formBuilder.group({
+      name: [''],
+      phone: ['', (phoneControl: AbstractControl<string>) => {
+        if (phoneControl['value'] != '') {
+          if (RegExp(/ /).test(phoneControl['value']))
+            phoneControl.patchValue(
+              phoneControl['value'].replace(/ /, '')
+            );
+          if (RegExp(/^[0-9]{10}$/).test(phoneControl['value']))
+            phoneControl.setValue(
+              lib
+                .format(phoneControl['value'], 'EC', 'INTERNATIONAL')
+                .replace(/ /, '')
+            );
+          if (
+            RegExp(/^[+]{1}[0-9]{12}$/).test(phoneControl['value']) &&
+            lib.isValidPhoneNumber(phoneControl['value'])
+          )
+            return null;
+          return { notIsValidPhoneNumber: true };
+        }
+      },]
+    })
   }
 
   public async openModal() {
